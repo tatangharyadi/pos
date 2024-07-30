@@ -26,23 +26,21 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/product',
       name: 'product',
-      builder: (BuildContext context, GoRouterState state) {
-        return const ProductScreen();
-      },
+      builder: (context, state) => const ProductScreen(),
     ),
     GoRoute(
       path: '/shift',
       name: 'shift',
-      builder: (BuildContext context, GoRouterState state) {
-        return const ShiftScreen();
-      },
-    ),
-    GoRoute(
-      path: '/shift/form',
-      name: 'shiftform',
-      builder: (BuildContext context, GoRouterState state) {
-        return const ShiftForm();
-      },
+      builder: (context, state) => const ShiftScreen(),
+      routes: [
+        GoRoute(
+          path: 'detail/:id',
+          name: 'shift_detail',
+          builder: (context, state) => ShiftForm(
+            id: state.pathParameters['id']!,
+          )
+        )
+      ],
     ),
   ],
 );

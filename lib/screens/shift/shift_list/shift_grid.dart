@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pos/screens/shift/shift_list/shift_card.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/shift/shift_repository.dart';
@@ -24,7 +25,17 @@ class ShiftGrid extends ConsumerWidget {
       itemCount: dayShifts.length,
       itemBuilder: (context, index) {
         DayShift dayShift = dayShifts[index];
-        return ShiftCard(dayShift);
+        return GestureDetector(
+          onTap: () {
+            context.go(context.namedLocation(
+                'shift_detail',
+                pathParameters: {
+                  'id': dayShift.id.toString(),
+                }
+              )
+            );
+          },
+          child: ShiftCard(dayShift));
       },
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/shift/shift_repository.dart';
 import 'package:pos/models/shift/shift_model.dart';
@@ -13,9 +14,7 @@ class ShiftCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Realm realm = ref.watch(shiftRepositoryProvider);
-    RealmResults<Shift> shifts;
-
-    shifts = realm.all<Shift>();
+    final selected = realm.find<DayShift>(dayShift.id);
 
     return Card(
       child: Padding(
@@ -29,9 +28,11 @@ class ShiftCard extends ConsumerWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,              
                   children: [
-                    Text(dayShift.dayShift),
+                    Text(dayShift.name),
                     Row(
                       children: [
+                        Text(DateFormat("yyyy-MM-dd").format(dayShift.dateShift.toLocal())),
+                        const Gap(5),
                         const Icon(Icons.paid, size: 12),
                         Text(dayShift.totalSales.toString()),
                       ],
@@ -41,10 +42,20 @@ class ShiftCard extends ConsumerWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,              
                   children: [
-                    TextButton.icon(
-                      icon: const Icon(Icons.request_quote_rounded),                  
-                      onPressed: (){},
-                      label: const Text('')),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.request_quote_rounded),                  
+                          onPressed: (){},
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete_rounded),                  
+                          onPressed: (){
+                            ref.read(shiftRepositoryProvider.notifier).deleteDayShift(dayShift);
+                          },
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ],
@@ -52,9 +63,9 @@ class ShiftCard extends ConsumerWidget {
             Expanded(
               child:
                 ListView.builder(
-                  itemCount: shifts.length,
+                  itemCount: selected!.shifts.length,
                   itemBuilder: (context, index) {
-                    Shift shift = shifts[index];
+                    Shift shift = selected.shifts[index];
 
                     late IconData icon;
                     switch (shift.status) {
@@ -74,7 +85,7 @@ class ShiftCard extends ConsumerWidget {
                       title: Row(
                         children: [
                           Text(
-                            shift.shift,
+                            shift.name,
                             style: const TextStyle(
                               fontSize: 12,
                             ),

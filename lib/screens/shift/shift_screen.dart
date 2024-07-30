@@ -29,7 +29,10 @@ class ShiftScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () {
-          context.push(context.namedLocation('shiftform'));        
+          context.go(context.namedLocation(
+              'shift_detail/new',
+            )
+          );      
         },
         child: const Icon(Icons.add),
       ), 
