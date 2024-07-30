@@ -38,9 +38,13 @@ class _ShiftFormState extends ConsumerState<ShiftForm> {
 
   @override
   Widget build(BuildContext context) {
+    Realm realm = ref.watch(shiftRepositoryProvider);
+    final objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : null;
+    final selected = realm.find<DayShift>(objectId);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.id),
+        title: Text('Shift: ${widget.id}'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -53,6 +57,7 @@ class _ShiftFormState extends ConsumerState<ShiftForm> {
                   decoration: const InputDecoration(
                     labelText: 'Shift Name',
                   ),
+                  initialValue: selected?.name ?? '',
                 ),
             ],
           ),
