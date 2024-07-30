@@ -18,7 +18,7 @@ class ShiftGrid extends ConsumerWidget {
 
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+        crossAxisCount: 3,
         childAspectRatio: 1.5,
       ),
       itemCount: dayShifts.length,

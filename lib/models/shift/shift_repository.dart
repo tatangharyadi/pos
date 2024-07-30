@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:realm/realm.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:pos/models/shift/shift_model.dart';
@@ -13,10 +14,10 @@ class ShiftRepository extends _$ShiftRepository {
     var config = Configuration.local([DayShift.schema, Shift.schema], schemaVersion: 3);
     _realm = Realm(config);
 
-    _realm.write(() {
-      _realm.deleteAll<Shift>();
-      _realm.deleteAll<DayShift>();
-    });
+    // _realm.write(() {
+    //   _realm.deleteAll<Shift>();
+    //   _realm.deleteAll<DayShift>();
+    // });
 
     var dayShifts = _realm.all<DayShift>();
     if (dayShifts.isEmpty) {
@@ -39,5 +40,12 @@ class ShiftRepository extends _$ShiftRepository {
     }
 
     return _realm;
+  }
+
+  Future<void> addDayShift(DayShift dayShift) async{
+    state.write(() {
+      state.add(dayShift);
+    });
+    ref.invalidateSelf();
   }
 }
