@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'realm_service.dart';
+part of 'app_router.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$realmServiceHash() => r'76dd0392ca570b73add0f41e2de512e5d6d1d886';
+String _$goRouterHash() => r'1bee2ce2c4c0aca9f5a361a64d9e0d2bd288eeda';
 
-/// See also [RealmService].
-@ProviderFor(RealmService)
-final realmServiceProvider = NotifierProvider<RealmService, Realm>.internal(
-  RealmService.new,
-  name: r'realmServiceProvider',
+/// See also [goRouter].
+@ProviderFor(goRouter)
+final goRouterProvider = AutoDisposeProvider<GoRouter>.internal(
+  goRouter,
+  name: r'goRouterProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$realmServiceHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$goRouterHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$RealmService = Notifier<Realm>;
+typedef GoRouterRef = AutoDisposeProviderRef<GoRouter>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

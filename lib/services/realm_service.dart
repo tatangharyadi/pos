@@ -4,7 +4,7 @@ import 'package:pos/models/shift/shift_model.dart';
 
 part 'realm_service.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class RealmService extends _$RealmService {
   late Realm _realm;
 

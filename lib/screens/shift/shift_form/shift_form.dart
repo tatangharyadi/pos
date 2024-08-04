@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos/services/realm_service.dart';
+import 'package:pos/models/shift/shift_repository.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/shift/shift_model.dart';
 
@@ -17,6 +17,7 @@ class ShiftForm extends ConsumerStatefulWidget {
 
 class _ShiftFormState extends ConsumerState<ShiftForm> {
   final _formKey = GlobalKey<FormBuilderState>();
+  late ObjectId _objectId;  
 
   @override
   void initState() {
@@ -25,23 +26,21 @@ class _ShiftFormState extends ConsumerState<ShiftForm> {
 
   void _submit() {
     DayShift dayShift = DayShift(
-      ObjectId(),
+      _objectId,
       _formKey.currentState!.fields['shiftName']!.value.toString(),
       DateTime.now(),
       totalSales: 0.0,
     );
 
-    Realm realm = ref.watch(realmServiceProvider);
-    realm.write(() {
-      realm.add(dayShift);
-    });
+    final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);
+    shiftRepository.create(dayShift);
   }
 
   @override
   Widget build(BuildContext context) {
-    Realm realm = ref.watch(realmServiceProvider);
-    final objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : null;
-    final selected = realm.find<DayShift>(objectId);
+    final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);
+    _objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : ObjectId();
+    final selected = shiftRepository.findById(_objectId);
 
     return Scaffold(
       appBar: AppBar(

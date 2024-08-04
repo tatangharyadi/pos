@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/components/widgets.dart';
-import 'package:pos/screens/shift/shift_list/shift_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos/services/realm_service.dart';
+import 'package:pos/models/shift/shift_repository.dart';
 import 'package:realm/realm.dart';
+import 'package:pos/screens/shift/shift_list/shift_card.dart';
 import 'package:pos/models/shift/shift_model.dart';
 
 @override
@@ -13,7 +13,9 @@ class ShiftGrid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Realm realm = ref.watch(realmServiceProvider);
+    // Realm realm = ref.watch(realmServiceProvider);
+      Realm realm = ref.watch(shiftRepositoryProvider);
+
     return StreamBuilder<RealmResultsChanges<DayShift>>(
       stream: realm.query<DayShift>("TRUEPREDICATE SORT(_id ASC)")
           .changes,

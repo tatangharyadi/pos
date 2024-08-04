@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'realm_service.dart';
+part of 'app_service.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$realmServiceHash() => r'76dd0392ca570b73add0f41e2de512e5d6d1d886';
+String _$appServiceHash() => r'a8dbccd80062ebaf1f887b011715359f6d5319cd';
 
-/// See also [RealmService].
-@ProviderFor(RealmService)
-final realmServiceProvider = NotifierProvider<RealmService, Realm>.internal(
-  RealmService.new,
-  name: r'realmServiceProvider',
+/// See also [appService].
+@ProviderFor(appService)
+final appServiceProvider = FutureProvider<void>.internal(
+  appService,
+  name: r'appServiceProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$realmServiceHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$appServiceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$RealmService = Notifier<Realm>;
+typedef AppServiceRef = FutureProviderRef<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
