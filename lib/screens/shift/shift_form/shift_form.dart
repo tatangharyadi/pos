@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gap/gap.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:pos/models/shift/shift_repository.dart';
+import 'package:pos/screens/shift/shift_form/shift_calendar.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/shift/shift_model.dart';
 
@@ -51,6 +54,7 @@ class _ShiftFormState extends ConsumerState<ShiftForm> {
         child: FormBuilder(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
                 FormBuilderTextField(
                   name: 'shiftName',
@@ -59,6 +63,18 @@ class _ShiftFormState extends ConsumerState<ShiftForm> {
                   ),
                   initialValue: selected?.name ?? '',
                 ),
+                const Gap(5),
+                FormBuilderDateTimePicker(
+                  name: 'dateShift',
+                  decoration: const InputDecoration(
+                    labelText: 'Shift Date',
+                  ),
+                  inputType: InputType.date,
+                  format: DateFormat('yyyy-MM-dd'),
+                  initialValue: selected?.dateShift ?? DateTime.now(),
+                ),
+                const Gap(5),
+                ShiftCalendar(_objectId.toString()),
             ],
           ),
         ),

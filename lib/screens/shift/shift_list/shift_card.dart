@@ -71,7 +71,7 @@ class ShiftCard extends ConsumerWidget {
 
                     late IconData icon;
                     switch (shift.status) {
-                      case 'CLOSE':
+                      case 'CLOSE' || 'REOPENED':
                         icon = Icons.event_busy_rounded;
                       break;
                       case 'OPEN':

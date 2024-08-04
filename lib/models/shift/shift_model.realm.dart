@@ -13,8 +13,12 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
   Shift(
     ObjectId id,
     String name,
+    DateTime startTime,
+    DateTime endTime,
     String status,
     String secretPin, {
+    DateTime? openTime,
+    DateTime? closeTime,
     double totalSales = 0.0,
   }) {
     if (!_defaultsSet) {
@@ -24,6 +28,10 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
     }
     RealmObjectBase.set(this, '_id', id);
     RealmObjectBase.set(this, 'name', name);
+    RealmObjectBase.set(this, 'startTime', startTime);
+    RealmObjectBase.set(this, 'endTime', endTime);
+    RealmObjectBase.set(this, 'openTime', openTime);
+    RealmObjectBase.set(this, 'closeTime', closeTime);
     RealmObjectBase.set(this, 'status', status);
     RealmObjectBase.set(this, 'secretPin', secretPin);
     RealmObjectBase.set(this, 'totalSales', totalSales);
@@ -40,6 +48,32 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
   String get name => RealmObjectBase.get<String>(this, 'name') as String;
   @override
   set name(String value) => RealmObjectBase.set(this, 'name', value);
+
+  @override
+  DateTime get startTime =>
+      RealmObjectBase.get<DateTime>(this, 'startTime') as DateTime;
+  @override
+  set startTime(DateTime value) =>
+      RealmObjectBase.set(this, 'startTime', value);
+
+  @override
+  DateTime get endTime =>
+      RealmObjectBase.get<DateTime>(this, 'endTime') as DateTime;
+  @override
+  set endTime(DateTime value) => RealmObjectBase.set(this, 'endTime', value);
+
+  @override
+  DateTime? get openTime =>
+      RealmObjectBase.get<DateTime>(this, 'openTime') as DateTime?;
+  @override
+  set openTime(DateTime? value) => RealmObjectBase.set(this, 'openTime', value);
+
+  @override
+  DateTime? get closeTime =>
+      RealmObjectBase.get<DateTime>(this, 'closeTime') as DateTime?;
+  @override
+  set closeTime(DateTime? value) =>
+      RealmObjectBase.set(this, 'closeTime', value);
 
   @override
   String get status => RealmObjectBase.get<String>(this, 'status') as String;
@@ -73,6 +107,10 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
     return <String, dynamic>{
       '_id': id.toEJson(),
       'name': name.toEJson(),
+      'startTime': startTime.toEJson(),
+      'endTime': endTime.toEJson(),
+      'openTime': openTime.toEJson(),
+      'closeTime': closeTime.toEJson(),
       'status': status.toEJson(),
       'secretPin': secretPin.toEJson(),
       'totalSales': totalSales.toEJson(),
@@ -85,6 +123,10 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
       {
         '_id': EJsonValue id,
         'name': EJsonValue name,
+        'startTime': EJsonValue startTime,
+        'endTime': EJsonValue endTime,
+        'openTime': EJsonValue openTime,
+        'closeTime': EJsonValue closeTime,
         'status': EJsonValue status,
         'secretPin': EJsonValue secretPin,
         'totalSales': EJsonValue totalSales,
@@ -92,8 +134,12 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
         Shift(
           fromEJson(id),
           fromEJson(name),
+          fromEJson(startTime),
+          fromEJson(endTime),
           fromEJson(status),
           fromEJson(secretPin),
+          openTime: fromEJson(openTime),
+          closeTime: fromEJson(closeTime),
           totalSales: fromEJson(totalSales),
         ),
       _ => raiseInvalidEJson(ejson),
@@ -108,6 +154,10 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
           mapTo: '_id', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
+      SchemaProperty('startTime', RealmPropertyType.timestamp),
+      SchemaProperty('endTime', RealmPropertyType.timestamp),
+      SchemaProperty('openTime', RealmPropertyType.timestamp, optional: true),
+      SchemaProperty('closeTime', RealmPropertyType.timestamp, optional: true),
       SchemaProperty('status', RealmPropertyType.string),
       SchemaProperty('secretPin', RealmPropertyType.string),
       SchemaProperty('totalSales', RealmPropertyType.double),

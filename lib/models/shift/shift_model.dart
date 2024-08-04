@@ -11,6 +11,10 @@ class _Shift {
 
   @Indexed()
   late String name;
+  late DateTime startTime;
+  late DateTime endTime;
+  late DateTime? openTime;
+  late DateTime? closeTime;
   late String status;
   late String secretPin;
 

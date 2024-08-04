@@ -13,7 +13,6 @@ class ShiftGrid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Realm realm = ref.watch(realmServiceProvider);
       Realm realm = ref.watch(shiftRepositoryProvider);
 
     return StreamBuilder<RealmResultsChanges<DayShift>>(
