@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos/services/realm_service.dart';
 import 'package:realm/realm.dart';
-import 'package:pos/models/shift/shift_repository.dart';
 import 'package:pos/models/shift/shift_model.dart';
 
 class ShiftCard extends ConsumerWidget {
@@ -11,9 +11,16 @@ class ShiftCard extends ConsumerWidget {
 
   const ShiftCard(this.dayShift, {super.key});
 
+  void _delete(ref, DayShift dayShift) {
+    Realm realm = ref.watch(realmServiceProvider);
+    realm.write(() {
+      realm.delete(dayShift);
+    });
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Realm realm = ref.watch(shiftRepositoryProvider);
+    Realm realm = ref.watch(realmServiceProvider);
     final selected = realm.find<DayShift>(dayShift.id);
 
     return Card(
@@ -50,9 +57,7 @@ class ShiftCard extends ConsumerWidget {
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete_rounded),                  
-                          onPressed: (){
-                            ref.read(shiftRepositoryProvider.notifier).deleteDayShift(dayShift);
-                          },
+                          onPressed: (){_delete(ref, dayShift);},
                         )
                       ],
                     ),
