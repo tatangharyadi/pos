@@ -16,9 +16,8 @@ part 'app_router.g.dart';
   return GoRouter (
     initialLocation: '/',
     redirect: (context, state) {
-      if (appState.isLoading || appState.hasError) {
-        return '/';
-      }
+      if (appState.isLoading || appState.hasError) {}
+      return '/';
     },
     routes: [
       GoRoute(
