@@ -10,7 +10,7 @@ class RealmService extends _$RealmService {
 
   @override
   Realm build() {
-    var config = Configuration.local([DayShift.schema, Shift.schema], schemaVersion: 7);
+    var config = Configuration.local([DayShift.schema, Shift.schema], schemaVersion: 1);
     _realm = Realm(config);
 
     var dayShifts = _realm.all<DayShift>();

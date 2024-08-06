@@ -17,9 +17,6 @@ class ShiftCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);
-    final selected = shiftRepository.findById(dayShift.id);
-
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -65,9 +62,9 @@ class ShiftCard extends ConsumerWidget {
             Expanded(
               child:
                 ListView.builder(
-                  itemCount: selected!.shifts.length,
+                  itemCount: dayShift.shifts.length,
                   itemBuilder: (context, index) {
-                    Shift shift = selected.shifts[index];
+                    Shift shift = dayShift.shifts[index];
 
                     late IconData icon;
                     switch (shift.status) {

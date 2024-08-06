@@ -17,6 +17,7 @@ class _Shift {
   late DateTime? closeTime;
   late String status;
   late String secretPin;
+  late bool selected = false;
 
   late final double totalSales = 0.0;
 }

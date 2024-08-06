@@ -23,6 +23,30 @@ class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
     return ObjectId();
   }
 
+  void _selectedRow(bool value, Shift row) {
+    setState(() {
+      row.realm.write(() {
+        row.selected = value;
+      });
+    });
+  }
+
+  void _insertRow(RealmList<Shift> rows, Shift row) {
+    setState(() {
+      rows.realm.write(() {
+        rows.add(row);
+      });
+    });
+  }
+
+  void _deleteSelected(RealmList<Shift> rows) {
+    setState(() {
+      rows.realm.write(() {
+        rows.removeWhere((element) => element.selected);
+      });
+    });
+  }
+
   DataTable _buildTable(List<dynamic> shifts) {
     final List<Map<String, dynamic>> header = [
       {"title": "Name", "numeric": false},
@@ -39,6 +63,7 @@ class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
       headingTextStyle: const TextStyle(
         fontWeight: FontWeight.bold,
       ),
+      showCheckboxColumn: true,
       columns: header.map((item) {
           return DataColumn(
             label: Text(item['title']),
@@ -120,6 +145,8 @@ class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
                 ),
               ),
             ],
+            selected: shift.selected,
+            onSelectChanged: (value) => _selectedRow(value!, shift),
           );
         },
       ),
@@ -149,7 +176,7 @@ class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
               IconButton(
                 icon: const Icon(Icons.add),
                 onPressed: () async {
-                  final result = await context.push(context.namedLocation(
+                  final shift = await context.push(context.namedLocation(
                       'shift_subdetail',
                       pathParameters: {
                         'id': widget.id.toString(),
@@ -157,13 +184,13 @@ class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
                       }
                     )
                   ) as Shift;
-                  setState(() {
-                    shifts.realm.write(() {
-                      shifts.add(result);
-                    });
-                  });
+                  _insertRow(shifts, shift);
                 },
               ),
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () => _deleteSelected(shifts),
+              )
             ],
           ),
           SliverToBoxAdapter(
