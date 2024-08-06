@@ -10,7 +10,7 @@ class NavBar extends StatelessWidget {
       children: [
         const UserAccountsDrawerHeader(
           accountName: Text('Cashier'),
-          accountEmail: Text('cashier@yummycorp.com'),
+          accountEmail: Text('cashier@pos.com'),
           currentAccountPicture: CircleAvatar(),
         ),
         ListTile(

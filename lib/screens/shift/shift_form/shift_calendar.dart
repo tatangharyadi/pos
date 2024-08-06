@@ -176,15 +176,18 @@ class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
               IconButton(
                 icon: const Icon(Icons.add),
                 onPressed: () async {
-                  final shift = await context.push(context.namedLocation(
+                  final data = await context.push(context.namedLocation(
                       'shift_subdetail',
                       pathParameters: {
                         'id': widget.id.toString(),
                         'subId': 'new',
                       }
                     )
-                  ) as Shift;
-                  _insertRow(shifts, shift);
+                  );
+                  if (data != null) {
+                    final shift = data as Shift;
+                    _insertRow(shifts, shift);
+                  }
                 },
               ),
               IconButton(
