@@ -20,7 +20,19 @@ class ShiftChildForm extends ConsumerStatefulWidget {
 
 class _ShiftChildFormState extends ConsumerState<ShiftChildForm> {
   final _formKey = GlobalKey<FormBuilderState>();
-  late ObjectId _parentId;  
+  late ObjectId _parentId;
+
+  Shift _new() {
+    DateTime now = DateTime.now();
+
+    return Shift(
+      ObjectId(),
+      'new',
+      DateTime(now.year, now.month, now.day, 10, 00),
+      DateTime(now.year, now.month, now.day, 17, 00),
+      "SCHEDULE",
+      '123');
+  }
 
   Shift _submit() {
     final shiftRepository = ref.read(shiftRepositoryProvider.notifier);
@@ -65,6 +77,7 @@ class _ShiftChildFormState extends ConsumerState<ShiftChildForm> {
   Widget build(BuildContext context) {
     final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);
     final dayShift = shiftRepository.findById(_parentId);
+    final shift = _new();
 
     return Scaffold(
       appBar: AppBar(
@@ -82,6 +95,7 @@ class _ShiftChildFormState extends ConsumerState<ShiftChildForm> {
                   decoration: const InputDecoration(
                     labelText: 'Shift Name',
                   ),
+                  initialValue: shift.name,
                 ),
                 const Gap(5),
                 FormBuilderTextField( 
@@ -89,6 +103,7 @@ class _ShiftChildFormState extends ConsumerState<ShiftChildForm> {
                   decoration: const InputDecoration(
                     labelText: 'Secret Pin',
                   ),
+                  initialValue: shift.secretPin,
                 ),
                 const Gap(5),
                 Row(
@@ -101,6 +116,7 @@ class _ShiftChildFormState extends ConsumerState<ShiftChildForm> {
                         ),
                         inputType: InputType.time,
                         format: DateFormat('HH:mm'),
+                        initialValue: shift.startTime,
                       ),
                     ),
                     const Gap(5),
@@ -112,6 +128,7 @@ class _ShiftChildFormState extends ConsumerState<ShiftChildForm> {
                         ),
                         inputType: InputType.time,
                         format: DateFormat('HH:mm'),
+                        initialValue: shift.endTime,
                       ),
                     ),
                   ],
