@@ -25,6 +25,21 @@ class _ShiftFormState extends ConsumerState<ShiftForm> {
   @override
   void initState() {
     super.initState();
+    _objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : _new();
+  }
+
+  ObjectId _new() {
+    DayShift dayShift = DayShift(
+      ObjectId(),
+      'new',
+      DateTime.now(),
+      totalSales: 0.0,
+    );
+
+    final shiftRepository = ref.read(shiftRepositoryProvider.notifier);
+    shiftRepository.create(dayShift);
+
+    return dayShift.id;
   }
 
   void _submit() {
@@ -42,7 +57,6 @@ class _ShiftFormState extends ConsumerState<ShiftForm> {
   @override
   Widget build(BuildContext context) {
     final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);
-    _objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : ObjectId();
     final selected = shiftRepository.findById(_objectId);
 
     return Scaffold(
@@ -74,7 +88,7 @@ class _ShiftFormState extends ConsumerState<ShiftForm> {
                   initialValue: selected?.dateShift ?? DateTime.now(),
                 ),
                 const Gap(5),
-                ShiftCalendar(_objectId.toString()),
+                ShiftCalendar(id: _objectId.toString()),
             ],
           ),
         ),

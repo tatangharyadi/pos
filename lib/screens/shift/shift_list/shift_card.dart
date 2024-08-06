@@ -8,7 +8,7 @@ import 'package:pos/models/shift/shift_model.dart';
 class ShiftCard extends ConsumerWidget {
   final DayShift dayShift;
 
-  const ShiftCard(this.dayShift, {super.key});
+  const ShiftCard({super.key, required this.dayShift});
 
   void _delete(ref, DayShift dayShift) {
     final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);

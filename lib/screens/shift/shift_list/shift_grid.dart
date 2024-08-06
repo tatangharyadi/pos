@@ -45,7 +45,7 @@ class ShiftGrid extends ConsumerWidget {
                     )
                   );
                 },
-                child: ShiftCard(dayShift));
+                child: ShiftCard(dayShift: dayShift));
             } else {return Container();}
           },
         );

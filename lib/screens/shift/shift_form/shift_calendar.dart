@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pos/models/shift/shift_model.dart';
 import 'package:pos/models/shift/shift_repository.dart';
 import 'package:realm/realm.dart';
 
-class ShiftCalendar extends ConsumerWidget {
+class ShiftCalendar extends ConsumerStatefulWidget {
   final String id; 
 
-  const ShiftCalendar(this.id, {super.key});
+  const ShiftCalendar({super.key, required this.id});
 
+    @override
+  ConsumerState<ShiftCalendar> createState() => _ShiftCalendarState();
+}
+
+class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
   DataTable _buildTable(List<dynamic> results) {
     final List<Map<String, dynamic>> header = [
       {"title": "Name", "numeric": false},
@@ -115,11 +121,11 @@ class ShiftCalendar extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);
-    final objectId = (id != 'new') ? ObjectId.fromHexString(id) : ObjectId();
+    final objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : ObjectId();
     final selected = shiftRepository.findById(objectId);
-    final results = selected?.shifts ?? [];
+    final results = selected?.shifts ?? RealmList<Shift>([]);
 
     return Expanded(
       child: CustomScrollView(
@@ -131,7 +137,20 @@ class ShiftCalendar extends ConsumerWidget {
             actions: [
               IconButton(
                 icon: const Icon(Icons.add),
-                onPressed: () {
+                onPressed: () async {
+                  final result = await context.push(context.namedLocation(
+                      'shift_subdetail',
+                      pathParameters: {
+                        'id': widget.id.toString(),
+                        'subId': 'new',
+                      }
+                    )
+                  ) as Shift;
+                  setState(() {
+                    results.realm.write(() {
+                      results.add(result);
+                    });
+                  });
                 },
               ),
             ],

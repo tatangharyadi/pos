@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:pos/models/shift/shift_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pos/services/app_service.dart';
 import 'package:pos/screens/home/home_screen.dart';
 import 'package:pos/screens/shift/shift_form/shift_form.dart';
 import 'package:pos/screens/terminal/terminal_screen.dart';
 import 'package:pos/screens/product/product_screen.dart';
 import 'package:pos/screens/shift/shift_screen.dart';
-import 'package:pos/services/app_service.dart';
+import 'package:pos/screens/shift/shift_form/shift_child_form.dart';
 
 part 'app_router.g.dart';
 
@@ -16,8 +18,10 @@ part 'app_router.g.dart';
   return GoRouter (
     initialLocation: '/',
     redirect: (context, state) {
-      if (appState.isLoading || appState.hasError) {}
-      return '/';
+      if (appState.isLoading || appState.hasError) {
+        return '/';
+      }
+      return null;
     },
     routes: [
       GoRoute(
@@ -49,7 +53,17 @@ part 'app_router.g.dart';
             name: 'shift_detail',
             builder: (context, state) => ShiftForm(
               id: state.pathParameters['id']!,
-            )
+            ),
+            routes: [
+              GoRoute(
+                path: ':subId',
+                name: 'shift_subdetail',
+                builder: (context, state) => ShiftChildForm(
+                  id: state.pathParameters['id']!,
+                  subId: state.pathParameters['subId']!,
+                ),
+              ),
+            ] 
           )
         ],
       ),
