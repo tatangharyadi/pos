@@ -17,7 +17,13 @@ class ShiftCalendar extends ConsumerStatefulWidget {
 }
 
 class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
-  DataTable _buildTable(List<dynamic> results) {
+  late ObjectId _objectId;
+
+  ObjectId _new() {
+    return ObjectId();
+  }
+
+  DataTable _buildTable(List<dynamic> shifts) {
     final List<Map<String, dynamic>> header = [
       {"title": "Name", "numeric": false},
       {"title": "Start", "numeric": false},
@@ -41,8 +47,8 @@ class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
         }).toList(),
 
       rows: List<DataRow>.generate(
-        results.length, (index) {
-          Shift shift = results[index];
+        shifts.length, (index) {
+          Shift shift = shifts[index];
 
           late IconData icon;
           switch (shift.status) {
@@ -121,11 +127,16 @@ class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : _new();
+  }  
+
+  @override
   Widget build(BuildContext context) {
     final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);
-    final objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : ObjectId();
-    final selected = shiftRepository.findById(objectId);
-    final results = selected?.shifts ?? RealmList<Shift>([]);
+    final dayShift = shiftRepository.findById(_objectId);
+    final shifts = dayShift?.shifts ?? RealmList<Shift>([]);
 
     return Expanded(
       child: CustomScrollView(
@@ -147,8 +158,8 @@ class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
                     )
                   ) as Shift;
                   setState(() {
-                    results.realm.write(() {
-                      results.add(result);
+                    shifts.realm.write(() {
+                      shifts.add(result);
                     });
                   });
                 },
@@ -159,7 +170,7 @@ class _ShiftCalendarState extends ConsumerState<ShiftCalendar> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child:
-                _buildTable(results),
+                _buildTable(shifts),
             ),
           ),
         ],

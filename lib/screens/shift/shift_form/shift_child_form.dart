@@ -7,8 +7,9 @@ import 'package:realm/realm.dart';
 
 class ShiftChildForm extends ConsumerStatefulWidget {
   final String id;
+  final String subId;
 
-  const ShiftChildForm({super.key, required this.id, required String subId});
+  const ShiftChildForm({super.key, required this.id, required this.subId});
 
   @override
   ConsumerState<ShiftChildForm> createState() => _ShiftChildFormState();
@@ -23,7 +24,7 @@ class _ShiftChildFormState extends ConsumerState<ShiftChildForm> {
     super.initState();
   }
 
-  void _submit() {
+  Shift _submit() {
     DateTime now = DateTime.now();
     Shift shift = Shift(
       ObjectId(),
@@ -33,7 +34,7 @@ class _ShiftChildFormState extends ConsumerState<ShiftChildForm> {
       "SCHEDULE",
       '369');
 
-    context.pop(shift); 
+      return shift;
   }
 
   @override
@@ -67,7 +68,7 @@ class _ShiftChildFormState extends ConsumerState<ShiftChildForm> {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () {
-          _submit(); 
+          context.pop(_submit()); 
         },
         child: const Icon(Icons.check),
       ),

@@ -20,16 +20,11 @@ class ShiftForm extends ConsumerStatefulWidget {
 
 class _ShiftFormState extends ConsumerState<ShiftForm> {
   final _formKey = GlobalKey<FormBuilderState>();
-  late ObjectId _objectId;  
-
-  @override
-  void initState() {
-    super.initState();
-    _objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : _new();
-  }
+  late ObjectId _objectId;
+  late bool _isDirty = true;
 
   ObjectId _new() {
-    DayShift dayShift = DayShift(
+    DayShift object = DayShift(
       ObjectId(),
       'new',
       DateTime.now(),
@@ -37,76 +32,92 @@ class _ShiftFormState extends ConsumerState<ShiftForm> {
     );
 
     final shiftRepository = ref.read(shiftRepositoryProvider.notifier);
-    shiftRepository.create(dayShift);
+    shiftRepository.create(object);
 
-    return dayShift.id;
+    return object.id;
   }
 
-  void _submit() {
-    DayShift dayShift = DayShift(
-      _objectId,
-      _formKey.currentState!.fields['shiftName']!.value.toString(),
-      DateTime.now(),
-      totalSales: 0.0,
-    );
+  void _dispose(bool didPop, DayShift? object) {
+    final shiftRepository = ref.read(shiftRepositoryProvider.notifier);
+    if (didPop && widget.id == 'new' && object != null && _isDirty) {
+      shiftRepository.delete(object);
+    }
+  }
+
+  void _submit(DayShift? object) {
+    if (object == null) return;
+
+    object.name = _formKey.currentState!.fields['shiftName']!.value.toString();
+    object.dateShift = _formKey.currentState!.fields['dateShift']!.value as DateTime;
 
     final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);
-    shiftRepository.create(dayShift);
+    shiftRepository.create(object);
+    _isDirty = false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : _new();
   }
 
   @override
   Widget build(BuildContext context) {
     final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);
-    final selected = shiftRepository.findById(_objectId);
+    final dayShift = shiftRepository.findById(_objectId);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Shift: ${widget.id}'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: FormBuilder(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-                FormBuilderTextField(
-                  name: 'shiftName',
-                  decoration: const InputDecoration(
-                    labelText: 'Shift Name',
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (bool didPop) async => _dispose(didPop, dayShift),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Shift: ${widget.id}'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: FormBuilder(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                  FormBuilderTextField(
+                    name: 'shiftName',
+                    decoration: const InputDecoration(
+                      labelText: 'Shift Name',
+                    ),
+                    initialValue: dayShift?.name ?? '',
                   ),
-                  initialValue: selected?.name ?? '',
-                ),
-                const Gap(5),
-                FormBuilderDateTimePicker(
-                  name: 'dateShift',
-                  decoration: const InputDecoration(
-                    labelText: 'Shift Date',
+                  const Gap(5),
+                  FormBuilderDateTimePicker(
+                    name: 'dateShift',
+                    decoration: const InputDecoration(
+                      labelText: 'Shift Date',
+                    ),
+                    inputType: InputType.date,
+                    format: DateFormat('yyyy-MM-dd'),
+                    initialValue: dayShift?.dateShift ?? DateTime.now(),
                   ),
-                  inputType: InputType.date,
-                  format: DateFormat('yyyy-MM-dd'),
-                  initialValue: selected?.dateShift ?? DateTime.now(),
-                ),
-                const Gap(5),
-                ShiftCalendar(id: _objectId.toString()),
-            ],
+                  const Gap(5),
+                  ShiftCalendar(id: _objectId.toString()),
+              ],
+            ),
           ),
         ),
+        bottomNavigationBar: BottomAppBar(
+          shape: const CircularNotchedRectangle(),
+          height: 30,
+          child: Container(height: 5),
+        ),
+        floatingActionButton: FloatingActionButton(
+          shape: const CircleBorder(),
+          onPressed: () {
+            _submit(dayShift);
+            context.go(context.namedLocation('shift'));  
+          },
+          child: const Icon(Icons.check),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,       
       ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        height: 30,
-        child: Container(height: 5),
-      ),
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        onPressed: () {
-          _submit();
-          context.go(context.namedLocation('shift'));  
-        },
-        child: const Icon(Icons.check),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,       
     );
   }
 }
