@@ -1,6 +1,7 @@
 import 'package:realm/realm.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:pos/models/shift/shift_model.dart';
+import 'package:pos/models/product/product_model.dart';
 
 part 'realm_service.g.dart';
 
@@ -10,8 +11,23 @@ class RealmService extends _$RealmService {
 
   @override
   Realm build() {
-    var config = Configuration.local([DayShift.schema, Shift.schema], schemaVersion: 1);
+    var config = Configuration.local([
+      Price.schema, Product.schema, Brand.schema, Category.schema,
+      DayShift.schema, Shift.schema], schemaVersion: 1);
     _realm = Realm(config);
+
+    var products = _realm.all<Product>();
+    if (products.isEmpty) {
+      _realm.write(() {
+        _realm.addAll([
+          Product(ObjectId(), 'HOUS00077162', 'PRODUCT', 'Spaghetti Aglio Olio', image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077162.png'),
+          Product(ObjectId(), 'HOUS00077118', 'PRODUCT', 'Chicken Steak Burger', image:  'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077118.png'),
+          Product(ObjectId(), 'HOUS00069085', 'PRODUCT', 'Butter Croissant', image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00069085.png'),
+          Product(ObjectId(), 'HOUS00075523', 'PRODUCT', 'Hot Cappuccino', image:  'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077118.png'),
+          Product(ObjectId(), 'HOUS00075563', 'PRODUCT', 'Iced Tea', image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00069085.png'),
+        ]);
+      });
+    }
 
     var dayShifts = _realm.all<DayShift>();
     if (dayShifts.isEmpty) {
@@ -35,8 +51,8 @@ class RealmService extends _$RealmService {
 
       DayShift seed = DayShift(ObjectId(), 'DAYSHIFTSEED', DateTime.now().toUtc(), totalSales: 6000, shifts: shifts);
 
-      _realm.write<DayShift>(() {
-        return _realm.add(seed);
+      _realm.write(() {
+        _realm.add(seed);
       });
     }
 

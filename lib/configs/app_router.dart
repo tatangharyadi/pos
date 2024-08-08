@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pos/models/shift/shift_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/services/app_service.dart';
@@ -19,6 +18,7 @@ part 'app_router.g.dart';
     initialLocation: '/',
     redirect: (context, state) {
       if (appState.isLoading || appState.hasError) {
+        print('***** error *****');
         return '/';
       }
       return null;

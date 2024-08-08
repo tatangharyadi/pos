@@ -1,6 +1,6 @@
-import 'package:pos/services/realm_service.dart';
-import 'package:realm/realm.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:realm/realm.dart';
+import 'package:pos/services/realm_service.dart';
 import 'package:pos/models/shift/shift_model.dart';
 
 part 'shift_repository.g.dart';

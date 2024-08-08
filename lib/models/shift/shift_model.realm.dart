@@ -19,13 +19,13 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
     String secretPin, {
     DateTime? openTime,
     DateTime? closeTime,
-    bool selected = false,
     double totalSales = 0.0,
+    bool selected = false,
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObjectBase.setDefaults<Shift>({
-        'selected': false,
         'totalSales': 0.0,
+        'selected': false,
       });
     }
     RealmObjectBase.set(this, '_id', id);
@@ -36,8 +36,8 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'closeTime', closeTime);
     RealmObjectBase.set(this, 'status', status);
     RealmObjectBase.set(this, 'secretPin', secretPin);
-    RealmObjectBase.set(this, 'selected', selected);
     RealmObjectBase.set(this, 'totalSales', totalSales);
+    RealmObjectBase.set(this, 'selected', selected);
   }
 
   Shift._();
@@ -90,15 +90,16 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
   set secretPin(String value) => RealmObjectBase.set(this, 'secretPin', value);
 
   @override
-  bool get selected => RealmObjectBase.get<bool>(this, 'selected') as bool;
-  @override
-  set selected(bool value) => RealmObjectBase.set(this, 'selected', value);
-
-  @override
   double get totalSales =>
       RealmObjectBase.get<double>(this, 'totalSales') as double;
   @override
-  set totalSales(double value) => throw RealmUnsupportedSetError();
+  set totalSales(double value) =>
+      RealmObjectBase.set(this, 'totalSales', value);
+
+  @override
+  bool get selected => RealmObjectBase.get<bool>(this, 'selected') as bool;
+  @override
+  set selected(bool value) => RealmObjectBase.set(this, 'selected', value);
 
   @override
   Stream<RealmObjectChanges<Shift>> get changes =>
@@ -121,8 +122,8 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
       'closeTime': closeTime.toEJson(),
       'status': status.toEJson(),
       'secretPin': secretPin.toEJson(),
-      'selected': selected.toEJson(),
       'totalSales': totalSales.toEJson(),
+      'selected': selected.toEJson(),
     };
   }
 
@@ -138,8 +139,8 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
         'closeTime': EJsonValue closeTime,
         'status': EJsonValue status,
         'secretPin': EJsonValue secretPin,
-        'selected': EJsonValue selected,
         'totalSales': EJsonValue totalSales,
+        'selected': EJsonValue selected,
       } =>
         Shift(
           fromEJson(id),
@@ -150,8 +151,8 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
           fromEJson(secretPin),
           openTime: fromEJson(openTime),
           closeTime: fromEJson(closeTime),
-          selected: fromEJson(selected),
           totalSales: fromEJson(totalSales),
+          selected: fromEJson(selected),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -160,7 +161,7 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
   static final schema = () {
     RealmObjectBase.registerFactory(Shift._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, Shift, 'shift', [
+    return SchemaObject(ObjectType.realmObject, Shift, 'shifts', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string,
@@ -171,8 +172,8 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('closeTime', RealmPropertyType.timestamp, optional: true),
       SchemaProperty('status', RealmPropertyType.string),
       SchemaProperty('secretPin', RealmPropertyType.string),
-      SchemaProperty('selected', RealmPropertyType.bool),
       SchemaProperty('totalSales', RealmPropertyType.double),
+      SchemaProperty('selected', RealmPropertyType.bool),
     ]);
   }();
 
@@ -282,7 +283,7 @@ class DayShift extends _DayShift
   static final schema = () {
     RealmObjectBase.registerFactory(DayShift._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, DayShift, 'dayshift', [
+    return SchemaObject(ObjectType.realmObject, DayShift, 'dayShifts', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string,
@@ -290,7 +291,7 @@ class DayShift extends _DayShift
       SchemaProperty('dateShift', RealmPropertyType.timestamp),
       SchemaProperty('totalSales', RealmPropertyType.double),
       SchemaProperty('shifts', RealmPropertyType.object,
-          linkTarget: 'shift', collectionType: RealmCollectionType.list),
+          linkTarget: 'shifts', collectionType: RealmCollectionType.list),
     ]);
   }();
 

@@ -3,7 +3,7 @@ import 'package:realm/realm.dart';
 part 'shift_model.realm.dart';
 
 @RealmModel()
-@MapTo("shift")
+@MapTo("shifts")
 class _Shift {
   @PrimaryKey()
   @MapTo("_id")
@@ -17,13 +17,14 @@ class _Shift {
   late DateTime? closeTime;
   late String status;
   late String secretPin;
-  late bool selected = false;
 
-  late final double totalSales = 0.0;
+  late double totalSales = 0.0;
+
+  late bool selected = false;
 }
 
 @RealmModel()
-@MapTo("dayshift")
+@MapTo("dayShifts")
 class _DayShift {
   @PrimaryKey()
   @MapTo("_id")
