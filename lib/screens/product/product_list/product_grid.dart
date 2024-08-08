@@ -20,6 +20,7 @@ class ProductDataTableSource extends DataTableSource {
         DataCell(Text(product.sku)),
         DataCell(Text(product.type)),
         DataCell(Text(product.name)),
+        DataCell(Text(product.prices.first.price.toString())),
       ],
     );
   }
@@ -42,6 +43,7 @@ class ProductGrid extends ConsumerWidget {
       {"title": "SKU", "numeric": false},
       {"title": "Type", "numeric": false},
       {"title": "Name", "numeric": false},
+      {"title": "Price", "numeric": true},
     ];
 
     return PaginatedDataTable(

@@ -15,16 +15,45 @@ class RealmService extends _$RealmService {
       Price.schema, Product.schema, Brand.schema, Category.schema,
       DayShift.schema, Shift.schema], schemaVersion: 1);
     _realm = Realm(config);
+    
+    final storagePath = Configuration.defaultStoragePath;
+    print('***** ${storagePath} *****');
 
     var products = _realm.all<Product>();
     if (products.isEmpty) {
+      List<Price> pricesHOUS00077162 = [
+        Price(ObjectId(), 'IDR', 54000),
+      ];
+      List<Price> pricesHOUS00077118 = [
+        Price(ObjectId(), 'IDR', 53000),
+      ];
+      List<Price> pricesHHOUS00069085 = [
+        Price(ObjectId(), 'IDR', 21000),
+      ];
+      List<Price> pricesHOUS00075523 = [
+        Price(ObjectId(), 'IDR', 28000),
+      ];
+      List<Price> pricesHOUS00075563 = [
+        Price(ObjectId(), 'IDR', 15000),
+      ];
+
       _realm.write(() {
         _realm.addAll([
-          Product(ObjectId(), 'HOUS00077162', 'PRODUCT', 'Spaghetti Aglio Olio', image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077162.png'),
-          Product(ObjectId(), 'HOUS00077118', 'PRODUCT', 'Chicken Steak Burger', image:  'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077118.png'),
-          Product(ObjectId(), 'HOUS00069085', 'PRODUCT', 'Butter Croissant', image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00069085.png'),
-          Product(ObjectId(), 'HOUS00075523', 'PRODUCT', 'Hot Cappuccino', image:  'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077118.png'),
-          Product(ObjectId(), 'HOUS00075563', 'PRODUCT', 'Iced Tea', image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00069085.png'),
+          Product(ObjectId(), 'HOUS00077162', 'PRODUCT', 'Spaghetti Aglio Olio',
+            image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077162.png',
+            prices: pricesHOUS00077162),
+          Product(ObjectId(), 'HOUS00077118', 'PRODUCT', 'Chicken Steak Burger',
+            image:  'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077118.png',
+            prices: pricesHOUS00077118),
+          Product(ObjectId(), 'HOUS00069085', 'PRODUCT', 'Butter Croissant',
+            image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00069085.png',
+            prices: pricesHHOUS00069085),
+          Product(ObjectId(), 'HOUS00075523', 'PRODUCT', 'Hot Cappuccino',
+            image:  'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077118.png',
+            prices: pricesHOUS00075523),
+          Product(ObjectId(), 'HOUS00075563', 'PRODUCT', 'Iced Tea',
+            image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00069085.png',
+            prices: pricesHOUS00075563),
         ]);
       });
     }
