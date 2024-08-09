@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pos/components/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realm/realm.dart';
@@ -36,6 +35,7 @@ class ProductDataTableSource extends DataTableSource {
     }
     
     return DataRow(
+      key: ValueKey(product.id),
       cells: [
         DataCell(Text(product.sku)),
         DataCell(Text(product.type)),
@@ -69,7 +69,9 @@ class ProductGrid extends ConsumerWidget {
     return PaginatedDataTable(
       source: ProductDataTableSource(products),
       showCheckboxColumn: true,
-      rowsPerPage: 6,
+      showFirstLastButtons: true,
+      showEmptyRows: false,
+      rowsPerPage: 5,
       columns: header.map((item) {
           return DataColumn(
             label: Text(item['title']),
