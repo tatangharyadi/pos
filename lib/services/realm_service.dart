@@ -13,7 +13,8 @@ class RealmService extends _$RealmService {
   @override
   Realm build() {
     var config = Configuration.local([
-      Price.schema, Product.schema, Brand.schema, Category.schema,
+      Price.schema, Modifier.schema, ModifierCollection.schema,
+      Product.schema, Brand.schema, Category.schema,
       DayShift.schema, Shift.schema], schemaVersion: 1);
     _realm = Realm(config);
     
@@ -29,6 +30,7 @@ class RealmService extends _$RealmService {
 
     var products = _realm.all<Product>();
     if (products.isEmpty) {
+      
       List<Price> pricesHOUS00077162 = [
         Price(ObjectId(), 'IDR', 54000),
         Price(ObjectId(), 'IDR', 55000,
@@ -42,13 +44,47 @@ class RealmService extends _$RealmService {
         Price(ObjectId(), 'IDR', 53000),
       ];
       List<Price> pricesHHOUS00069085 = [
-        Price(ObjectId(), 'IDR', 21000),
+        Price(ObjectId(), 'IDR', 18000),
       ];
-      List<Price> pricesHOUS00075523 = [
+      List<Price> pricesMGMULI002 = [
         Price(ObjectId(), 'IDR', 28000),
       ];
-      List<Price> pricesHOUS00075563 = [
-        Price(ObjectId(), 'IDR', 15000),
+      List<Price> pricesHOUS00076950 = [
+        Price(ObjectId(), 'IDR', 10000),
+      ];
+
+      List<ModifierCollection> modifierCollectionMGMULI002 = [
+        ModifierCollection(ObjectId(), 'Add-On', 0, 5,
+          modifiers: [
+            Modifier(ObjectId(), 'MODIFIER', 'Hazelnut Syrup',
+              prices: [
+                Price(ObjectId(), 'IDR', 6000),
+              ]),
+            Modifier(ObjectId(), 'MODIFIER', 'Vanilla Syrup',
+              prices: [
+                Price(ObjectId(), 'IDR', 6000),
+              ]),
+            Modifier(ObjectId(), 'MODIFIER', 'Oat Milk',
+              prices: [
+                Price(ObjectId(), 'IDR', 12000),
+              ]),
+            Modifier(ObjectId(), 'MODIFIER', 'Expresso',
+              prices: [
+                Price(ObjectId(), 'IDR', 5000),
+              ]),
+            Modifier(ObjectId(), 'MODIFIER', 'Double Expresso',
+              prices: [
+                Price(ObjectId(), 'IDR', 10000),
+              ]),
+          ]),
+      ];
+
+      List<ModifierCollection> modifierCollectionHOUS00076950 = [
+        ModifierCollection(ObjectId(), 'Temp', 1, 1,
+          modifiers: [
+            Modifier(ObjectId(), 'MODIFIER', 'Hot'),
+            Modifier(ObjectId(), 'MODIFIER', 'Iced'),
+          ]),
       ];
 
       _realm.write(() {
@@ -62,12 +98,12 @@ class RealmService extends _$RealmService {
           Product(ObjectId(), 'HOUS00069085', 'PRODUCT', 'Butter Croissant',
             image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00069085.png',
             prices: pricesHHOUS00069085),
-          Product(ObjectId(), 'HOUS00075523', 'PRODUCT', 'Hot Cappuccino',
-            image:  'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077118.png',
-            prices: pricesHOUS00075523),
-          Product(ObjectId(), 'HOUS00075563', 'PRODUCT', 'Iced Tea',
-            image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00069085.png',
-            prices: pricesHOUS00075563),
+          Product(ObjectId(), 'MGM-ULI-002', 'PRODUCT', 'Hot Cappuccino',
+            image:  'https://ik.imagekit.io/yummycorp/yummykitchen/MGM-ULI-002.png',
+            modifierCollections: modifierCollectionMGMULI002, prices: pricesMGMULI002),
+          Product(ObjectId(), 'HOUS00076950', 'PRODUCT', 'Black Tea',
+            image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00076950.png',
+            modifierCollections: modifierCollectionHOUS00076950, prices: pricesHOUS00076950),
         ]);
       });
     }

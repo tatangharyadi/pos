@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
+import 'package:pos/screens/product/product_detail/product_detail.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/services/app_service.dart';
@@ -45,6 +46,15 @@ part 'app_router.g.dart';
         path: '/product',
         name: 'product',
         builder: (context, state) => const ProductScreen(),
+        routes: [
+          GoRoute(
+            path: 'detail/:id',
+            name: 'product_detail',
+            builder: (context, state) => ProductDetail(
+              id: state.pathParameters['id']!,
+            ),
+          )
+        ], 
       ),
       GoRoute(
         path: '/shift',

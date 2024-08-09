@@ -117,6 +117,237 @@ class Price extends _Price with RealmEntity, RealmObjectBase, RealmObject {
   SchemaObject get objectSchema => RealmObjectBase.getSchema(this) ?? schema;
 }
 
+class Modifier extends _Modifier
+    with RealmEntity, RealmObjectBase, RealmObject {
+  Modifier(
+    ObjectId id,
+    String type,
+    String name, {
+    String? sku,
+    String? description,
+    Iterable<Price> prices = const [],
+  }) {
+    RealmObjectBase.set(this, '_id', id);
+    RealmObjectBase.set(this, 'sku', sku);
+    RealmObjectBase.set(this, 'type', type);
+    RealmObjectBase.set(this, 'name', name);
+    RealmObjectBase.set(this, 'description', description);
+    RealmObjectBase.set<RealmList<Price>>(
+        this, 'prices', RealmList<Price>(prices));
+  }
+
+  Modifier._();
+
+  @override
+  ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
+  @override
+  set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
+
+  @override
+  String? get sku => RealmObjectBase.get<String>(this, 'sku') as String?;
+  @override
+  set sku(String? value) => RealmObjectBase.set(this, 'sku', value);
+
+  @override
+  String get type => RealmObjectBase.get<String>(this, 'type') as String;
+  @override
+  set type(String value) => RealmObjectBase.set(this, 'type', value);
+
+  @override
+  String get name => RealmObjectBase.get<String>(this, 'name') as String;
+  @override
+  set name(String value) => RealmObjectBase.set(this, 'name', value);
+
+  @override
+  String? get description =>
+      RealmObjectBase.get<String>(this, 'description') as String?;
+  @override
+  set description(String? value) =>
+      RealmObjectBase.set(this, 'description', value);
+
+  @override
+  RealmList<Price> get prices =>
+      RealmObjectBase.get<Price>(this, 'prices') as RealmList<Price>;
+  @override
+  set prices(covariant RealmList<Price> value) =>
+      throw RealmUnsupportedSetError();
+
+  @override
+  Stream<RealmObjectChanges<Modifier>> get changes =>
+      RealmObjectBase.getChanges<Modifier>(this);
+
+  @override
+  Stream<RealmObjectChanges<Modifier>> changesFor([List<String>? keyPaths]) =>
+      RealmObjectBase.getChangesFor<Modifier>(this, keyPaths);
+
+  @override
+  Modifier freeze() => RealmObjectBase.freezeObject<Modifier>(this);
+
+  EJsonValue toEJson() {
+    return <String, dynamic>{
+      '_id': id.toEJson(),
+      'sku': sku.toEJson(),
+      'type': type.toEJson(),
+      'name': name.toEJson(),
+      'description': description.toEJson(),
+      'prices': prices.toEJson(),
+    };
+  }
+
+  static EJsonValue _toEJson(Modifier value) => value.toEJson();
+  static Modifier _fromEJson(EJsonValue ejson) {
+    return switch (ejson) {
+      {
+        '_id': EJsonValue id,
+        'sku': EJsonValue sku,
+        'type': EJsonValue type,
+        'name': EJsonValue name,
+        'description': EJsonValue description,
+        'prices': EJsonValue prices,
+      } =>
+        Modifier(
+          fromEJson(id),
+          fromEJson(type),
+          fromEJson(name),
+          sku: fromEJson(sku),
+          description: fromEJson(description),
+          prices: fromEJson(prices),
+        ),
+      _ => raiseInvalidEJson(ejson),
+    };
+  }
+
+  static final schema = () {
+    RealmObjectBase.registerFactory(Modifier._);
+    register(_toEJson, _fromEJson);
+    return SchemaObject(ObjectType.realmObject, Modifier, 'modifiers', [
+      SchemaProperty('id', RealmPropertyType.objectid,
+          mapTo: '_id', primaryKey: true),
+      SchemaProperty('sku', RealmPropertyType.string,
+          optional: true, indexType: RealmIndexType.regular),
+      SchemaProperty('type', RealmPropertyType.string),
+      SchemaProperty('name', RealmPropertyType.string,
+          indexType: RealmIndexType.regular),
+      SchemaProperty('description', RealmPropertyType.string, optional: true),
+      SchemaProperty('prices', RealmPropertyType.object,
+          linkTarget: 'prices', collectionType: RealmCollectionType.list),
+    ]);
+  }();
+
+  @override
+  SchemaObject get objectSchema => RealmObjectBase.getSchema(this) ?? schema;
+}
+
+class ModifierCollection extends _ModifierCollection
+    with RealmEntity, RealmObjectBase, RealmObject {
+  ModifierCollection(
+    ObjectId id,
+    String name,
+    int min,
+    int max, {
+    Iterable<Modifier> modifiers = const [],
+  }) {
+    RealmObjectBase.set(this, '_id', id);
+    RealmObjectBase.set(this, 'name', name);
+    RealmObjectBase.set(this, 'min', min);
+    RealmObjectBase.set(this, 'max', max);
+    RealmObjectBase.set<RealmList<Modifier>>(
+        this, 'modifiers', RealmList<Modifier>(modifiers));
+  }
+
+  ModifierCollection._();
+
+  @override
+  ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
+  @override
+  set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
+
+  @override
+  String get name => RealmObjectBase.get<String>(this, 'name') as String;
+  @override
+  set name(String value) => RealmObjectBase.set(this, 'name', value);
+
+  @override
+  int get min => RealmObjectBase.get<int>(this, 'min') as int;
+  @override
+  set min(int value) => RealmObjectBase.set(this, 'min', value);
+
+  @override
+  int get max => RealmObjectBase.get<int>(this, 'max') as int;
+  @override
+  set max(int value) => RealmObjectBase.set(this, 'max', value);
+
+  @override
+  RealmList<Modifier> get modifiers =>
+      RealmObjectBase.get<Modifier>(this, 'modifiers') as RealmList<Modifier>;
+  @override
+  set modifiers(covariant RealmList<Modifier> value) =>
+      throw RealmUnsupportedSetError();
+
+  @override
+  Stream<RealmObjectChanges<ModifierCollection>> get changes =>
+      RealmObjectBase.getChanges<ModifierCollection>(this);
+
+  @override
+  Stream<RealmObjectChanges<ModifierCollection>> changesFor(
+          [List<String>? keyPaths]) =>
+      RealmObjectBase.getChangesFor<ModifierCollection>(this, keyPaths);
+
+  @override
+  ModifierCollection freeze() =>
+      RealmObjectBase.freezeObject<ModifierCollection>(this);
+
+  EJsonValue toEJson() {
+    return <String, dynamic>{
+      '_id': id.toEJson(),
+      'name': name.toEJson(),
+      'min': min.toEJson(),
+      'max': max.toEJson(),
+      'modifiers': modifiers.toEJson(),
+    };
+  }
+
+  static EJsonValue _toEJson(ModifierCollection value) => value.toEJson();
+  static ModifierCollection _fromEJson(EJsonValue ejson) {
+    return switch (ejson) {
+      {
+        '_id': EJsonValue id,
+        'name': EJsonValue name,
+        'min': EJsonValue min,
+        'max': EJsonValue max,
+        'modifiers': EJsonValue modifiers,
+      } =>
+        ModifierCollection(
+          fromEJson(id),
+          fromEJson(name),
+          fromEJson(min),
+          fromEJson(max),
+          modifiers: fromEJson(modifiers),
+        ),
+      _ => raiseInvalidEJson(ejson),
+    };
+  }
+
+  static final schema = () {
+    RealmObjectBase.registerFactory(ModifierCollection._);
+    register(_toEJson, _fromEJson);
+    return SchemaObject(
+        ObjectType.realmObject, ModifierCollection, 'modifierCollections', [
+      SchemaProperty('id', RealmPropertyType.objectid,
+          mapTo: '_id', primaryKey: true),
+      SchemaProperty('name', RealmPropertyType.string,
+          indexType: RealmIndexType.regular),
+      SchemaProperty('min', RealmPropertyType.int),
+      SchemaProperty('max', RealmPropertyType.int),
+      SchemaProperty('modifiers', RealmPropertyType.object,
+          linkTarget: 'modifiers', collectionType: RealmCollectionType.list),
+    ]);
+  }();
+
+  @override
+  SchemaObject get objectSchema => RealmObjectBase.getSchema(this) ?? schema;
+}
+
 class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
   static var _defaultsSet = false;
 
@@ -128,7 +359,7 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
     String? description,
     String? image,
     double? cost,
-    Iterable<Product> productRelations = const [],
+    Iterable<ModifierCollection> modifierCollections = const [],
     Iterable<Price> prices = const [],
     bool selected = false,
   }) {
@@ -144,8 +375,10 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'description', description);
     RealmObjectBase.set(this, 'image', image);
     RealmObjectBase.set(this, 'cost', cost);
-    RealmObjectBase.set<RealmList<Product>>(
-        this, 'productRelations', RealmList<Product>(productRelations));
+    RealmObjectBase.set<RealmList<ModifierCollection>>(
+        this,
+        'modifierCollections',
+        RealmList<ModifierCollection>(modifierCollections));
     RealmObjectBase.set<RealmList<Price>>(
         this, 'prices', RealmList<Price>(prices));
     RealmObjectBase.set(this, 'selected', selected);
@@ -191,11 +424,11 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
   set cost(double? value) => RealmObjectBase.set(this, 'cost', value);
 
   @override
-  RealmList<Product> get productRelations =>
-      RealmObjectBase.get<Product>(this, 'productRelations')
-          as RealmList<Product>;
+  RealmList<ModifierCollection> get modifierCollections =>
+      RealmObjectBase.get<ModifierCollection>(this, 'modifierCollections')
+          as RealmList<ModifierCollection>;
   @override
-  set productRelations(covariant RealmList<Product> value) =>
+  set modifierCollections(covariant RealmList<ModifierCollection> value) =>
       throw RealmUnsupportedSetError();
 
   @override
@@ -209,6 +442,18 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
   bool get selected => RealmObjectBase.get<bool>(this, 'selected') as bool;
   @override
   set selected(bool value) => RealmObjectBase.set(this, 'selected', value);
+
+  @override
+  RealmResults<Brand> get brand {
+    if (!isManaged) {
+      throw RealmError('Using backlinks is only possible for managed objects.');
+    }
+    return RealmObjectBase.get<Brand>(this, 'brand') as RealmResults<Brand>;
+  }
+
+  @override
+  set brand(covariant RealmResults<Brand> value) =>
+      throw RealmUnsupportedSetError();
 
   @override
   Stream<RealmObjectChanges<Product>> get changes =>
@@ -230,7 +475,7 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
       'description': description.toEJson(),
       'image': image.toEJson(),
       'cost': cost.toEJson(),
-      'productRelations': productRelations.toEJson(),
+      'modifierCollections': modifierCollections.toEJson(),
       'prices': prices.toEJson(),
       'selected': selected.toEJson(),
     };
@@ -247,7 +492,7 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
         'description': EJsonValue description,
         'image': EJsonValue image,
         'cost': EJsonValue cost,
-        'productRelations': EJsonValue productRelations,
+        'modifierCollections': EJsonValue modifierCollections,
         'prices': EJsonValue prices,
         'selected': EJsonValue selected,
       } =>
@@ -259,7 +504,7 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
           description: fromEJson(description),
           image: fromEJson(image),
           cost: fromEJson(cost),
-          productRelations: fromEJson(productRelations),
+          modifierCollections: fromEJson(modifierCollections),
           prices: fromEJson(prices),
           selected: fromEJson(selected),
         ),
@@ -281,11 +526,16 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('description', RealmPropertyType.string, optional: true),
       SchemaProperty('image', RealmPropertyType.string, optional: true),
       SchemaProperty('cost', RealmPropertyType.double, optional: true),
-      SchemaProperty('productRelations', RealmPropertyType.object,
-          linkTarget: 'products', collectionType: RealmCollectionType.list),
+      SchemaProperty('modifierCollections', RealmPropertyType.object,
+          linkTarget: 'modifierCollections',
+          collectionType: RealmCollectionType.list),
       SchemaProperty('prices', RealmPropertyType.object,
           linkTarget: 'prices', collectionType: RealmCollectionType.list),
       SchemaProperty('selected', RealmPropertyType.bool),
+      SchemaProperty('brand', RealmPropertyType.linkingObjects,
+          linkOriginProperty: 'products',
+          collectionType: RealmCollectionType.list,
+          linkTarget: 'brands'),
     ]);
   }();
 
@@ -296,9 +546,9 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
 class Brand extends _Brand with RealmEntity, RealmObjectBase, RealmObject {
   Brand(
     ObjectId id,
-    String name,
-    String description,
-    String image, {
+    String name, {
+    String? description,
+    String? image,
     Iterable<Product> products = const [],
   }) {
     RealmObjectBase.set(this, '_id', id);
@@ -322,16 +572,16 @@ class Brand extends _Brand with RealmEntity, RealmObjectBase, RealmObject {
   set name(String value) => RealmObjectBase.set(this, 'name', value);
 
   @override
-  String get description =>
-      RealmObjectBase.get<String>(this, 'description') as String;
+  String? get description =>
+      RealmObjectBase.get<String>(this, 'description') as String?;
   @override
-  set description(String value) =>
+  set description(String? value) =>
       RealmObjectBase.set(this, 'description', value);
 
   @override
-  String get image => RealmObjectBase.get<String>(this, 'image') as String;
+  String? get image => RealmObjectBase.get<String>(this, 'image') as String?;
   @override
-  set image(String value) => RealmObjectBase.set(this, 'image', value);
+  set image(String? value) => RealmObjectBase.set(this, 'image', value);
 
   @override
   RealmList<Product> get products =>
@@ -374,8 +624,8 @@ class Brand extends _Brand with RealmEntity, RealmObjectBase, RealmObject {
         Brand(
           fromEJson(id),
           fromEJson(name),
-          fromEJson(description),
-          fromEJson(image),
+          description: fromEJson(description),
+          image: fromEJson(image),
           products: fromEJson(products),
         ),
       _ => raiseInvalidEJson(ejson),
@@ -390,8 +640,8 @@ class Brand extends _Brand with RealmEntity, RealmObjectBase, RealmObject {
           mapTo: '_id', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
-      SchemaProperty('description', RealmPropertyType.string),
-      SchemaProperty('image', RealmPropertyType.string),
+      SchemaProperty('description', RealmPropertyType.string, optional: true),
+      SchemaProperty('image', RealmPropertyType.string, optional: true),
       SchemaProperty('products', RealmPropertyType.object,
           linkTarget: 'products', collectionType: RealmCollectionType.list),
     ]);

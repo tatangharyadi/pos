@@ -37,7 +37,7 @@ class ProductScreen extends StatelessWidget {
           //   )
           // );      
         },    
-        child: const Icon(Icons.autorenew),
+        child: const Icon(Icons.refresh),
       ), 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

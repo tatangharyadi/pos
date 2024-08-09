@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pos/components/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/product/product_query_repository.dart';
@@ -8,9 +9,10 @@ import 'package:pos/models/product/product_model.dart';
 
 @override
 class ProductDataTableSource extends DataTableSource {
+  final BuildContext context;
   final RealmResults<Product> products;
 
-  ProductDataTableSource(this.products);
+  ProductDataTableSource(this.context, this.products);
 
   @override
   DataRow getRow(int index) {
@@ -43,6 +45,14 @@ class ProductDataTableSource extends DataTableSource {
         DataCell(Text(product.name)),
         DataCell(Text(price.toString())),
       ],
+      onLongPress: () {
+        context.push(context.namedLocation(
+            'product_detail',
+            pathParameters: {
+              'id': product.id.toString(),
+            }
+        ));
+      },
     );
   }
 
@@ -59,7 +69,7 @@ class ProductDataTableSource extends DataTableSource {
 class ProductGrid extends ConsumerWidget {
   const ProductGrid({super.key});
 
-  PaginatedDataTable _buildTable(RealmResults<Product> products) {
+  PaginatedDataTable _buildTable(BuildContext context, RealmResults<Product> products) {
     final List<Map<String, dynamic>> header = [
       {"title": "SKU", "numeric": false},
       {"title": "Type", "numeric": false},
@@ -68,7 +78,7 @@ class ProductGrid extends ConsumerWidget {
     ];
 
     return PaginatedDataTable(
-      source: ProductDataTableSource(products),
+      source: ProductDataTableSource(context, products),
       showCheckboxColumn: true,
       showFirstLastButtons: true,
       showEmptyRows: false,
@@ -104,7 +114,7 @@ class ProductGrid extends ConsumerWidget {
         }
 
         return Expanded(
-          child: _buildTable(results),
+          child: _buildTable(context, results),
                 );
       },
     );

@@ -17,6 +17,36 @@ class _Price {
 }
 
 @RealmModel()
+@MapTo("modifiers")
+class _Modifier {
+  @PrimaryKey()
+  @MapTo("_id")
+  late ObjectId id;
+
+  @Indexed()
+  late String? sku;
+  late String type;
+  @Indexed()
+  late String name;
+  late String? description;
+  late List<_Price> prices;
+}
+
+@RealmModel()
+@MapTo("modifierCollections")
+class _ModifierCollection {
+  @PrimaryKey()
+  @MapTo("_id")
+  late ObjectId id;
+
+  @Indexed()
+  late String name;
+  late int min;
+  late int max;
+  late List<_Modifier> modifiers;
+}
+
+@RealmModel()
 @MapTo("products")
 class _Product {
   @PrimaryKey()
@@ -31,7 +61,9 @@ class _Product {
   late String? description;
   late String? image;
   late double? cost;
-  late List<_Product> productRelations;
+  @Backlink(#products)
+  late Iterable<_Brand> brand;
+  late List<_ModifierCollection> modifierCollections;
   late List<_Price> prices;
 
   late bool selected = false;
@@ -46,8 +78,8 @@ class _Brand {
 
   @Indexed()
   late String name;
-  late String description;
-  late String image;
+  late String? description;
+  late String? image;
   late List<_Product> products;
 }
 
