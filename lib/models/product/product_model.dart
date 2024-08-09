@@ -23,10 +23,10 @@ class _Product {
   @MapTo("_id")
   late ObjectId id;
 
-  @Indexed(RealmIndexType.fullText)
+  @Indexed()
   late String sku;
   late String type;
-  @Indexed(RealmIndexType.fullText)
+  @Indexed()
   late String name;
   late String? description;
   late String? image;
