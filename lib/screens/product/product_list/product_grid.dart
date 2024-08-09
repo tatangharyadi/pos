@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pos/components/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos/models/product/product_query_repository.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/product/product_repository.dart';
 import 'package:pos/models/product/product_model.dart';
@@ -83,11 +84,17 @@ class ProductGrid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-      Realm realm = ref.watch(productRepositoryProvider);
+    const query = r'''
+      sku LIKE[c] $0 ||
+      name LIKE[c] $0
+    ''';
+
+    Realm realm = ref.watch(productRepositoryProvider);
+    String queryParameter = ref.watch(productQueryRepositoryProvider);
+    queryParameter = '*$queryParameter*';
 
     return StreamBuilder<RealmResultsChanges<Product>>(
-      stream: realm.query<Product>("TRUEPREDICATE SORT(_id ASC)")
-          .changes,
+      stream: realm.query<Product>(query, [queryParameter]).changes,
       builder: (context, snapshot) {
         if (snapshot.data == null) {return progressIndicator();}
         

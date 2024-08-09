@@ -13,10 +13,10 @@ class ShiftGrid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-      Realm realm = ref.watch(shiftRepositoryProvider);
+    Realm realm = ref.watch(shiftRepositoryProvider);
 
     return StreamBuilder<RealmResultsChanges<DayShift>>(
-      stream: realm.query<DayShift>("TRUEPREDICATE SORT(_id ASC)")
+      stream: realm.query<DayShift>('TRUEPREDICATE SORT(_id ASC)')
           .changes,
       builder: (context, snapshot) {
         if (snapshot.data == null) {return progressIndicator();}
