@@ -15,12 +15,32 @@ class ProductDataTableSource extends DataTableSource {
   @override
   DataRow getRow(int index) {
     final product = products[index];
+
+    final now = DateTime.now().toUtc();
+    const query = r'''
+      priceEffectiveTime == nil && priceExpireTime == nil
+      LIMIT(1)
+    ''';
+    const queryValid = r'''
+      priceEffectiveTime <= $0 && priceExpireTime >= $0
+      SORT(priceExpireTime ASC)
+      LIMIT(1)
+    ''';
+    final basePrice = product.prices.query(query);
+    final validPrices = product.prices.query(queryValid, [now]);
+    double price = 0;
+    if (!validPrices.isEmpty) {
+      price = validPrices.first.price;
+    } else if (!basePrice.isEmpty) {
+      price = basePrice.first.price;
+    }
+    
     return DataRow(
       cells: [
         DataCell(Text(product.sku)),
         DataCell(Text(product.type)),
         DataCell(Text(product.name)),
-        DataCell(Text(product.prices.first.price.toString())),
+        DataCell(Text(price.toString())),
       ],
     );
   }

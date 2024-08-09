@@ -1,5 +1,6 @@
-import 'package:realm/realm.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:realm/realm.dart';
 import 'package:pos/models/shift/shift_model.dart';
 import 'package:pos/models/product/product_model.dart';
 
@@ -16,13 +17,26 @@ class RealmService extends _$RealmService {
       DayShift.schema, Shift.schema], schemaVersion: 1);
     _realm = Realm(config);
     
-    final storagePath = Configuration.defaultStoragePath;
-    print('***** ${storagePath} *****');
+    if(foundation.kDebugMode) {
+      final storagePath = Configuration.defaultStoragePath;
+      print('DEBUG: $storagePath');
+    }
+
+    DateTime now = DateTime.now();
+    DateTime previous = now.subtract(const Duration(days: 1));
+    DateTime next = now.add(const Duration(days: 1));
+    DateTime next2 = now.add(const Duration(days: 2));
 
     var products = _realm.all<Product>();
     if (products.isEmpty) {
       List<Price> pricesHOUS00077162 = [
         Price(ObjectId(), 'IDR', 54000),
+        Price(ObjectId(), 'IDR', 55000,
+        priceEffectiveTime: DateTime(now.year, now.month, now.day, 00, 00).toUtc(),
+        priceExpireTime: DateTime(next.year, next.month, next.day, 23, 59).toUtc()),
+        Price(ObjectId(), 'IDR', 56000,
+        priceEffectiveTime: DateTime(previous.year, previous.month, previous.day, 00, 00).toUtc(),
+        priceExpireTime: DateTime(next2.year, next2.month, next2.day, 23, 59).toUtc())
       ];
       List<Price> pricesHOUS00077118 = [
         Price(ObjectId(), 'IDR', 53000),
@@ -60,8 +74,6 @@ class RealmService extends _$RealmService {
 
     var dayShifts = _realm.all<DayShift>();
     if (dayShifts.isEmpty) {
-      DateTime now = DateTime.now();
-      DateTime next = now.add(const Duration(days: 1));
       List<Shift> shifts = [
         Shift(ObjectId(), 'SHIFT01',
           DateTime(now.year, now.month, now.day, 10, 00).toUtc(), DateTime(now.year, now.month, now.day, 15, 00).toUtc(),

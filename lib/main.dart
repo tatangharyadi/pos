@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/app.dart';
 
 void main() {
-  runApp(ProviderScope(child: MyApp()),);
+  runApp(const ProviderScope(child: MyApp()),);
 }
 
 

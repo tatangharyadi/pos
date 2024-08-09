@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +19,9 @@ part 'app_router.g.dart';
     initialLocation: '/',
     redirect: (context, state) {
       if (appState.isLoading || appState.hasError) {
-        print('***** error *****');
+        if(foundation.kDebugMode) {
+          print('DEBUG: isLoading or hasError');
+        }
         return '/';
       }
       return null;
