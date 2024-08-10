@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos/models/product/product_repository.dart';
+import 'package:realm/realm.dart';
 import 'package:pos/screens/product/product_detail/product_info.dart';
 import 'package:pos/screens/product/product_detail/product_modifier.dart';
 import 'package:pos/screens/product/product_detail/product_price.dart';
@@ -16,19 +18,28 @@ class ProductDetail extends ConsumerStatefulWidget {
 class _ProductDetailState extends ConsumerState<ProductDetail>
   with SingleTickerProviderStateMixin {
   late final tabController = TabController(length: 3, vsync: this);
+  late ObjectId _objectId;
+
+  @override
+  void initState() {
+    super.initState();
+    _objectId = ObjectId.fromHexString(widget.id);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final productRepository = ref.watch(productRepositoryProvider.notifier);
+    final product = productRepository.findById(_objectId);
+
     return Scaffold(    
       appBar: AppBar(
-        title: Text('Product: ${widget.id}'),
+        title: Text(product!.name),
       ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Product Name'),
                 TabBar(
                 controller: tabController,
                   tabs: const [
@@ -41,9 +52,9 @@ class _ProductDetailState extends ConsumerState<ProductDetail>
                   child: TabBarView(
                     controller: tabController,
                     children: [
-                      productInfoView(),
-                      productModifierView(),
-                      productPriceView(),
+                      productInfoView(product),
+                      productModifierView(product),
+                      productPriceView(product),
                     ],
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/services/realm_service.dart';
+import 'package:pos/models/product/product_model.dart';
 
 part 'product_repository.g.dart';
 
@@ -13,4 +14,9 @@ class ProductRepository extends _$ProductRepository {
     _realm = ref.watch(realmServiceProvider);
     return _realm;
   }
+
+   Product? findById(ObjectId? id) {
+    Product? product = _realm.find<Product>(id);
+    return product;
+  } 
 }

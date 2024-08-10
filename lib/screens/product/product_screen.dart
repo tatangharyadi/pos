@@ -16,7 +16,6 @@ class ProductScreen extends StatelessWidget {
       body: const Row(
         children: [
           Expanded(
-            flex: 2,
             child: ProductPanel()
           ),
         ]

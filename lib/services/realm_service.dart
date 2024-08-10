@@ -54,7 +54,7 @@ class RealmService extends _$RealmService {
       ];
 
       List<ModifierCollection> modifierCollectionMGMULI002 = [
-        ModifierCollection(ObjectId(), 'Add-On', 0, 5,
+        ModifierCollection(ObjectId(), 'Add-On', 0, 3,
           modifiers: [
             Modifier(ObjectId(), 'MODIFIER', 'Hazelnut Syrup',
               prices: [

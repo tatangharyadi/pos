@@ -29,9 +29,7 @@ class _ProductPanelState extends ConsumerState<ProductPanel> {
             padding: const EdgeInsets.only(left: 18.0, right: 18.0),
             child: queryForm(context, _formKey, _onQueryPressed),
           ),
-          const Expanded(
-            child: ProductGrid()
-          )
+          const ProductGrid()
         ],
     );
   }
