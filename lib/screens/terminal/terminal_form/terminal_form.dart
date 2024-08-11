@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/screens/terminal/terminal_form/product/product_panel.dart';
+import 'package:pos/screens/terminal/terminal_form/cart/cart_panel.dart';
 
 class TerminalForm extends StatelessWidget {
   final String id;
@@ -19,9 +20,9 @@ class TerminalForm extends StatelessWidget {
             flex: 2,
             child: ProductPanel(),
           ),
-          // Expanded( 
-          //   child: CartPanel(),
-          // ),
+          Expanded( 
+            child: CartPanel(),
+          ),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -32,7 +33,7 @@ class TerminalForm extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () {
-          context.push(context.namedLocation('paymentform'));        
+          // context.push(context.namedLocation('paymentform'));        
         },
         child: const Icon(Icons.keyboard_double_arrow_right),
       ), 

@@ -1,41 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:pos/models/product/product_utils.dart';
 import 'package:pos/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:pos/components/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos/models/category/category_query_repository.dart';
 import 'package:pos/models/product/product_query_repository.dart';
 import 'package:pos/models/product/product_repository.dart';
+import 'package:pos/models/cart/cart_repository.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/product/product_model.dart';
+import 'package:pos/models/product/product_utils.dart';
 
 class ProductGrid extends ConsumerWidget {
   const ProductGrid({super.key});
-
-  double _getPrice(Product product) {
-    final now = DateTime.now().toUtc();
-
-    const query = r'''
-      priceEffectiveTime == nil && priceExpireTime == nil
-      LIMIT(1)
-    ''';
-    const queryValid = r'''
-      priceEffectiveTime <= $0 && priceExpireTime >= $0
-      SORT(priceExpireTime ASC)
-      LIMIT(1)
-    ''';
-    final basePrice = product.prices.query(query);
-    final validPrices = product.prices.query(queryValid, [now]);
-    double price = 0;
-    if (!validPrices.isEmpty) {
-      price = validPrices.first.price;
-    } else if (!basePrice.isEmpty) {
-      price = basePrice.first.price;
-    }
-
-    return price;
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -70,10 +46,15 @@ class ProductGrid extends ConsumerWidget {
           itemBuilder: (context, index) {
             Product product = results[index];
             double price = ProductUtils.getValidPrice(product);
-            late IconData icon;
 
             return GestureDetector(
-              onTap: () {},
+              onTap: () {
+                ref.read(cartRepositoryProvider.notifier).add(
+                  product.sku,
+                  product.name,
+                  price, 
+                  1);
+              },
               child: GridTile(
                 footer: GridTileBar(
                   backgroundColor: tileBackground,
