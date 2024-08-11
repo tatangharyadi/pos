@@ -16,7 +16,6 @@ class ShiftScreen extends StatelessWidget {
       body: const Row(
         children: [
           Expanded(
-            flex: 2,
             child: ShiftPanel()
           ),
         ]

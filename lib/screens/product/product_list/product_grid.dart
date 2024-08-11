@@ -4,6 +4,7 @@ import 'package:pos/components/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/product/product_query_repository.dart';
 import 'package:realm/realm.dart';
+import 'package:pos/models/product/product_utils.dart';
 import 'package:pos/models/product/product_repository.dart';
 import 'package:pos/models/product/product_model.dart';
 
@@ -17,26 +18,8 @@ class ProductDataTableSource extends DataTableSource {
   @override
   DataRow getRow(int index) {
     final product = products[index];
+    final price = ProductUtils.getValidPrice(product);
 
-    final now = DateTime.now().toUtc();
-    const query = r'''
-      priceEffectiveTime == nil && priceExpireTime == nil
-      LIMIT(1)
-    ''';
-    const queryValid = r'''
-      priceEffectiveTime <= $0 && priceExpireTime >= $0
-      SORT(priceExpireTime ASC)
-      LIMIT(1)
-    ''';
-    final basePrice = product.prices.query(query);
-    final validPrices = product.prices.query(queryValid, [now]);
-    double price = 0;
-    if (!validPrices.isEmpty) {
-      price = validPrices.first.price;
-    } else if (!basePrice.isEmpty) {
-      price = basePrice.first.price;
-    }
-    
     return DataRow(
       key: ValueKey(product.id),
       cells: [

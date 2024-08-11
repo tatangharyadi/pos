@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:pos/navbar.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pos/screens/terminal/order_list/order_panel.dart';
+import 'package:pos/screens/terminal/terminal_form/product/product_panel.dart';
 
-class TerminalScreen extends StatelessWidget {
-  const TerminalScreen({super.key});
+class TerminalForm extends StatelessWidget {
+  final String id;
+
+  const TerminalForm({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavBar(),
       appBar: AppBar(
         title: const Text('Terminal'),
       ),
       body: const Row(
         children: [
           Expanded(
-            child: OrderPanel()
+            flex: 2,
+            child: ProductPanel(),
           ),
-        ]
+          // Expanded( 
+          //   child: CartPanel(),
+          // ),
+        ],
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
@@ -28,18 +32,11 @@ class TerminalScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () {
-            context.go(context.namedLocation(
-                'terminal_form',
-                pathParameters: {
-                  'id':'new',
-                }
-            )
-          );      
+          context.push(context.namedLocation('paymentform'));        
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.keyboard_double_arrow_right),
       ), 
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,          
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,      
     );
   }
 }
- 

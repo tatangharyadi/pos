@@ -1,15 +1,16 @@
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
-import 'package:pos/screens/product/product_detail/product_detail.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/services/app_service.dart';
 import 'package:pos/screens/home/home_screen.dart';
-import 'package:pos/screens/shift/shift_form/shift_form.dart';
-import 'package:pos/screens/terminal/terminal_screen.dart';
 import 'package:pos/screens/product/product_screen.dart';
+import 'package:pos/screens/product/product_detail/product_detail.dart';
 import 'package:pos/screens/shift/shift_screen.dart';
+import 'package:pos/screens/shift/shift_form/shift_form.dart';
 import 'package:pos/screens/shift/shift_form/shift_child_form.dart';
+import 'package:pos/screens/terminal/terminal_screen.dart';
+import 'package:pos/screens/terminal/terminal_form/terminal_form.dart';
 
 part 'app_router.g.dart';
 
@@ -38,9 +39,16 @@ part 'app_router.g.dart';
       GoRoute(
         path: '/terminal',
         name: 'terminal',
-        builder: (BuildContext context, GoRouterState state) {
-          return const TerminalScreen();
-        },
+        builder: (context, state) => const TerminalScreen(),
+        routes: [
+          GoRoute(
+            path: 'detail/:id',
+            name: 'terminal_form',
+            builder: (context, state) => TerminalForm(
+              id: state.pathParameters['id']!,
+            ),
+          )
+        ], 
       ),
       GoRoute(
         path: '/product',

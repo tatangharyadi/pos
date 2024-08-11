@@ -6,3 +6,5 @@ appThemeData() {
         useMaterial3: true,
       );
 }
+
+final tileBackground = Colors.green.shade900.withOpacity(0.7);

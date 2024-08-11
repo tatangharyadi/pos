@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:pos/models/order/order_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/shift/shift_model.dart';
@@ -15,7 +16,9 @@ class RealmService extends _$RealmService {
     var config = Configuration.local([
       Price.schema, Modifier.schema, ModifierCollection.schema,
       Product.schema, Brand.schema, Category.schema,
-      DayShift.schema, Shift.schema], schemaVersion: 1);
+      DayShift.schema, Shift.schema,
+      OrderLineModifier.schema, OrderLine.schema, Order.schema, ParentOrder.schema],
+      schemaVersion: 1);
     _realm = Realm(config);
     
     if(foundation.kDebugMode) {
