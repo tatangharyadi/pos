@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/product/product_repository.dart';
 import 'package:realm/realm.dart';
-import 'package:pos/screens/product/product_detail/product_info.dart';
-import 'package:pos/screens/product/product_detail/product_modifier.dart';
-import 'package:pos/screens/product/product_detail/product_price.dart';
+import 'package:pos/screens/product/product_detail/product_info_tab.dart';
+import 'package:pos/screens/product/product_detail/product_modifier_tab.dart';
+import 'package:pos/screens/product/product_detail/product_price_tab.dart';
 
 class ProductDetail extends ConsumerStatefulWidget {
   final String id;
@@ -52,9 +52,9 @@ class _ProductDetailState extends ConsumerState<ProductDetail>
                   child: TabBarView(
                     controller: tabController,
                     children: [
-                      productInfoView(product),
-                      productModifierView(product),
-                      productPriceView(product),
+                      ProductInfoTab(product: product),
+                      ProductModifierTab(product: product),
+                      ProductPriceTab(product: product),
                     ],
                   ),
                 ),
