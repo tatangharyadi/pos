@@ -14,6 +14,202 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+CartItemModifier _$CartItemModifierFromJson(Map<String, dynamic> json) {
+  return _CartItemModifier.fromJson(json);
+}
+
+/// @nodoc
+mixin _$CartItemModifier {
+  String get objectId => throw _privateConstructorUsedError;
+  String? get sku => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  double get unitPrice => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $CartItemModifierCopyWith<CartItemModifier> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CartItemModifierCopyWith<$Res> {
+  factory $CartItemModifierCopyWith(
+          CartItemModifier value, $Res Function(CartItemModifier) then) =
+      _$CartItemModifierCopyWithImpl<$Res, CartItemModifier>;
+  @useResult
+  $Res call({String objectId, String? sku, String name, double unitPrice});
+}
+
+/// @nodoc
+class _$CartItemModifierCopyWithImpl<$Res, $Val extends CartItemModifier>
+    implements $CartItemModifierCopyWith<$Res> {
+  _$CartItemModifierCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? objectId = null,
+    Object? sku = freezed,
+    Object? name = null,
+    Object? unitPrice = null,
+  }) {
+    return _then(_value.copyWith(
+      objectId: null == objectId
+          ? _value.objectId
+          : objectId // ignore: cast_nullable_to_non_nullable
+              as String,
+      sku: freezed == sku
+          ? _value.sku
+          : sku // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      unitPrice: null == unitPrice
+          ? _value.unitPrice
+          : unitPrice // ignore: cast_nullable_to_non_nullable
+              as double,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$CartItemModifierImplCopyWith<$Res>
+    implements $CartItemModifierCopyWith<$Res> {
+  factory _$$CartItemModifierImplCopyWith(_$CartItemModifierImpl value,
+          $Res Function(_$CartItemModifierImpl) then) =
+      __$$CartItemModifierImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String objectId, String? sku, String name, double unitPrice});
+}
+
+/// @nodoc
+class __$$CartItemModifierImplCopyWithImpl<$Res>
+    extends _$CartItemModifierCopyWithImpl<$Res, _$CartItemModifierImpl>
+    implements _$$CartItemModifierImplCopyWith<$Res> {
+  __$$CartItemModifierImplCopyWithImpl(_$CartItemModifierImpl _value,
+      $Res Function(_$CartItemModifierImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? objectId = null,
+    Object? sku = freezed,
+    Object? name = null,
+    Object? unitPrice = null,
+  }) {
+    return _then(_$CartItemModifierImpl(
+      objectId: null == objectId
+          ? _value.objectId
+          : objectId // ignore: cast_nullable_to_non_nullable
+              as String,
+      sku: freezed == sku
+          ? _value.sku
+          : sku // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      unitPrice: null == unitPrice
+          ? _value.unitPrice
+          : unitPrice // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$CartItemModifierImpl implements _CartItemModifier {
+  _$CartItemModifierImpl(
+      {required this.objectId,
+      this.sku,
+      required this.name,
+      this.unitPrice = 0.0});
+
+  factory _$CartItemModifierImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CartItemModifierImplFromJson(json);
+
+  @override
+  final String objectId;
+  @override
+  final String? sku;
+  @override
+  final String name;
+  @override
+  @JsonKey()
+  final double unitPrice;
+
+  @override
+  String toString() {
+    return 'CartItemModifier(objectId: $objectId, sku: $sku, name: $name, unitPrice: $unitPrice)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CartItemModifierImpl &&
+            (identical(other.objectId, objectId) ||
+                other.objectId == objectId) &&
+            (identical(other.sku, sku) || other.sku == sku) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.unitPrice, unitPrice) ||
+                other.unitPrice == unitPrice));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, objectId, sku, name, unitPrice);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CartItemModifierImplCopyWith<_$CartItemModifierImpl> get copyWith =>
+      __$$CartItemModifierImplCopyWithImpl<_$CartItemModifierImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CartItemModifierImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CartItemModifier implements CartItemModifier {
+  factory _CartItemModifier(
+      {required final String objectId,
+      final String? sku,
+      required final String name,
+      final double unitPrice}) = _$CartItemModifierImpl;
+
+  factory _CartItemModifier.fromJson(Map<String, dynamic> json) =
+      _$CartItemModifierImpl.fromJson;
+
+  @override
+  String get objectId;
+  @override
+  String? get sku;
+  @override
+  String get name;
+  @override
+  double get unitPrice;
+  @override
+  @JsonKey(ignore: true)
+  _$$CartItemModifierImplCopyWith<_$CartItemModifierImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 CartItem _$CartItemFromJson(Map<String, dynamic> json) {
   return _CartItem.fromJson(json);
 }
@@ -23,8 +219,9 @@ mixin _$CartItem {
   String get objectId => throw _privateConstructorUsedError;
   String get sku => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  dynamic get unitPrice => throw _privateConstructorUsedError;
+  double get unitPrice => throw _privateConstructorUsedError;
   int get qty => throw _privateConstructorUsedError;
+  List<CartItemModifier> get modifiers => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,7 +235,12 @@ abstract class $CartItemCopyWith<$Res> {
       _$CartItemCopyWithImpl<$Res, CartItem>;
   @useResult
   $Res call(
-      {String objectId, String sku, String name, dynamic unitPrice, int qty});
+      {String objectId,
+      String sku,
+      String name,
+      double unitPrice,
+      int qty,
+      List<CartItemModifier> modifiers});
 }
 
 /// @nodoc
@@ -57,8 +259,9 @@ class _$CartItemCopyWithImpl<$Res, $Val extends CartItem>
     Object? objectId = null,
     Object? sku = null,
     Object? name = null,
-    Object? unitPrice = freezed,
+    Object? unitPrice = null,
     Object? qty = null,
+    Object? modifiers = null,
   }) {
     return _then(_value.copyWith(
       objectId: null == objectId
@@ -73,14 +276,18 @@ class _$CartItemCopyWithImpl<$Res, $Val extends CartItem>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      unitPrice: freezed == unitPrice
+      unitPrice: null == unitPrice
           ? _value.unitPrice
           : unitPrice // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as double,
       qty: null == qty
           ? _value.qty
           : qty // ignore: cast_nullable_to_non_nullable
               as int,
+      modifiers: null == modifiers
+          ? _value.modifiers
+          : modifiers // ignore: cast_nullable_to_non_nullable
+              as List<CartItemModifier>,
     ) as $Val);
   }
 }
@@ -94,7 +301,12 @@ abstract class _$$CartItemImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String objectId, String sku, String name, dynamic unitPrice, int qty});
+      {String objectId,
+      String sku,
+      String name,
+      double unitPrice,
+      int qty,
+      List<CartItemModifier> modifiers});
 }
 
 /// @nodoc
@@ -111,8 +323,9 @@ class __$$CartItemImplCopyWithImpl<$Res>
     Object? objectId = null,
     Object? sku = null,
     Object? name = null,
-    Object? unitPrice = freezed,
+    Object? unitPrice = null,
     Object? qty = null,
+    Object? modifiers = null,
   }) {
     return _then(_$CartItemImpl(
       objectId: null == objectId
@@ -127,11 +340,18 @@ class __$$CartItemImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      unitPrice: freezed == unitPrice ? _value.unitPrice! : unitPrice,
+      unitPrice: null == unitPrice
+          ? _value.unitPrice
+          : unitPrice // ignore: cast_nullable_to_non_nullable
+              as double,
       qty: null == qty
           ? _value.qty
           : qty // ignore: cast_nullable_to_non_nullable
               as int,
+      modifiers: null == modifiers
+          ? _value.modifiers
+          : modifiers // ignore: cast_nullable_to_non_nullable
+              as List<CartItemModifier>,
     ));
   }
 }
@@ -143,8 +363,9 @@ class _$CartItemImpl implements _CartItem {
       {required this.objectId,
       required this.sku,
       required this.name,
-      this.unitPrice = 0,
-      required this.qty});
+      this.unitPrice = 0.0,
+      required this.qty,
+      this.modifiers = const []});
 
   factory _$CartItemImpl.fromJson(Map<String, dynamic> json) =>
       _$$CartItemImplFromJson(json);
@@ -157,13 +378,16 @@ class _$CartItemImpl implements _CartItem {
   final String name;
   @override
   @JsonKey()
-  final dynamic unitPrice;
+  final double unitPrice;
   @override
   final int qty;
+  @override
+  @JsonKey()
+  final List<CartItemModifier> modifiers;
 
   @override
   String toString() {
-    return 'CartItem(objectId: $objectId, sku: $sku, name: $name, unitPrice: $unitPrice, qty: $qty)';
+    return 'CartItem(objectId: $objectId, sku: $sku, name: $name, unitPrice: $unitPrice, qty: $qty, modifiers: $modifiers)';
   }
 
   @override
@@ -175,14 +399,16 @@ class _$CartItemImpl implements _CartItem {
                 other.objectId == objectId) &&
             (identical(other.sku, sku) || other.sku == sku) &&
             (identical(other.name, name) || other.name == name) &&
-            const DeepCollectionEquality().equals(other.unitPrice, unitPrice) &&
-            (identical(other.qty, qty) || other.qty == qty));
+            (identical(other.unitPrice, unitPrice) ||
+                other.unitPrice == unitPrice) &&
+            (identical(other.qty, qty) || other.qty == qty) &&
+            const DeepCollectionEquality().equals(other.modifiers, modifiers));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, objectId, sku, name,
-      const DeepCollectionEquality().hash(unitPrice), qty);
+  int get hashCode => Object.hash(runtimeType, objectId, sku, name, unitPrice,
+      qty, const DeepCollectionEquality().hash(modifiers));
 
   @JsonKey(ignore: true)
   @override
@@ -203,8 +429,9 @@ abstract class _CartItem implements CartItem {
       {required final String objectId,
       required final String sku,
       required final String name,
-      final dynamic unitPrice,
-      required final int qty}) = _$CartItemImpl;
+      final double unitPrice,
+      required final int qty,
+      final List<CartItemModifier> modifiers}) = _$CartItemImpl;
 
   factory _CartItem.fromJson(Map<String, dynamic> json) =
       _$CartItemImpl.fromJson;
@@ -216,9 +443,11 @@ abstract class _CartItem implements CartItem {
   @override
   String get name;
   @override
-  dynamic get unitPrice;
+  double get unitPrice;
   @override
   int get qty;
+  @override
+  List<CartItemModifier> get modifiers;
   @override
   @JsonKey(ignore: true)
   _$$CartItemImplCopyWith<_$CartItemImpl> get copyWith =>

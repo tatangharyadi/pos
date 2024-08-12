@@ -7,8 +7,9 @@ import 'package:pos/models/product/product_query_repository.dart';
 import 'package:pos/models/product/product_repository.dart';
 import 'package:pos/models/cart/cart_repository.dart';
 import 'package:realm/realm.dart';
-import 'package:pos/models/product/product_model.dart';
 import 'package:pos/models/product/product_utils.dart';
+import 'package:pos/models/product/product_model.dart';
+import 'package:pos/screens/terminal/terminal_form/cart/cart_item_modifer_form.dart';
 
 class ProductGrid extends ConsumerWidget {
   const ProductGrid({super.key});
@@ -45,6 +46,7 @@ class ProductGrid extends ConsumerWidget {
           itemCount: results.length,
           itemBuilder: (context, index) {
             Product product = results[index];
+            String id = product.id.toString();
             double price = ProductUtils.getValidPrice(product);
 
             return GestureDetector(
@@ -54,6 +56,14 @@ class ProductGrid extends ConsumerWidget {
                   product.name,
                   price, 
                   1);
+              },
+              onLongPress: () {
+                showGeneralDialog(
+                  context: context, 
+                  pageBuilder: (_, __, ___) {
+                    return CartItemModiferForm(id: id);
+                  }
+                );
               },
               child: GridTile(
                 footer: GridTileBar(
