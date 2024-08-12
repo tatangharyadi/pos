@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:pos/components/modifier_card/modifier_card.dart';
+import 'package:pos/components/modifier_card_v2/modifier_card.dart';
 import 'package:pos/models/product/product_repository.dart';
 import 'package:pos/models/cart/cart_repository.dart';
 import 'package:pos/models/product/product_utils.dart';
@@ -34,17 +34,21 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
     final product = productRepository.findById(_objectId);
     final price = ProductUtils.getValidPrice(product!);
 
-    List<BaseModifierCard> modifierCards = [];
-    for (var modifierCollection in product!.modifierCollections) {
-      modifierCards.add(ModifierCollectionCard(modifierCollection.name, modifierCollection.min, modifierCollection.max));
-      for (var modifier in modifierCollection.modifiers) {
-        double price = 0;
-        if (modifier.prices.isNotEmpty) {
-          price = modifier.prices.first.price;
-        }
-        modifierCards.add(ModifierCard(modifier.name, price));
-      }
+    List<ModifierCollectionCard> modifierCards = [];
+    for (var modifierCollection in product.modifierCollections) {
+      modifierCards.add(ModifierCollectionCard(modifierCollection));
     }
+    // List<BaseModifierCard> modifierCards = [];
+    // for (var modifierCollection in product.modifierCollections) {
+    //   modifierCards.add(ModifierCollectionCard(modifierCollection.name, modifierCollection.min, modifierCollection.max));
+    //   for (var modifier in modifierCollection.modifiers) {
+    //     double price = 0;
+    //     if (modifier.prices.isNotEmpty) {
+    //       price = modifier.prices.first.price;
+    //     }
+    //     modifierCards.add(ModifierCard(modifier.name, price));
+    //   }
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -78,13 +82,10 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
             Expanded(
               child: Column(
                 children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: modifierCards.length,
-                      itemBuilder: (context, index) {
-                        return modifierCards[index].build(context);
-                      }),
-                  )
+                  for (var modifierCard in modifierCards) ...[
+                    modifierCard.build(context),
+                    const Gap(5),
+                  ],
                 ],
               ),
             ),
