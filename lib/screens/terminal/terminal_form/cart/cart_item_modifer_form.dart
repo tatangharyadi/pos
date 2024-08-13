@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:pos/components/modifier_card_v2/modifier_card.dart';
+import 'package:pos/components/modifier_card/checkbox_modifier_card.dart';
+import 'package:pos/components/modifier_card/radio_modifier_card.dart';
 import 'package:pos/models/product/product_repository.dart';
 import 'package:pos/models/cart/cart_repository.dart';
 import 'package:pos/models/product/product_utils.dart';
@@ -34,25 +35,18 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
     final product = productRepository.findById(_objectId);
     final price = ProductUtils.getValidPrice(product!);
 
-    List<ModifierCollectionCard> modifierCards = [];
+    List<Widget> modifierCards = [];
     for (var modifierCollection in product.modifierCollections) {
-      modifierCards.add(ModifierCollectionCard(modifierCollection));
+      if (modifierCollection.max == 1) {
+        modifierCards.add(RadioModifierCard(modifierCollection: modifierCollection));
+      } else {
+      modifierCards.add(CheckboxModifierCard(modifierCollection: modifierCollection));
+      }
     }
-    // List<BaseModifierCard> modifierCards = [];
-    // for (var modifierCollection in product.modifierCollections) {
-    //   modifierCards.add(ModifierCollectionCard(modifierCollection.name, modifierCollection.min, modifierCollection.max));
-    //   for (var modifier in modifierCollection.modifiers) {
-    //     double price = 0;
-    //     if (modifier.prices.isNotEmpty) {
-    //       price = modifier.prices.first.price;
-    //     }
-    //     modifierCards.add(ModifierCard(modifier.name, price));
-    //   }
-    // }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(product!.name),
+        title: Text(product.name),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -83,7 +77,7 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
               child: Column(
                 children: [
                   for (var modifierCard in modifierCards) ...[
-                    modifierCard.build(context),
+                    modifierCard,
                     const Gap(5),
                   ],
                 ],
