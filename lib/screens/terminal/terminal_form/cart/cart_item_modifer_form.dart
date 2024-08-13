@@ -28,6 +28,32 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
     super.initState();
     _objectId = ObjectId.fromHexString(widget.id);
   }
+
+  void onChanged() {
+    List<String> selectedModifiers = [];
+
+    for (var field in _formKey.currentState!.fields.entries) {
+      String fieldType = field.value.toString();
+      if (fieldType.contains('FormBuilderChoiceChip') && field.value.value != null) {
+        selectedModifiers.add(field.value.value);
+      }
+      if (fieldType.contains('FormBuilderFilterChip')) {
+        for (var value in field.value.value) {
+          selectedModifiers.add(value);
+        }
+      }
+    }
+
+    final productRepository = ref.read(productRepositoryProvider.notifier);
+    for (var selected in selectedModifiers) {
+      final modifier = productRepository.findModifierById(ObjectId.fromHexString(selected));
+      double price = 0;
+      if (modifier!.prices.isNotEmpty) {
+        price = modifier.prices.first.price;
+      }
+      print('selected: ${modifier.name} ${price}');
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -38,9 +64,11 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
     List<Widget> modifierCards = [];
     for (var modifierCollection in product.modifierCollections) {
       if (modifierCollection.max == 1) {
-        modifierCards.add(RadioModifierCard(formKey: _formKey, modifierCollection: modifierCollection));
+        modifierCards.add(RadioModifierCard(formKey: _formKey,
+          onChanged: onChanged, modifierCollection: modifierCollection));
       } else {
-      modifierCards.add(CheckboxModifierCard(formKey: _formKey, modifierCollection: modifierCollection));
+      modifierCards.add(CheckboxModifierCard(formKey: _formKey,
+        onChanged: onChanged, modifierCollection: modifierCollection));
       }
     }
 

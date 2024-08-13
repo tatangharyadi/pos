@@ -5,9 +5,11 @@ import 'package:pos/models/product/product_model.dart';
 
 class RadioModifierCard extends ConsumerStatefulWidget {
   final GlobalKey<FormBuilderState> formKey;
+  final Function onChanged;
   final ModifierCollection modifierCollection;
 
-  const RadioModifierCard({super.key, required this.formKey, required this.modifierCollection});
+  const RadioModifierCard({super.key, required this.formKey, 
+    required this.onChanged, required this.modifierCollection});
 
   @override
   ConsumerState<RadioModifierCard> createState() => _RadioModifierCardState();
@@ -32,7 +34,7 @@ class _RadioModifierCardState extends ConsumerState<RadioModifierCard> {
         price = modifier.prices.first.price;
       }
       options.add(FormBuilderChipOption(
-        value: modifier.name,
+        value: modifier.id.hexString,
         child: Text('${modifier.name} (+${price.toStringAsFixed(0)})'),
       ));
     }
@@ -46,13 +48,13 @@ class _RadioModifierCardState extends ConsumerState<RadioModifierCard> {
               height: 300,
               width: 300,
               child: FormBuilderChoiceChip(
-                name: widget.modifierCollection.name,
+                name: widget.modifierCollection.id.hexString,
                 decoration: InputDecoration(
                   labelText: widget.modifierCollection.name,
                 ),
                 options: options,
                 onChanged: (value) {
-                  print(value);
+                  widget.onChanged();
                 },
               ),
             ),

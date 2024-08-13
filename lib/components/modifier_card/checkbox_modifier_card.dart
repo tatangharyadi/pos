@@ -5,9 +5,11 @@ import 'package:pos/models/product/product_model.dart';
 
 class CheckboxModifierCard extends ConsumerStatefulWidget {
   final GlobalKey<FormBuilderState> formKey;
+  final Function onChanged;
   final ModifierCollection modifierCollection; 
 
-  const CheckboxModifierCard({super.key, required this.formKey, required this.modifierCollection});
+  const CheckboxModifierCard({super.key, required this.formKey,
+    required this.onChanged, required this.modifierCollection});
 
   @override
   ConsumerState<CheckboxModifierCard> createState() => _CheckboxModifierCardState();
@@ -31,7 +33,7 @@ class _CheckboxModifierCardState extends ConsumerState<CheckboxModifierCard> {
       if (modifier.prices.isNotEmpty) {
         price = modifier.prices.first.price;
         options.add(FormBuilderChipOption(
-          value: modifier.name,
+          value: modifier.id.hexString,
           child: Text('${modifier.name} (+${price.toStringAsFixed(0)})'),
         ));
       }
@@ -46,13 +48,13 @@ class _CheckboxModifierCardState extends ConsumerState<CheckboxModifierCard> {
               height: 300,
               width: 300,
               child: FormBuilderFilterChip(
-                name: widget.modifierCollection.name,
+                name: widget.modifierCollection.id.hexString,
                 decoration: InputDecoration(
                   labelText: widget.modifierCollection.name,
                 ),
                 options: options,
                 onChanged: (value) {
-                  print(value);
+                  widget.onChanged();
                 },
               ),
             ),

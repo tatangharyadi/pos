@@ -11,7 +11,7 @@ class _Price {
 
   @Indexed()
   late String currencyCode;
-  late double price;
+  late double price = 0.0;
   late DateTime? priceEffectiveTime;
   late DateTime? priceExpireTime;
 }

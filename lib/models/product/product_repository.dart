@@ -15,8 +15,13 @@ class ProductRepository extends _$ProductRepository {
     return _realm;
   }
 
-   Product? findById(ObjectId? id) {
+  Product? findById(ObjectId? id) {
     Product? product = _realm.find<Product>(id);
     return product;
+  }
+
+  Modifier? findModifierById(ObjectId? id) {
+    Modifier? modifier = _realm.find<Modifier>(id);
+    return modifier;
   }
 }
