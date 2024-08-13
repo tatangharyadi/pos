@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pos/components/modifier_card/modifier_card.dart';
 import 'package:pos/models/product/product_model.dart';
+import 'package:pos/models/product/product_utils.dart';
 
 class ProductModifierTab extends StatelessWidget {
   final Product product;
@@ -12,10 +13,7 @@ class ProductModifierTab extends StatelessWidget {
     for (var modifierCollection in product.modifierCollections) {
       modifierCards.add(ModifierCollectionCard(modifierCollection.name, modifierCollection.min, modifierCollection.max));
       for (var modifier in modifierCollection.modifiers) {
-        double price = 0;
-        if (modifier.prices.isNotEmpty) {
-          price = modifier.prices.first.price;
-        }
+        final price = ProductUtils.getValidPriceByModifier(modifier);
         modifierCards.add(ModifierCard(modifier.name, price));
       }
     }

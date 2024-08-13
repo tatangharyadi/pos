@@ -47,11 +47,8 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
     final productRepository = ref.read(productRepositoryProvider.notifier);
     for (var selected in selectedModifiers) {
       final modifier = productRepository.findModifierById(ObjectId.fromHexString(selected));
-      double price = 0;
-      if (modifier!.prices.isNotEmpty) {
-        price = modifier.prices.first.price;
-      }
-      print('selected: ${modifier.name} ${price}');
+      final price = ProductUtils.getValidPriceByModifier(modifier!);
+      print('selected: ${modifier.name} $price');
     }
   }
   
@@ -59,7 +56,7 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
   Widget build(BuildContext context) {
     final productRepository = ref.watch(productRepositoryProvider.notifier);
     final product = productRepository.findById(_objectId);
-    final price = ProductUtils.getValidPrice(product!);
+    final price = ProductUtils.getValidPriceByProduct(product!);
 
     List<Widget> modifierCards = [];
     for (var modifierCollection in product.modifierCollections) {

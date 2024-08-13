@@ -8,13 +8,20 @@ part of 'product_model.dart';
 
 // ignore_for_file: type=lint
 class Price extends _Price with RealmEntity, RealmObjectBase, RealmObject {
+  static var _defaultsSet = false;
+
   Price(
     ObjectId id,
-    String currencyCode,
-    double price, {
+    String currencyCode, {
+    double price = 0.0,
     DateTime? priceEffectiveTime,
     DateTime? priceExpireTime,
   }) {
+    if (!_defaultsSet) {
+      _defaultsSet = RealmObjectBase.setDefaults<Price>({
+        'price': 0.0,
+      });
+    }
     RealmObjectBase.set(this, '_id', id);
     RealmObjectBase.set(this, 'currencyCode', currencyCode);
     RealmObjectBase.set(this, 'price', price);
@@ -56,6 +63,32 @@ class Price extends _Price with RealmEntity, RealmObjectBase, RealmObject {
       RealmObjectBase.set(this, 'priceExpireTime', value);
 
   @override
+  RealmResults<Product> get linkedProduct {
+    if (!isManaged) {
+      throw RealmError('Using backlinks is only possible for managed objects.');
+    }
+    return RealmObjectBase.get<Product>(this, 'linkedProduct')
+        as RealmResults<Product>;
+  }
+
+  @override
+  set linkedProduct(covariant RealmResults<Product> value) =>
+      throw RealmUnsupportedSetError();
+
+  @override
+  RealmResults<Modifier> get linkedModifier {
+    if (!isManaged) {
+      throw RealmError('Using backlinks is only possible for managed objects.');
+    }
+    return RealmObjectBase.get<Modifier>(this, 'linkedModifier')
+        as RealmResults<Modifier>;
+  }
+
+  @override
+  set linkedModifier(covariant RealmResults<Modifier> value) =>
+      throw RealmUnsupportedSetError();
+
+  @override
   Stream<RealmObjectChanges<Price>> get changes =>
       RealmObjectBase.getChanges<Price>(this);
 
@@ -89,7 +122,7 @@ class Price extends _Price with RealmEntity, RealmObjectBase, RealmObject {
         Price(
           fromEJson(id),
           fromEJson(currencyCode),
-          fromEJson(price),
+          price: fromEJson(price),
           priceEffectiveTime: fromEJson(priceEffectiveTime),
           priceExpireTime: fromEJson(priceExpireTime),
         ),
@@ -103,13 +136,20 @@ class Price extends _Price with RealmEntity, RealmObjectBase, RealmObject {
     return SchemaObject(ObjectType.realmObject, Price, 'prices', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
-      SchemaProperty('currencyCode', RealmPropertyType.string,
-          indexType: RealmIndexType.regular),
+      SchemaProperty('currencyCode', RealmPropertyType.string),
       SchemaProperty('price', RealmPropertyType.double),
       SchemaProperty('priceEffectiveTime', RealmPropertyType.timestamp,
           optional: true),
       SchemaProperty('priceExpireTime', RealmPropertyType.timestamp,
           optional: true),
+      SchemaProperty('linkedProduct', RealmPropertyType.linkingObjects,
+          linkOriginProperty: 'prices',
+          collectionType: RealmCollectionType.list,
+          linkTarget: 'products'),
+      SchemaProperty('linkedModifier', RealmPropertyType.linkingObjects,
+          linkOriginProperty: 'prices',
+          collectionType: RealmCollectionType.list,
+          linkTarget: 'modifiers'),
     ]);
   }();
 
@@ -444,15 +484,16 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
   set selected(bool value) => RealmObjectBase.set(this, 'selected', value);
 
   @override
-  RealmResults<Brand> get brand {
+  RealmResults<Brand> get linkedBrand {
     if (!isManaged) {
       throw RealmError('Using backlinks is only possible for managed objects.');
     }
-    return RealmObjectBase.get<Brand>(this, 'brand') as RealmResults<Brand>;
+    return RealmObjectBase.get<Brand>(this, 'linkedBrand')
+        as RealmResults<Brand>;
   }
 
   @override
-  set brand(covariant RealmResults<Brand> value) =>
+  set linkedBrand(covariant RealmResults<Brand> value) =>
       throw RealmUnsupportedSetError();
 
   @override
@@ -532,7 +573,7 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('prices', RealmPropertyType.object,
           linkTarget: 'prices', collectionType: RealmCollectionType.list),
       SchemaProperty('selected', RealmPropertyType.bool),
-      SchemaProperty('brand', RealmPropertyType.linkingObjects,
+      SchemaProperty('linkedBrand', RealmPropertyType.linkingObjects,
           linkOriginProperty: 'products',
           collectionType: RealmCollectionType.list,
           linkTarget: 'brands'),

@@ -9,11 +9,15 @@ class _Price {
   @MapTo("_id")
   late ObjectId id;
 
-  @Indexed()
   late String currencyCode;
   late double price = 0.0;
   late DateTime? priceEffectiveTime;
   late DateTime? priceExpireTime;
+
+  @Backlink(#prices)
+  late Iterable<_Product> linkedProduct;
+  @Backlink(#prices)
+  late Iterable<_Modifier> linkedModifier;
 }
 
 @RealmModel()
@@ -62,7 +66,7 @@ class _Product {
   late String? image;
   late double? cost;
   @Backlink(#products)
-  late Iterable<_Brand> brand;
+  late Iterable<_Brand> linkedBrand;
   late List<_ModifierCollection> modifierCollections;
   late List<_Price> prices;
 

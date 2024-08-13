@@ -35,25 +35,25 @@ class RealmService extends _$RealmService {
     if (products.isEmpty) {
       
       List<Price> pricesHOUS00077162 = [
-        Price(ObjectId(), 'IDR', 54000),
-        Price(ObjectId(), 'IDR', 55000,
+        Price(ObjectId(), 'IDR', price: 54000),
+        Price(ObjectId(), 'IDR', price: 55000,
         priceEffectiveTime: DateTime(now.year, now.month, now.day, 00, 00).toUtc(),
         priceExpireTime: DateTime(next.year, next.month, next.day, 23, 59).toUtc()),
-        Price(ObjectId(), 'IDR', 56000,
+        Price(ObjectId(), 'IDR', price: 56000,
         priceEffectiveTime: DateTime(previous.year, previous.month, previous.day, 00, 00).toUtc(),
         priceExpireTime: DateTime(next2.year, next2.month, next2.day, 23, 59).toUtc())
       ];
       List<Price> pricesHOUS00077118 = [
-        Price(ObjectId(), 'IDR', 53000),
+        Price(ObjectId(), 'IDR', price: 53000),
       ];
       List<Price> pricesHHOUS00069085 = [
-        Price(ObjectId(), 'IDR', 18000),
+        Price(ObjectId(), 'IDR', price: 18000),
       ];
       List<Price> pricesMGMULI002 = [
-        Price(ObjectId(), 'IDR', 28000),
+        Price(ObjectId(), 'IDR', price: 28000),
       ];
       List<Price> pricesHOUS00076950 = [
-        Price(ObjectId(), 'IDR', 10000),
+        Price(ObjectId(), 'IDR', price: 10000),
       ];
 
       List<ModifierCollection> modifierCollectionMGMULI002 = [
@@ -61,23 +61,23 @@ class RealmService extends _$RealmService {
           modifiers: [
             Modifier(ObjectId(), 'MODIFIER', 'Hazelnut Syrup',
               prices: [
-                Price(ObjectId(), 'IDR', 6000),
+                Price(ObjectId(), 'IDR', price: 6000),
               ]),
             Modifier(ObjectId(), 'MODIFIER', 'Vanilla Syrup',
               prices: [
-                Price(ObjectId(), 'IDR', 6000),
+                Price(ObjectId(), 'IDR', price: 6000),
               ]),
             Modifier(ObjectId(), 'MODIFIER', 'Oat Milk',
               prices: [
-                Price(ObjectId(), 'IDR', 12000),
+                Price(ObjectId(), 'IDR', price: 12000),
               ]),
             Modifier(ObjectId(), 'MODIFIER', 'Expresso',
               prices: [
-                Price(ObjectId(), 'IDR', 5000),
+                Price(ObjectId(), 'IDR', price: 5000),
               ]),
             Modifier(ObjectId(), 'MODIFIER', 'Double Expresso',
               prices: [
-                Price(ObjectId(), 'IDR', 10000),
+                Price(ObjectId(), 'IDR', price: 10000),
               ]),
           ]),
       ];

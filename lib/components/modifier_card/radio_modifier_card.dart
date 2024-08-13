@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/product/product_model.dart';
+import 'package:pos/models/product/product_utils.dart';
 
 class RadioModifierCard extends ConsumerStatefulWidget {
   final GlobalKey<FormBuilderState> formKey;
@@ -29,10 +30,7 @@ class _RadioModifierCardState extends ConsumerState<RadioModifierCard> {
     List<FormBuilderChipOption> options = [];
 
     for (var modifier in _modifiers) {
-      double price = 0;
-      if (modifier.prices.isNotEmpty) {
-        price = modifier.prices.first.price;
-      }
+      final price = ProductUtils.getValidPriceByModifier(modifier);
       options.add(FormBuilderChipOption(
         value: modifier.id.hexString,
         child: Text('${modifier.name} (+${price.toStringAsFixed(0)})'),

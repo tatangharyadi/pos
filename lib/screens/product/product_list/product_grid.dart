@@ -18,7 +18,7 @@ class ProductDataTableSource extends DataTableSource {
   @override
   DataRow getRow(int index) {
     final product = products[index];
-    final price = ProductUtils.getValidPrice(product);
+    final price = ProductUtils.getValidPriceByProduct(product);
 
     return DataRow(
       key: ValueKey(product.id),

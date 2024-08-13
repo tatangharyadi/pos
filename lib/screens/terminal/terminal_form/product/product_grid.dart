@@ -47,7 +47,7 @@ class ProductGrid extends ConsumerWidget {
           itemBuilder: (context, index) {
             Product product = results[index];
             String id = product.id.toString();
-            double price = ProductUtils.getValidPrice(product);
+            double price = ProductUtils.getValidPriceByProduct(product);
 
             return GestureDetector(
               onTap: () {
