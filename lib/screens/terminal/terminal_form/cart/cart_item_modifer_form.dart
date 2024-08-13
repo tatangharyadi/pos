@@ -38,9 +38,9 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
     List<Widget> modifierCards = [];
     for (var modifierCollection in product.modifierCollections) {
       if (modifierCollection.max == 1) {
-        modifierCards.add(RadioModifierCard(modifierCollection: modifierCollection));
+        modifierCards.add(RadioModifierCard(formKey: _formKey, modifierCollection: modifierCollection));
       } else {
-      modifierCards.add(CheckboxModifierCard(modifierCollection: modifierCollection));
+      modifierCards.add(CheckboxModifierCard(formKey: _formKey, modifierCollection: modifierCollection));
       }
     }
 
@@ -50,40 +50,43 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Column(
-              children: [
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxHeight: 150,
-                    maxWidth: 150,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      product.image ?? 'https://via.placeholder.com/150',
-                      fit: BoxFit.cover,  ),
-                  ),
-                ),
-                const Gap(5),
-                Text(product.sku),
-                const Gap(5),
-                Text(NumberFormat.decimalPattern().format(price)),
-              ],
-            ),
-            const Gap(5),
-            Expanded(
-              child: Column(
+        child: FormBuilder(
+          key: _formKey,
+          child: Row(
+            children: [
+              Column(
                 children: [
-                  for (var modifierCard in modifierCards) ...[
-                    modifierCard,
-                    const Gap(5),
-                  ],
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxHeight: 150,
+                      maxWidth: 150,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        product.image ?? 'https://via.placeholder.com/150',
+                        fit: BoxFit.cover,  ),
+                    ),
+                  ),
+                  const Gap(5),
+                  Text(product.sku),
+                  const Gap(5),
+                  Text(NumberFormat.decimalPattern().format(price)),
                 ],
               ),
-            ),
-          ],
+              const Gap(5),
+              Expanded(
+                child: Column(
+                  children: [
+                    for (var modifierCard in modifierCards) ...[
+                      modifierCard,
+                      const Gap(5),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
