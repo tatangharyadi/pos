@@ -13,6 +13,7 @@ _$CartItemModifierImpl _$$CartItemModifierImplFromJson(
       sku: json['sku'] as String?,
       name: json['name'] as String,
       unitPrice: (json['unitPrice'] as num?)?.toDouble() ?? 0.0,
+      isSelected: json['isSelected'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$CartItemModifierImplToJson(
@@ -22,6 +23,7 @@ Map<String, dynamic> _$$CartItemModifierImplToJson(
       'sku': instance.sku,
       'name': instance.name,
       'unitPrice': instance.unitPrice,
+      'isSelected': instance.isSelected,
     };
 
 _$CartItemImpl _$$CartItemImplFromJson(Map<String, dynamic> json) =>

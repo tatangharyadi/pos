@@ -24,6 +24,7 @@ mixin _$CartItemModifier {
   String? get sku => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   double get unitPrice => throw _privateConstructorUsedError;
+  bool get isSelected => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,7 +38,12 @@ abstract class $CartItemModifierCopyWith<$Res> {
           CartItemModifier value, $Res Function(CartItemModifier) then) =
       _$CartItemModifierCopyWithImpl<$Res, CartItemModifier>;
   @useResult
-  $Res call({String objectId, String? sku, String name, double unitPrice});
+  $Res call(
+      {String objectId,
+      String? sku,
+      String name,
+      double unitPrice,
+      bool isSelected});
 }
 
 /// @nodoc
@@ -57,6 +63,7 @@ class _$CartItemModifierCopyWithImpl<$Res, $Val extends CartItemModifier>
     Object? sku = freezed,
     Object? name = null,
     Object? unitPrice = null,
+    Object? isSelected = null,
   }) {
     return _then(_value.copyWith(
       objectId: null == objectId
@@ -75,6 +82,10 @@ class _$CartItemModifierCopyWithImpl<$Res, $Val extends CartItemModifier>
           ? _value.unitPrice
           : unitPrice // ignore: cast_nullable_to_non_nullable
               as double,
+      isSelected: null == isSelected
+          ? _value.isSelected
+          : isSelected // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -87,7 +98,12 @@ abstract class _$$CartItemModifierImplCopyWith<$Res>
       __$$CartItemModifierImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String objectId, String? sku, String name, double unitPrice});
+  $Res call(
+      {String objectId,
+      String? sku,
+      String name,
+      double unitPrice,
+      bool isSelected});
 }
 
 /// @nodoc
@@ -105,6 +121,7 @@ class __$$CartItemModifierImplCopyWithImpl<$Res>
     Object? sku = freezed,
     Object? name = null,
     Object? unitPrice = null,
+    Object? isSelected = null,
   }) {
     return _then(_$CartItemModifierImpl(
       objectId: null == objectId
@@ -123,6 +140,10 @@ class __$$CartItemModifierImplCopyWithImpl<$Res>
           ? _value.unitPrice
           : unitPrice // ignore: cast_nullable_to_non_nullable
               as double,
+      isSelected: null == isSelected
+          ? _value.isSelected
+          : isSelected // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -134,7 +155,8 @@ class _$CartItemModifierImpl implements _CartItemModifier {
       {required this.objectId,
       this.sku,
       required this.name,
-      this.unitPrice = 0.0});
+      this.unitPrice = 0.0,
+      this.isSelected = false});
 
   factory _$CartItemModifierImpl.fromJson(Map<String, dynamic> json) =>
       _$$CartItemModifierImplFromJson(json);
@@ -148,10 +170,13 @@ class _$CartItemModifierImpl implements _CartItemModifier {
   @override
   @JsonKey()
   final double unitPrice;
+  @override
+  @JsonKey()
+  final bool isSelected;
 
   @override
   String toString() {
-    return 'CartItemModifier(objectId: $objectId, sku: $sku, name: $name, unitPrice: $unitPrice)';
+    return 'CartItemModifier(objectId: $objectId, sku: $sku, name: $name, unitPrice: $unitPrice, isSelected: $isSelected)';
   }
 
   @override
@@ -164,12 +189,15 @@ class _$CartItemModifierImpl implements _CartItemModifier {
             (identical(other.sku, sku) || other.sku == sku) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.unitPrice, unitPrice) ||
-                other.unitPrice == unitPrice));
+                other.unitPrice == unitPrice) &&
+            (identical(other.isSelected, isSelected) ||
+                other.isSelected == isSelected));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, objectId, sku, name, unitPrice);
+  int get hashCode =>
+      Object.hash(runtimeType, objectId, sku, name, unitPrice, isSelected);
 
   @JsonKey(ignore: true)
   @override
@@ -191,7 +219,8 @@ abstract class _CartItemModifier implements CartItemModifier {
       {required final String objectId,
       final String? sku,
       required final String name,
-      final double unitPrice}) = _$CartItemModifierImpl;
+      final double unitPrice,
+      final bool isSelected}) = _$CartItemModifierImpl;
 
   factory _CartItemModifier.fromJson(Map<String, dynamic> json) =
       _$CartItemModifierImpl.fromJson;
@@ -204,6 +233,8 @@ abstract class _CartItemModifier implements CartItemModifier {
   String get name;
   @override
   double get unitPrice;
+  @override
+  bool get isSelected;
   @override
   @JsonKey(ignore: true)
   _$$CartItemModifierImplCopyWith<_$CartItemModifierImpl> get copyWith =>

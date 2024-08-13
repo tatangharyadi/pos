@@ -10,6 +10,7 @@ class CartItemModifier with _$CartItemModifier {
     String? sku,
     required String name,
     @Default(0.0) double unitPrice,
+    @Default(false) bool isSelected,
   }) = _CartItemModifier;
 
   factory CartItemModifier.fromJson(Map<String, Object?> json) => _$CartItemModifierFromJson(json);

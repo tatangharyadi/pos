@@ -10,6 +10,8 @@ import 'package:pos/models/product/product_repository.dart';
 import 'package:pos/models/cart/cart_repository.dart';
 import 'package:pos/models/product/product_utils.dart';
 import 'package:realm/realm.dart';
+import 'package:pos/models/product/product_model.dart';
+import 'package:pos/models/cart/cart_item_model.dart';
 
 class CartItemModiferForm extends ConsumerStatefulWidget {
   final String id;
@@ -22,11 +24,39 @@ class CartItemModiferForm extends ConsumerStatefulWidget {
 class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
   final _formKey = GlobalKey<FormBuilderState>();
   late ObjectId _objectId;
+  late CartItem _cartItem;
+  late Product _product;
+  late double _unitPrice, _totalModifierPrice;
 
   @override
   void initState() {
     super.initState();
     _objectId = ObjectId.fromHexString(widget.id);
+    
+    final productRepository = ref.read(productRepositoryProvider.notifier);
+    _product = productRepository.findById(_objectId)!;
+    _unitPrice = ProductUtils.getValidPriceByProduct(_product);
+    _cartItem = CartItem(
+      objectId: _product.id.hexString,
+      sku: _product.sku,
+      name: _product.name,
+      unitPrice: _unitPrice,
+      qty: 1,
+      modifiers: List<CartItemModifier>.empty(growable: true));
+
+    for (var modifierCollection in _product.modifierCollections) {
+      for (var modifier in modifierCollection.modifiers) {
+        final price = ProductUtils.getValidPriceByModifier(modifier);
+        _cartItem.modifiers.add(CartItemModifier(
+          objectId: modifier.id.hexString,
+          sku: modifier.sku,
+          name: modifier.name,
+          unitPrice: price,
+          isSelected: false));
+      }
+    }
+
+    _totalModifierPrice = 0;
   }
 
   void onChanged() {
@@ -44,22 +74,36 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
       }
     }
 
-    final productRepository = ref.read(productRepositoryProvider.notifier);
-    for (var selected in selectedModifiers) {
-      final modifier = productRepository.findModifierById(ObjectId.fromHexString(selected));
-      final price = ProductUtils.getValidPriceByModifier(modifier!);
-      print('selected: ${modifier.name} $price');
-    }
+    setState(() {
+      _cartItem.modifiers.clear();
+      _totalModifierPrice = 0;
+
+      for (var modifierCollection in _product.modifierCollections) {
+        for (var modifier in modifierCollection.modifiers) {
+          final modifierPrice = ProductUtils.getValidPriceByModifier(modifier);
+
+          bool isSelected = false;
+          int index = selectedModifiers.indexWhere((element) => element == modifier.id.hexString);
+          if (index != -1) {
+            isSelected = true;
+            _totalModifierPrice += modifierPrice;
+          }
+          
+          _cartItem.modifiers.add(CartItemModifier(
+            objectId: modifier.id.hexString,
+            sku: modifier.sku,
+            name: modifier.name,
+            unitPrice: modifierPrice,
+            isSelected: isSelected));
+        }
+      }
+    });
   }
   
   @override
   Widget build(BuildContext context) {
-    final productRepository = ref.watch(productRepositoryProvider.notifier);
-    final product = productRepository.findById(_objectId);
-    final price = ProductUtils.getValidPriceByProduct(product!);
-
     List<Widget> modifierCards = [];
-    for (var modifierCollection in product.modifierCollections) {
+    for (var modifierCollection in _product.modifierCollections) {
       if (modifierCollection.max == 1) {
         modifierCards.add(RadioModifierCard(formKey: _formKey,
           onChanged: onChanged, modifierCollection: modifierCollection));
@@ -71,7 +115,7 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(product.name),
+        title: Text(_product.name),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -89,14 +133,16 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        product.image ?? 'https://via.placeholder.com/150',
+                        _product.image ?? 'https://via.placeholder.com/150',
                         fit: BoxFit.cover,  ),
                     ),
                   ),
                   const Gap(5),
-                  Text(product.sku),
+                  Text(_product.sku),
                   const Gap(5),
-                  Text(NumberFormat.decimalPattern().format(price)),
+                  Text(NumberFormat.decimalPattern().format(_unitPrice)),
+                  const Gap(5),
+                  Text('+${NumberFormat.decimalPattern().format(_totalModifierPrice)}'),
                 ],
               ),
               const Gap(5),
@@ -109,6 +155,16 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
                     ],
                   ],
                 ),
+              ),
+              const Gap(5),
+              Column(
+                children: [
+                  Text(_cartItem.name),
+                  Text(_cartItem.qty.toString()),
+                  for (var modifier in _cartItem.modifiers) ...[
+                    Text('${modifier.name} ${modifier.isSelected}'),
+                  ],
+                ],
               ),
             ],
           ),
@@ -123,9 +179,9 @@ class _CartItemModiferFormState extends ConsumerState<CartItemModiferForm> {
         shape: const CircleBorder(),
         onPressed: () {
           ref.read(cartRepositoryProvider.notifier).add(
-            product.sku,
-            product.name,
-            price, 
+            _product.sku,
+            _product.name,
+            _unitPrice + _totalModifierPrice, 
             1);
           context.pop();
         },
