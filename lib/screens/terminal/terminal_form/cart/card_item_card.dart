@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:pos/screens/terminal/terminal_form/cart/cart_item_form.dart';
 import 'package:pos/models/cart/cart_item_model.dart';
 
 class CartItemCard extends StatelessWidget {
@@ -12,23 +13,35 @@ class CartItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(cartItem.name,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-                  Text('x${cartItem.qty} @${NumberFormat.decimalPattern().format(cartItem.unitPrice)}'),
-                ],
+        InkWell(
+          onTap: () {
+            showGeneralDialog(
+              context: context, 
+              pageBuilder: (_, __, ___) {
+                return CartItemForm(
+                  orderLineId: cartItem.orderLineId,
+                  productId: cartItem.productId,);
+              }
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(cartItem.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text('x${cartItem.qty} @${NumberFormat.decimalPattern().format(cartItem.unitPrice)}'),
+                  ],
+                ),
               ),
-            ),
-            const Divider(),
-            Text(NumberFormat.decimalPattern().format(cartItem.unitPrice * cartItem.qty)),
-          ],
+              const Divider(),
+              Text(NumberFormat.decimalPattern().format(cartItem.unitPrice * cartItem.qty)),
+            ],
+          ),
         ),
         const Gap(10),
       ],

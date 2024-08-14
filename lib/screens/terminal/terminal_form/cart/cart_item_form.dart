@@ -89,16 +89,15 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
           int index = selectedModifiers.indexWhere((element) => element == modifier.id.hexString);
           if (index != -1) {
             isSelected = true;
+            _cartItem.modifiers.add(CartItemModifier(
+              objectId: modifier.id.hexString,
+              collectionId: modifierCollection.id.hexString,
+              sku: modifier.sku,
+              name: modifier.name,
+              unitPrice: modifierPrice,
+              isSelected: isSelected));
             _totalModifierPrice += modifierPrice;
           }
-          
-          _cartItem.modifiers.add(CartItemModifier(
-            objectId: modifier.id.hexString,
-            collectionId: modifierCollection.id.hexString,
-            sku: modifier.sku,
-            name: modifier.name,
-            unitPrice: modifierPrice,
-            isSelected: isSelected));
         }
       }
     });
@@ -220,6 +219,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
             name: _product.name,
             unitPrice: _unitPrice + _totalModifierPrice,
             qty: _quantity);
+          ref.read(cartRepositoryProvider.notifier).remove(cartItem.orderLineId);
           ref.read(cartRepositoryProvider.notifier).add(cartItem);
           context.pop();
         },
