@@ -15,8 +15,9 @@ import 'package:pos/models/product/product_model.dart';
 import 'package:pos/models/cart/cart_item_model.dart';
 
 class CartItemForm extends ConsumerStatefulWidget {
-  final String id;
-  const CartItemForm({super.key, required this.id});
+  final String orderLineId;
+  final String productId;
+  const CartItemForm({super.key, required this.orderLineId, required this.productId});
 
     @override
   ConsumerState<CartItemForm> createState() => _CartItemModiferState();
@@ -24,41 +25,40 @@ class CartItemForm extends ConsumerStatefulWidget {
 
 class _CartItemModiferState extends ConsumerState<CartItemForm> {
   final _formKey = GlobalKey<FormBuilderState>();
-  late ObjectId _objectId;
   late CartItem _cartItem;
   late Product _product;
   late int _quantity;
   late double _unitPrice, _totalModifierPrice;
 
-  @override
-  void initState() {
-    super.initState();
-    _objectId = ObjectId.fromHexString(widget.id);
-    
-    final productRepository = ref.read(productRepositoryProvider.notifier);
-    _product = productRepository.findById(_objectId)!;
-    _unitPrice = ProductUtils.getValidPriceByProduct(_product);
-    _cartItem = CartItem(
-      objectId: _product.id.hexString,
-      sku: _product.sku,
-      name: _product.name,
-      unitPrice: _unitPrice,
+  CartItem _new() {
+    final cartItem = CartItem(
+      orderLineId: ObjectId().hexString,
+      productId: widget.productId,
+      sku: 'sku',
+      name: 'name',
+      unitPrice: 0.0,
       qty: 1,
       modifiers: List<CartItemModifier>.empty(growable: true));
 
-    for (var modifierCollection in _product.modifierCollections) {
-      for (var modifier in modifierCollection.modifiers) {
-        final price = ProductUtils.getValidPriceByModifier(modifier);
-        _cartItem.modifiers.add(CartItemModifier(
-          objectId: modifier.id.hexString,
-          sku: modifier.sku,
-          name: modifier.name,
-          unitPrice: price,
-          isSelected: false));
-      }
-    }
+      return cartItem;
+  }
 
-    _quantity = 1;
+  CartItem _edit() {
+    final cartRepository = ref.read(cartRepositoryProvider.notifier);
+    final cartItem = cartRepository.findByOrderLineId(widget.orderLineId)!;
+
+    return cartItem;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _cartItem = (widget.orderLineId != 'new') ? _edit() : _new();
+
+    final productRepository = ref.read(productRepositoryProvider.notifier);
+    _product = productRepository.findById(ObjectId.fromHexString(_cartItem.productId))!;
+    _unitPrice = ProductUtils.getValidPriceByProduct(_product);
+    _quantity = _cartItem.qty;
     _totalModifierPrice = 0;
   }
 
@@ -94,6 +94,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
           
           _cartItem.modifiers.add(CartItemModifier(
             objectId: modifier.id.hexString,
+            collectionId: modifierCollection.id.hexString,
             sku: modifier.sku,
             name: modifier.name,
             unitPrice: modifierPrice,
@@ -108,11 +109,21 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
     List<Widget> modifierCards = [];
     for (var modifierCollection in _product.modifierCollections) {
       if (modifierCollection.max == 1) {
+        String initialValue = '';
+        if (_cartItem.modifiers.isNotEmpty) {
+          initialValue = _cartItem.modifiers.firstWhere(
+            (element) => element.collectionId == modifierCollection.id.hexString).objectId;
+        }
         modifierCards.add(RadioModifierCard(formKey: _formKey,
-          onChanged: onChanged, modifierCollection: modifierCollection));
+          onChanged: onChanged, modifierCollection: modifierCollection, initialValue: initialValue,));
       } else {
+      List<String> initialValue = [];
+      if (_cartItem.modifiers.isNotEmpty) {
+        initialValue = _cartItem.modifiers.where(
+          (element) => element.collectionId == modifierCollection.id.hexString).map((e) => e.objectId).toList();
+      }
       modifierCards.add(CheckboxModifierCard(formKey: _formKey,
-        onChanged: onChanged, modifierCollection: modifierCollection));
+        onChanged: onChanged, modifierCollection: modifierCollection, initialValue: initialValue,));
       }
     }
 
@@ -204,11 +215,12 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () {
-          ref.read(cartRepositoryProvider.notifier).add(
-            _product.sku,
-            _product.name,
-            _unitPrice + _totalModifierPrice, 
-            _quantity);
+          final cartItem = _cartItem.copyWith(
+            sku: _product.sku,
+            name: _product.name,
+            unitPrice: _unitPrice + _totalModifierPrice,
+            qty: _quantity);
+          ref.read(cartRepositoryProvider.notifier).add(cartItem);
           context.pop();
         },
         child: const Icon(Icons.check),

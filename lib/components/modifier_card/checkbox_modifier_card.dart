@@ -8,9 +8,10 @@ class CheckboxModifierCard extends ConsumerStatefulWidget {
   final GlobalKey<FormBuilderState> formKey;
   final Function onChanged;
   final ModifierCollection modifierCollection; 
+  final List<String> initialValue;
 
   const CheckboxModifierCard({super.key, required this.formKey,
-    required this.onChanged, required this.modifierCollection});
+    required this.onChanged, required this.modifierCollection, required this.initialValue});
 
   @override
   ConsumerState<CheckboxModifierCard> createState() => _CheckboxModifierCardState();
@@ -30,7 +31,7 @@ class _CheckboxModifierCardState extends ConsumerState<CheckboxModifierCard> {
     List<FormBuilderChipOption> options = [];
     
     for (var modifier in _modifiers) {
-      final price = ProductUtils.getValidPriceByModifier(modifier!);
+      final price = ProductUtils.getValidPriceByModifier(modifier);
       options.add(FormBuilderChipOption(
         value: modifier.id.hexString,
         child: Text('${modifier.name} (+${price.toStringAsFixed(0)})'),
@@ -51,6 +52,7 @@ class _CheckboxModifierCardState extends ConsumerState<CheckboxModifierCard> {
                   labelText: widget.modifierCollection.name,
                 ),
                 options: options,
+                initialValue: widget.initialValue,
                 onChanged: (value) {
                   widget.onChanged();
                 },

@@ -8,9 +8,10 @@ class RadioModifierCard extends ConsumerStatefulWidget {
   final GlobalKey<FormBuilderState> formKey;
   final Function onChanged;
   final ModifierCollection modifierCollection;
+  final String initialValue;
 
   const RadioModifierCard({super.key, required this.formKey, 
-    required this.onChanged, required this.modifierCollection});
+    required this.onChanged, required this.modifierCollection, required this.initialValue});
 
   @override
   ConsumerState<RadioModifierCard> createState() => _RadioModifierCardState();
@@ -51,6 +52,7 @@ class _RadioModifierCardState extends ConsumerState<RadioModifierCard> {
                   labelText: widget.modifierCollection.name,
                 ),
                 options: options,
+                initialValue: widget.initialValue,
                 onChanged: (value) {
                   widget.onChanged();
                 },

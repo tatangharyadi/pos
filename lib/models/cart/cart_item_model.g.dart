@@ -10,6 +10,7 @@ _$CartItemModifierImpl _$$CartItemModifierImplFromJson(
         Map<String, dynamic> json) =>
     _$CartItemModifierImpl(
       objectId: json['objectId'] as String,
+      collectionId: json['collectionId'] as String,
       sku: json['sku'] as String?,
       name: json['name'] as String,
       unitPrice: (json['unitPrice'] as num?)?.toDouble() ?? 0.0,
@@ -20,6 +21,7 @@ Map<String, dynamic> _$$CartItemModifierImplToJson(
         _$CartItemModifierImpl instance) =>
     <String, dynamic>{
       'objectId': instance.objectId,
+      'collectionId': instance.collectionId,
       'sku': instance.sku,
       'name': instance.name,
       'unitPrice': instance.unitPrice,
@@ -28,7 +30,8 @@ Map<String, dynamic> _$$CartItemModifierImplToJson(
 
 _$CartItemImpl _$$CartItemImplFromJson(Map<String, dynamic> json) =>
     _$CartItemImpl(
-      objectId: json['objectId'] as String,
+      orderLineId: json['orderLineId'] as String,
+      productId: json['productId'] as String,
       sku: json['sku'] as String,
       name: json['name'] as String,
       unitPrice: (json['unitPrice'] as num?)?.toDouble() ?? 0.0,
@@ -41,7 +44,8 @@ _$CartItemImpl _$$CartItemImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$CartItemImplToJson(_$CartItemImpl instance) =>
     <String, dynamic>{
-      'objectId': instance.objectId,
+      'orderLineId': instance.orderLineId,
+      'productId': instance.productId,
       'sku': instance.sku,
       'name': instance.name,
       'unitPrice': instance.unitPrice,

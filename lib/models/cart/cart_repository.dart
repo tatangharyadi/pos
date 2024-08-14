@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:pos/models/cart/cart_item_model.dart';
-import 'package:realm/realm.dart';
 
 part 'cart_repository.g.dart';
 
@@ -11,21 +10,18 @@ class CartRepository extends _$CartRepository {
     return [];
   }
 
-  void add(String sku, String name, double unitPrice, int qty) {
+  CartItem? findByOrderLineId(String orderLineId) {
+    return state.firstWhere((item) => item.orderLineId == orderLineId);
+  }
+
+  void add(CartItem item) {
     state = [
-      ...state,
-      CartItem(
-        objectId: ObjectId().hexString,
-        sku: sku,
-        name: name,
-        unitPrice: unitPrice,
-        qty: qty,
-      )
+      ...state, item
     ];
   }
 
-  void remove(String objectId) {
-    state = state.where((item) => item.objectId != objectId).toList();
+  void remove(String orderLineId) {
+    state = state.where((item) => item.orderLineId != orderLineId).toList();
   }
 
   double sum() {

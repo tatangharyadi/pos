@@ -10,6 +10,7 @@ import 'package:pos/models/cart/cart_repository.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/product/product_utils.dart';
 import 'package:pos/models/product/product_model.dart';
+import 'package:pos/models/cart/cart_item_model.dart';
 
 class ProductGrid extends ConsumerWidget {
   const ProductGrid({super.key});
@@ -51,17 +52,24 @@ class ProductGrid extends ConsumerWidget {
 
             return GestureDetector(
               onTap: () {
-                ref.read(cartRepositoryProvider.notifier).add(
-                  product.sku,
-                  product.name,
-                  price, 
-                  1);
+                final cartItem = CartItem(
+                  orderLineId: ObjectId().hexString,
+                  productId: product.id.hexString,
+                  sku: product.sku,
+                  name: product.name,
+                  unitPrice: price,
+                  qty: 1,
+                  modifiers: List<CartItemModifier>.empty(growable: true)
+                );
+                ref.read(cartRepositoryProvider.notifier).add(cartItem);
               },
               onLongPress: () {
                 showGeneralDialog(
                   context: context, 
                   pageBuilder: (_, __, ___) {
-                    return CartItemForm(id: id);
+                    return CartItemForm(
+                      orderLineId: 'new',
+                      productId: id);
                   }
                 );
               },

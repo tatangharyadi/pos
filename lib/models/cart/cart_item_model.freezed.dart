@@ -21,6 +21,7 @@ CartItemModifier _$CartItemModifierFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$CartItemModifier {
   String get objectId => throw _privateConstructorUsedError;
+  String get collectionId => throw _privateConstructorUsedError;
   String? get sku => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   double get unitPrice => throw _privateConstructorUsedError;
@@ -40,6 +41,7 @@ abstract class $CartItemModifierCopyWith<$Res> {
   @useResult
   $Res call(
       {String objectId,
+      String collectionId,
       String? sku,
       String name,
       double unitPrice,
@@ -60,6 +62,7 @@ class _$CartItemModifierCopyWithImpl<$Res, $Val extends CartItemModifier>
   @override
   $Res call({
     Object? objectId = null,
+    Object? collectionId = null,
     Object? sku = freezed,
     Object? name = null,
     Object? unitPrice = null,
@@ -69,6 +72,10 @@ class _$CartItemModifierCopyWithImpl<$Res, $Val extends CartItemModifier>
       objectId: null == objectId
           ? _value.objectId
           : objectId // ignore: cast_nullable_to_non_nullable
+              as String,
+      collectionId: null == collectionId
+          ? _value.collectionId
+          : collectionId // ignore: cast_nullable_to_non_nullable
               as String,
       sku: freezed == sku
           ? _value.sku
@@ -100,6 +107,7 @@ abstract class _$$CartItemModifierImplCopyWith<$Res>
   @useResult
   $Res call(
       {String objectId,
+      String collectionId,
       String? sku,
       String name,
       double unitPrice,
@@ -118,6 +126,7 @@ class __$$CartItemModifierImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? objectId = null,
+    Object? collectionId = null,
     Object? sku = freezed,
     Object? name = null,
     Object? unitPrice = null,
@@ -127,6 +136,10 @@ class __$$CartItemModifierImplCopyWithImpl<$Res>
       objectId: null == objectId
           ? _value.objectId
           : objectId // ignore: cast_nullable_to_non_nullable
+              as String,
+      collectionId: null == collectionId
+          ? _value.collectionId
+          : collectionId // ignore: cast_nullable_to_non_nullable
               as String,
       sku: freezed == sku
           ? _value.sku
@@ -153,6 +166,7 @@ class __$$CartItemModifierImplCopyWithImpl<$Res>
 class _$CartItemModifierImpl implements _CartItemModifier {
   _$CartItemModifierImpl(
       {required this.objectId,
+      required this.collectionId,
       this.sku,
       required this.name,
       this.unitPrice = 0.0,
@@ -163,6 +177,8 @@ class _$CartItemModifierImpl implements _CartItemModifier {
 
   @override
   final String objectId;
+  @override
+  final String collectionId;
   @override
   final String? sku;
   @override
@@ -176,7 +192,7 @@ class _$CartItemModifierImpl implements _CartItemModifier {
 
   @override
   String toString() {
-    return 'CartItemModifier(objectId: $objectId, sku: $sku, name: $name, unitPrice: $unitPrice, isSelected: $isSelected)';
+    return 'CartItemModifier(objectId: $objectId, collectionId: $collectionId, sku: $sku, name: $name, unitPrice: $unitPrice, isSelected: $isSelected)';
   }
 
   @override
@@ -186,6 +202,8 @@ class _$CartItemModifierImpl implements _CartItemModifier {
             other is _$CartItemModifierImpl &&
             (identical(other.objectId, objectId) ||
                 other.objectId == objectId) &&
+            (identical(other.collectionId, collectionId) ||
+                other.collectionId == collectionId) &&
             (identical(other.sku, sku) || other.sku == sku) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.unitPrice, unitPrice) ||
@@ -196,8 +214,8 @@ class _$CartItemModifierImpl implements _CartItemModifier {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, objectId, sku, name, unitPrice, isSelected);
+  int get hashCode => Object.hash(
+      runtimeType, objectId, collectionId, sku, name, unitPrice, isSelected);
 
   @JsonKey(ignore: true)
   @override
@@ -217,6 +235,7 @@ class _$CartItemModifierImpl implements _CartItemModifier {
 abstract class _CartItemModifier implements CartItemModifier {
   factory _CartItemModifier(
       {required final String objectId,
+      required final String collectionId,
       final String? sku,
       required final String name,
       final double unitPrice,
@@ -227,6 +246,8 @@ abstract class _CartItemModifier implements CartItemModifier {
 
   @override
   String get objectId;
+  @override
+  String get collectionId;
   @override
   String? get sku;
   @override
@@ -247,7 +268,8 @@ CartItem _$CartItemFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CartItem {
-  String get objectId => throw _privateConstructorUsedError;
+  String get orderLineId => throw _privateConstructorUsedError;
+  String get productId => throw _privateConstructorUsedError;
   String get sku => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   double get unitPrice => throw _privateConstructorUsedError;
@@ -266,7 +288,8 @@ abstract class $CartItemCopyWith<$Res> {
       _$CartItemCopyWithImpl<$Res, CartItem>;
   @useResult
   $Res call(
-      {String objectId,
+      {String orderLineId,
+      String productId,
       String sku,
       String name,
       double unitPrice,
@@ -287,7 +310,8 @@ class _$CartItemCopyWithImpl<$Res, $Val extends CartItem>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? objectId = null,
+    Object? orderLineId = null,
+    Object? productId = null,
     Object? sku = null,
     Object? name = null,
     Object? unitPrice = null,
@@ -295,9 +319,13 @@ class _$CartItemCopyWithImpl<$Res, $Val extends CartItem>
     Object? modifiers = null,
   }) {
     return _then(_value.copyWith(
-      objectId: null == objectId
-          ? _value.objectId
-          : objectId // ignore: cast_nullable_to_non_nullable
+      orderLineId: null == orderLineId
+          ? _value.orderLineId
+          : orderLineId // ignore: cast_nullable_to_non_nullable
+              as String,
+      productId: null == productId
+          ? _value.productId
+          : productId // ignore: cast_nullable_to_non_nullable
               as String,
       sku: null == sku
           ? _value.sku
@@ -332,7 +360,8 @@ abstract class _$$CartItemImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String objectId,
+      {String orderLineId,
+      String productId,
       String sku,
       String name,
       double unitPrice,
@@ -351,7 +380,8 @@ class __$$CartItemImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? objectId = null,
+    Object? orderLineId = null,
+    Object? productId = null,
     Object? sku = null,
     Object? name = null,
     Object? unitPrice = null,
@@ -359,9 +389,13 @@ class __$$CartItemImplCopyWithImpl<$Res>
     Object? modifiers = null,
   }) {
     return _then(_$CartItemImpl(
-      objectId: null == objectId
-          ? _value.objectId
-          : objectId // ignore: cast_nullable_to_non_nullable
+      orderLineId: null == orderLineId
+          ? _value.orderLineId
+          : orderLineId // ignore: cast_nullable_to_non_nullable
+              as String,
+      productId: null == productId
+          ? _value.productId
+          : productId // ignore: cast_nullable_to_non_nullable
               as String,
       sku: null == sku
           ? _value.sku
@@ -391,7 +425,8 @@ class __$$CartItemImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CartItemImpl implements _CartItem {
   _$CartItemImpl(
-      {required this.objectId,
+      {required this.orderLineId,
+      required this.productId,
       required this.sku,
       required this.name,
       this.unitPrice = 0.0,
@@ -402,7 +437,9 @@ class _$CartItemImpl implements _CartItem {
       _$$CartItemImplFromJson(json);
 
   @override
-  final String objectId;
+  final String orderLineId;
+  @override
+  final String productId;
   @override
   final String sku;
   @override
@@ -418,7 +455,7 @@ class _$CartItemImpl implements _CartItem {
 
   @override
   String toString() {
-    return 'CartItem(objectId: $objectId, sku: $sku, name: $name, unitPrice: $unitPrice, qty: $qty, modifiers: $modifiers)';
+    return 'CartItem(orderLineId: $orderLineId, productId: $productId, sku: $sku, name: $name, unitPrice: $unitPrice, qty: $qty, modifiers: $modifiers)';
   }
 
   @override
@@ -426,8 +463,10 @@ class _$CartItemImpl implements _CartItem {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CartItemImpl &&
-            (identical(other.objectId, objectId) ||
-                other.objectId == objectId) &&
+            (identical(other.orderLineId, orderLineId) ||
+                other.orderLineId == orderLineId) &&
+            (identical(other.productId, productId) ||
+                other.productId == productId) &&
             (identical(other.sku, sku) || other.sku == sku) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.unitPrice, unitPrice) ||
@@ -438,8 +477,8 @@ class _$CartItemImpl implements _CartItem {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, objectId, sku, name, unitPrice,
-      qty, const DeepCollectionEquality().hash(modifiers));
+  int get hashCode => Object.hash(runtimeType, orderLineId, productId, sku,
+      name, unitPrice, qty, const DeepCollectionEquality().hash(modifiers));
 
   @JsonKey(ignore: true)
   @override
@@ -457,7 +496,8 @@ class _$CartItemImpl implements _CartItem {
 
 abstract class _CartItem implements CartItem {
   factory _CartItem(
-      {required final String objectId,
+      {required final String orderLineId,
+      required final String productId,
       required final String sku,
       required final String name,
       final double unitPrice,
@@ -468,7 +508,9 @@ abstract class _CartItem implements CartItem {
       _$CartItemImpl.fromJson;
 
   @override
-  String get objectId;
+  String get orderLineId;
+  @override
+  String get productId;
   @override
   String get sku;
   @override

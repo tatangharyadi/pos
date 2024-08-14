@@ -7,6 +7,7 @@ part 'cart_item_model.g.dart';
 class CartItemModifier with _$CartItemModifier {
   factory CartItemModifier({
     required String objectId,
+    required String collectionId,
     String? sku,
     required String name,
     @Default(0.0) double unitPrice,
@@ -19,7 +20,8 @@ class CartItemModifier with _$CartItemModifier {
 @Freezed(makeCollectionsUnmodifiable: false)
 class CartItem with _$CartItem{
   factory CartItem({
-    required String objectId,
+    required String orderLineId,
+    required String productId,
     required String sku,
     required String name,
     @Default(0.0) double unitPrice,
