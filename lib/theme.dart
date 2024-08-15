@@ -10,3 +10,6 @@ appThemeData() {
 final tileBackground = Colors.green.shade900.withOpacity(0.7);
 
 const dismissibleBackground = Colors.red;
+
+final dialogTitleBackground = Colors.green.shade900;
+const dialogContentBackground = Colors.white;
