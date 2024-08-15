@@ -45,7 +45,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
 
   CartItem _edit() {
     final cartRepository = ref.read(cartRepositoryProvider.notifier);
-    final cartItem = cartRepository.findByOrderLineId(widget.orderLineId)!;
+    final cartItem = cartRepository.findItemByOrderLineId(widget.orderLineId)!;
 
     return cartItem;
   }
@@ -59,7 +59,8 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
     _product = productRepository.findById(ObjectId.fromHexString(_cartItem.productId))!;
     _unitPrice = ProductUtils.getValidPriceByProduct(_product);
     _quantity = _cartItem.qty;
-    _totalModifierPrice = 0;
+    _totalModifierPrice = _cartItem.modifiers.fold(0, (previousValue, modifier) =>
+      previousValue + modifier.unitPrice);
   }
 
   void onChanged() {
@@ -90,7 +91,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
           if (index != -1) {
             isSelected = true;
             _cartItem.modifiers.add(CartItemModifier(
-              objectId: modifier.id.hexString,
+              modifierId: modifier.id.hexString,
               collectionId: modifierCollection.id.hexString,
               sku: modifier.sku,
               name: modifier.name,
@@ -111,7 +112,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
         String initialValue = '';
         if (_cartItem.modifiers.isNotEmpty) {
           initialValue = _cartItem.modifiers.firstWhere(
-            (element) => element.collectionId == modifierCollection.id.hexString).objectId;
+            (element) => element.collectionId == modifierCollection.id.hexString).modifierId;
         }
         modifierCards.add(RadioModifierCard(formKey: _formKey,
           onChanged: onChanged, modifierCollection: modifierCollection, initialValue: initialValue,));
@@ -119,7 +120,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
       List<String> initialValue = [];
       if (_cartItem.modifiers.isNotEmpty) {
         initialValue = _cartItem.modifiers.where(
-          (element) => element.collectionId == modifierCollection.id.hexString).map((e) => e.objectId).toList();
+          (element) => element.collectionId == modifierCollection.id.hexString).map((e) => e.modifierId).toList();
       }
       modifierCards.add(CheckboxModifierCard(formKey: _formKey,
         onChanged: onChanged, modifierCollection: modifierCollection, initialValue: initialValue,));
@@ -219,8 +220,8 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
             name: _product.name,
             unitPrice: _unitPrice + _totalModifierPrice,
             qty: _quantity);
-          ref.read(cartRepositoryProvider.notifier).remove(cartItem.orderLineId);
-          ref.read(cartRepositoryProvider.notifier).add(cartItem);
+          ref.read(cartRepositoryProvider.notifier).removeItem(cartItem.orderLineId);
+          ref.read(cartRepositoryProvider.notifier).addItem(cartItem);
           context.pop();
         },
         child: const Icon(Icons.check),

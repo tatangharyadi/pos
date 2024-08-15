@@ -6,7 +6,7 @@ part 'cart_item_model.g.dart';
 @freezed
 class CartItemModifier with _$CartItemModifier {
   factory CartItemModifier({
-    required String objectId,
+    required String modifierId,
     required String collectionId,
     String? sku,
     required String name,
@@ -30,4 +30,14 @@ class CartItem with _$CartItem{
   }) = _CartItem;
 
   factory CartItem.fromJson(Map<String, Object?> json) => _$CartItemFromJson(json);
+}
+
+@Freezed(makeCollectionsUnmodifiable: false)
+class Cart with _$Cart{
+  factory Cart({
+    required String orderId,
+    @Default([]) List<CartItem> items,
+  }) = _Cart;
+
+  factory Cart.fromJson(Map<String, Object?> json) => _$CartFromJson(json);
 }

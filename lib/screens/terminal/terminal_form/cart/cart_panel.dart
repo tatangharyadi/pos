@@ -13,7 +13,7 @@ class CartPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<CartItem> cartItemList = ref.watch(cartRepositoryProvider);
-    double cartTotal = ref.watch(cartRepositoryProvider.notifier).sum();
+    double cartTotal = ref.watch(cartRepositoryProvider.notifier).sumItems();
         
     return Container(
       padding: const EdgeInsets.all(10),

@@ -10,21 +10,21 @@ class CartRepository extends _$CartRepository {
     return [];
   }
 
-  CartItem? findByOrderLineId(String orderLineId) {
+  CartItem? findItemByOrderLineId(String orderLineId) {
     return state.firstWhere((item) => item.orderLineId == orderLineId);
   }
 
-  void add(CartItem item) {
+  void addItem(CartItem item) {
     state = [
       ...state, item
     ];
   }
 
-  void remove(String orderLineId) {
+  void removeItem(String orderLineId) {
     state = state.where((item) => item.orderLineId != orderLineId).toList();
   }
 
-  double sum() {
+  double sumItems() {
     double sum = state.fold(0, (previousValue, item) => previousValue + (item.qty * item.unitPrice));
     return sum;
   }

@@ -61,7 +61,7 @@ class ProductGrid extends ConsumerWidget {
                   qty: 1,
                   modifiers: List<CartItemModifier>.empty(growable: true)
                 );
-                ref.read(cartRepositoryProvider.notifier).add(cartItem);
+                ref.read(cartRepositoryProvider.notifier).addItem(cartItem);
               },
               onLongPress: () {
                 showGeneralDialog(

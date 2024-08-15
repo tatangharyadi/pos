@@ -20,7 +20,7 @@ class CartItemTab extends ConsumerWidget {
           return Dismissible(
             key: Key(cartItem.orderLineId),
             onDismissed: (direction) {
-              ref.read(cartRepositoryProvider.notifier).remove(cartItem.orderLineId);
+              ref.read(cartRepositoryProvider.notifier).removeItem(cartItem.orderLineId);
             },
             background: Container(color: dismissibleBackground),
             child: CartItemCard(cartItem),

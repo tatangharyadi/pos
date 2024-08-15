@@ -9,7 +9,7 @@ part of 'cart_item_model.dart';
 _$CartItemModifierImpl _$$CartItemModifierImplFromJson(
         Map<String, dynamic> json) =>
     _$CartItemModifierImpl(
-      objectId: json['objectId'] as String,
+      modifierId: json['modifierId'] as String,
       collectionId: json['collectionId'] as String,
       sku: json['sku'] as String?,
       name: json['name'] as String,
@@ -20,7 +20,7 @@ _$CartItemModifierImpl _$$CartItemModifierImplFromJson(
 Map<String, dynamic> _$$CartItemModifierImplToJson(
         _$CartItemModifierImpl instance) =>
     <String, dynamic>{
-      'objectId': instance.objectId,
+      'modifierId': instance.modifierId,
       'collectionId': instance.collectionId,
       'sku': instance.sku,
       'name': instance.name,
@@ -51,4 +51,18 @@ Map<String, dynamic> _$$CartItemImplToJson(_$CartItemImpl instance) =>
       'unitPrice': instance.unitPrice,
       'qty': instance.qty,
       'modifiers': instance.modifiers,
+    };
+
+_$CartImpl _$$CartImplFromJson(Map<String, dynamic> json) => _$CartImpl(
+      orderId: json['orderId'] as String,
+      items: (json['items'] as List<dynamic>?)
+              ?.map((e) => CartItem.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+    );
+
+Map<String, dynamic> _$$CartImplToJson(_$CartImpl instance) =>
+    <String, dynamic>{
+      'orderId': instance.orderId,
+      'items': instance.items,
     };
