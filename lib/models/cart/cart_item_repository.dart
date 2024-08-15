@@ -1,30 +1,33 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:pos/models/cart/cart_item_model.dart';
+import 'package:pos/models/cart/cart_model.dart';
 
-part 'cart_repository.g.dart';
+part 'cart_item_repository.g.dart';
 
 @riverpod
-class CartRepository extends _$CartRepository {
+class CartItemRepository extends _$CartItemRepository {
+  late List<CartItem> cartItems;
+
   @override
   List<CartItem> build() {
-    return [];
+    cartItems = [];
+    return cartItems;
   }
 
-  CartItem? findItemByOrderLineId(String orderLineId) {
+  CartItem? findById(String orderLineId) {
     return state.firstWhere((item) => item.orderLineId == orderLineId);
   }
 
-  void addItem(CartItem item) {
+  void add(CartItem item) {
     state = [
       ...state, item
     ];
   }
 
-  void removeItem(String orderLineId) {
+  void remove(String orderLineId) {
     state = state.where((item) => item.orderLineId != orderLineId).toList();
   }
 
-  double sumItems() {
+  double sum() {
     double sum = state.fold(0, (previousValue, item) => previousValue + (item.qty * item.unitPrice));
     return sum;
   }

@@ -6,11 +6,11 @@ import 'package:pos/screens/terminal/terminal_form/cart/cart_item_form.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/product/product_query_repository.dart';
 import 'package:pos/models/product/product_repository.dart';
-import 'package:pos/models/cart/cart_repository.dart';
+import 'package:pos/models/cart/cart_item_repository.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/product/product_utils.dart';
 import 'package:pos/models/product/product_model.dart';
-import 'package:pos/models/cart/cart_item_model.dart';
+import 'package:pos/models/cart/cart_model.dart';
 
 class ProductGrid extends ConsumerWidget {
   const ProductGrid({super.key});
@@ -61,7 +61,7 @@ class ProductGrid extends ConsumerWidget {
                   qty: 1,
                   modifiers: List<CartItemModifier>.empty(growable: true)
                 );
-                ref.read(cartRepositoryProvider.notifier).addItem(cartItem);
+                ref.read(cartItemRepositoryProvider.notifier).add(cartItem);
               },
               onLongPress: () {
                 showGeneralDialog(

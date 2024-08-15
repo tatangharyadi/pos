@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_item_form.dart';
-import 'package:pos/models/cart/cart_item_model.dart';
+import 'package:pos/models/cart/cart_model.dart';
 
 class CartItemCard extends StatelessWidget {
   final CartItem cartItem;

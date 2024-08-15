@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import 'package:pos/models/cart/cart_item_model.dart';
-import 'package:pos/models/cart/cart_repository.dart';
+import 'package:pos/models/cart/cart_model.dart';
+import 'package:pos/models/cart/cart_item_repository.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_item_tab.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_payment_tab.dart';
 
@@ -12,8 +12,8 @@ class CartPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<CartItem> cartItemList = ref.watch(cartRepositoryProvider);
-    double cartTotal = ref.watch(cartRepositoryProvider.notifier).sumItems();
+    List<CartItem> cartItemList = ref.watch(cartItemRepositoryProvider);
+    double cartTotal = ref.watch(cartItemRepositoryProvider.notifier).sum();
         
     return Container(
       padding: const EdgeInsets.all(10),
