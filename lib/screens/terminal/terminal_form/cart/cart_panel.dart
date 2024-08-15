@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
-import 'package:pos/models/cart/cart_model.dart';
-import 'package:pos/models/cart/cart_item_repository.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_item_tab.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_payment_tab.dart';
 
@@ -11,51 +8,39 @@ class CartPanel extends ConsumerWidget {
   const CartPanel({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    List<CartItem> cartItemList = ref.watch(cartItemRepositoryProvider);
-    double cartTotal = ref.watch(cartItemRepositoryProvider.notifier).sum();
-        
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: DefaultTabController(
-        length: 2,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const TabBar(
-                tabs: [
-                  Tab(icon: Icon(Icons.edit_note)),
-                  Tab(icon: Icon(Icons.monetization_on)),
-                ]),
-              const Gap(5),
-              const Expanded(
-                flex: 2,
-                child: TabBarView(
+  Widget build(BuildContext context, WidgetRef ref) {        
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            child: const DefaultTabController(
+              length: 2,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CartItemTab(),
-                    CartPaymentTab(),    
-                  ]),
-              ),
-              const Divider(),
-              Row(
-                children: [
-                  const Icon(Icons.shopping_cart),
-                  const Gap(5),
-                  Text('${cartItemList.length} items'),
-                  const Gap(5),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      NumberFormat.decimalPattern().format(cartTotal),
-                      textAlign: TextAlign.end,
+                    TabBar(
+                      tabs: [
+                        Tab(icon: Icon(Icons.edit_note)),
+                        Tab(icon: Icon(Icons.monetization_on)),
+                      ]),
+                    Gap(5),
+                    Expanded(
+                      flex: 2,
+                      child: TabBarView(
+                        children: [
+                          CartItemTab(),
+                          CartPaymentTab(),    
+                        ]),
                     ),
-                  ),
-                ]
-              ),
-            ],
+                    Divider(),
+                  ],
+                ),
+            ),
           ),
-      ),
+        ),
+      ],
     );
   }
 }
