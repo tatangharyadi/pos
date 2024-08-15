@@ -50,6 +50,15 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
     return cartItem;
   }
 
+  void _submit() {
+    _cartItem.sku = _product.sku;
+    _cartItem.name = _product.name;
+    _cartItem.unitPrice = _unitPrice + _totalModifierPrice;
+    _cartItem.qty = _quantity;
+    ref.read(cartItemRepositoryProvider.notifier).remove(_cartItem.orderLineId);
+    ref.read(cartItemRepositoryProvider.notifier).add(_cartItem);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -207,12 +216,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () {
-            _cartItem.sku = _product.sku;
-            _cartItem.name = _product.name;
-            _cartItem.unitPrice = _unitPrice + _totalModifierPrice;
-            _cartItem.qty = _quantity;
-          ref.read(cartItemRepositoryProvider.notifier).remove(_cartItem.orderLineId);
-          ref.read(cartItemRepositoryProvider.notifier).add(_cartItem);
+          _submit();
           context.pop();
         },
         child: const Icon(Icons.check),

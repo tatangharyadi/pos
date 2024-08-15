@@ -8,20 +8,42 @@ import 'package:pos/screens/terminal/terminal_form/product/product_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_panel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/cart/cart_item_repository.dart';
+import 'package:realm/realm.dart';
 
-class TerminalForm extends ConsumerWidget {
+class TerminalForm extends ConsumerStatefulWidget {
   final String id;
 
   const TerminalForm({super.key, required this.id});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TerminalForm> createState() => _TerminalFormState();
+}
+
+class _TerminalFormState extends ConsumerState<TerminalForm> {
+  late ObjectId _objectId;
+
+  ObjectId _new() {
+    return ObjectId();
+  }
+
+  void _submit() {
+  
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : _new();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     List<CartItem> cartItemList = ref.watch(cartItemRepositoryProvider);
     double cartTotal = ref.watch(cartItemRepositoryProvider.notifier).sum();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Terminal'),
+        title: Text(widget.id),
       ),
       body: Row(
           children: [
@@ -31,9 +53,9 @@ class TerminalForm extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: PageView(
-                      children: const [
-                        ProductPanel(),
-                        PaymentPanel(),
+                      children: [
+                        const ProductPanel(),
+                        PaymentPanel(orderId: _objectId.hexString),
                       ],
                     ),
                   ),
@@ -77,7 +99,8 @@ class TerminalForm extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () {
-          // context.push(context.namedLocation('paymentform'));        
+          _submit();
+          context.go(context.namedLocation('terminal'));        
         },
         child: const Icon(Icons.check),
       ), 

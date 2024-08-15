@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PaymentPanel extends StatelessWidget {
-  const PaymentPanel({super.key});
+  final String orderId;
+  const PaymentPanel({super.key, required this.orderId});
 
   @override
   Widget build(BuildContext context) {
