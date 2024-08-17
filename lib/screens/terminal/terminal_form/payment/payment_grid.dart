@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pos/theme.dart';
 import 'package:pos/consts/payment_option.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/components/payment_dialog/payment_member_dialog.dart';

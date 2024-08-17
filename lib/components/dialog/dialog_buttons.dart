@@ -13,32 +13,33 @@ class DialogButtons extends StatelessWidget {
     return Container(
       height: 120,
       width: MediaQuery.of(context).size.width * 0.5,
-      padding: const EdgeInsets.all(28),
-      decoration: const BoxDecoration(
-        color: dialogContentBackground,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Row(
+      child: Material(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(28, 0, 28, 0),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  onClickCancel();
-                },
-                child: const Text('CANCEL'),
-              ),
-              const Gap(5),
-              ElevatedButton(
-                onPressed: () {
-                  onClickOk();
-                },
-                child: const Text('OK'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      onClickCancel();
+                    },
+                    child: const Text('CANCEL'),
+                  ),
+                  const Gap(5),
+                  ElevatedButton(
+                    onPressed: () {
+                      onClickOk();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

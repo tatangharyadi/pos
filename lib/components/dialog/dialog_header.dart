@@ -13,26 +13,32 @@ class DialogHeader extends StatelessWidget {
     return Container(
       height: 50,
       width: MediaQuery.of(context).size.width * 0.5,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: dialogTitleBackground,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(8),
-          topRight: Radius.circular(8),
-        ),
-      ),
-      child: Row (
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(icon, color: Theme.of(context).colorScheme.onPrimary,),
-          const Gap(5),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,),
+      child: Material(
+          color: Theme.of(context).colorScheme.primary,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+            side: BorderSide.none,
           ),
-        ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row (
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(icon, color: Theme.of(context).colorScheme.onPrimary,),
+              const Gap(5),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

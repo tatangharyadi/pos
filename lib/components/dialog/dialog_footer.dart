@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
-import 'package:pos/theme.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
 class DialogFooter extends StatelessWidget {
 
@@ -10,14 +13,18 @@ class DialogFooter extends StatelessWidget {
     return Container(
       height: 25,
       width: MediaQuery.of(context).size.width * 0.5,
-      padding: const EdgeInsets.all(28),
-      decoration: const BoxDecoration(
-        color: dialogContentBackground,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(8),
-          bottomRight: Radius.circular(8),
-        ),
-      ),
+      child: const Material(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(8),
+              bottomRight: Radius.circular(8),
+            ),
+            side: BorderSide.none,
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(28, 0, 28, 0),
+          )
+        )
     );
   }
 }
