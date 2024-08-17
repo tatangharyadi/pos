@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gap/gap.dart';
 import 'package:pos/components/dialog/dialog_header.dart';
 import 'package:pos/components/dialog/dialog_buttons.dart';
@@ -23,6 +24,8 @@ class PaymentCashDialog extends ConsumerStatefulWidget {
 }
 
 class _PaymentCashDialogState extends ConsumerState<PaymentCashDialog> {
+  final _formKey = GlobalKey<FormBuilderState>();
+  late double _amount;
   
   void onClickCancel() {
     context.pop();
@@ -35,13 +38,19 @@ class _PaymentCashDialogState extends ConsumerState<PaymentCashDialog> {
       DateTime.now().toUtc(),
      'CASH',
      ObjectId.fromHexString(widget.orderId),
-      amount: 100000,
+      amount: _amount,
     );
 
     final paymentRepository = ref.read(paymentRepositoryProvider.notifier);
     paymentRepository.create(payment);
     
     context.pop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _amount = 100000;
   }
 
   @override
@@ -60,22 +69,37 @@ class _PaymentCashDialogState extends ConsumerState<PaymentCashDialog> {
             child: Material(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: Column (
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Order ID: ${widget.orderId}',),
-                    const Gap(5),
-                    Expanded(
-                      child: FormBuilderTextField(
-                        name: 'amount',
-                        decoration: const InputDecoration(
-                          labelText: 'Amount',
-                          prefixText: 'IDR',
-                        ),
-                        readOnly: true,
-                        initialValue: '100000',)
-                    ),
-                  ],
+                child: FormBuilder(
+                  key: _formKey,
+                  child: Column (
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Order ID: ${widget.orderId}',),
+                      const Gap(5),
+                      Expanded(
+                        child: FormBuilderTextField(
+                          name: 'amount',
+                          decoration: const InputDecoration(
+                            labelText: 'Amount',
+                            prefixText: 'IDR',
+                          ),
+                          initialValue: _amount.toString(),
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            if (value == null) return;
+                            if (double.tryParse(value) == null) return;
+                              setState(() {
+                              _amount = double.parse(value);
+                            });
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(),
+                              FormBuilderValidators.numeric()])
+                        )
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

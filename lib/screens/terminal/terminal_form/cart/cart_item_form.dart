@@ -189,9 +189,9 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
                         if (value == null) return;
-                        if (int.tryParse(value.toString()) == null) return;
+                        if (int.tryParse(value) == null) return;
                         setState(() {
-                          _quantity = int.parse(value.toString());
+                          _quantity = int.parse(value);
                         });
                       },
                       autovalidateMode: AutovalidateMode.onUserInteraction,

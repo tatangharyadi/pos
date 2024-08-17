@@ -7,15 +7,21 @@ import 'package:pos/screens/terminal/terminal_form/cart/cart_payment_cart.dart';
 import 'package:realm/realm.dart';
 
 class CartPaymentTab extends ConsumerWidget {
-  const CartPaymentTab({super.key});
+  final String orderId;
+
+  const CartPaymentTab({super.key, required this.orderId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const query = r'''
+      orderId == $0
+    ''';
+    
     Realm realm = ref.watch(paymentRepositoryProvider);
+    final queryParameter = ObjectId.fromHexString(orderId);
 
     return StreamBuilder<RealmResultsChanges<Payment>>(
-      stream: realm.query<Payment>('TRUEPREDICATE SORT(_id ASC)')
-          .changes,
+      stream: realm.query<Payment>(query, [queryParameter]).changes,
       builder: (context, snapshot) {
         if (snapshot.data == null) {return progressIndicator();}
         

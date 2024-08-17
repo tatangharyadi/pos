@@ -65,8 +65,8 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
             Expanded(
               child: Column(
                 children: [
-                  const Expanded(
-                    child: CartPanel()
+                  Expanded(
+                    child: CartPanel(orderId: _objectId.hexString)
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),

@@ -5,7 +5,9 @@ import 'package:pos/screens/terminal/terminal_form/cart/cart_item_tab.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_payment_tab.dart';
 
 class CartPanel extends ConsumerWidget {
-  const CartPanel({super.key});
+  final String orderId;
+
+  const CartPanel({super.key, required this.orderId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {        
@@ -14,27 +16,27 @@ class CartPanel extends ConsumerWidget {
         Expanded(
           child: Container(
             padding: const EdgeInsets.only(left: 8, right: 8),
-            child: const DefaultTabController(
+            child: DefaultTabController(
               length: 2,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TabBar(
+                    const TabBar(
                       tabs: [
                         Tab(icon: Icon(Icons.edit_note)),
                         Tab(icon: Icon(Icons.monetization_on)),
                       ]),
-                    Gap(5),
+                    const Gap(5),
                     Expanded(
                       flex: 2,
                       child: TabBarView(
                         children: [
-                          CartItemTab(),
-                          CartPaymentTab(),    
+                          const CartItemTab(),
+                          CartPaymentTab(orderId: orderId,),    
                         ]),
                     ),
-                    Divider(),
+                    const Divider(),
                   ],
                 ),
             ),
