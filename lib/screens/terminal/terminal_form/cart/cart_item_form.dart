@@ -29,7 +29,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
   late CartItem _cartItem;
   late Product _product;
   late int _quantity;
-  late double _unitPrice, _totalModifierPrice;
+  late double _unitPrice, _totalModifierPrice, _totalLine;
 
   CartItem _new() {
     final cartItem = CartItem(
@@ -57,8 +57,9 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
     _cartItem.unitPrice = _unitPrice + _totalModifierPrice;
     _cartItem.qty = _quantity;
     ref.read(cartItemRepositoryProvider.notifier).remove(_cartItem.orderLineId);
-    ref.read(cartItemRepositoryProvider.notifier).add(_cartItem);
+    ref.read(totalDueProvider.notifier).decrement(_totalLine);
 
+    ref.read(cartItemRepositoryProvider.notifier).add(_cartItem);
     ref.read(totalDueProvider.notifier).increment(_cartItem.unitPrice * _cartItem.qty);
   }
 
@@ -73,6 +74,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
     _quantity = _cartItem.qty;
     _totalModifierPrice = _cartItem.modifiers.fold(0, (previousValue, modifier) =>
       previousValue + modifier.unitPrice);
+    _totalLine = _cartItem.unitPrice * _cartItem.qty;
   }
 
   void onChanged() {
