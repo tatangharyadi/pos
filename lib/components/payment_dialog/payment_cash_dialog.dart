@@ -52,11 +52,12 @@ class _PaymentCashDialogState extends ConsumerState<PaymentCashDialog> {
   @override
   void initState() {
     super.initState();
-    _amount = 100000;
+    _amount = 0;
   }
 
   @override
   Widget build(BuildContext context) {
+    _amount = ref.watch(totalDueProvider) >= 0 ? ref.watch(totalDueProvider) : 0;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

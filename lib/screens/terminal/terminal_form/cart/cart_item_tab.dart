@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pos/states/total_due/total_due_provider.dart';
 import 'package:pos/theme.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/card_item_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +22,7 @@ class CartItemTab extends ConsumerWidget {
             key: Key(cartItem.orderLineId),
             onDismissed: (direction) {
               ref.read(cartItemRepositoryProvider.notifier).remove(cartItem.orderLineId);
+              ref.read(totalDueProvider.notifier).decrement(cartItem.unitPrice * cartItem.qty);
             },
             background: Container(color: dismissibleBackground),
             child: CartItemCard(cartItem),

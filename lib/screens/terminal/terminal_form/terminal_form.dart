@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pos/models/cart/cart_model.dart';
-import 'package:pos/models/payment/payment_repository.dart';
 import 'package:pos/screens/terminal/terminal_form/payment/payment_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/product/product_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_panel.dart';
@@ -11,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/cart/cart_item_repository.dart';
 import 'package:pos/states/total_due/total_due_provider.dart';
 import 'package:realm/realm.dart';
+import 'package:pos/models/cart/cart_model.dart';
 
 class TerminalForm extends ConsumerStatefulWidget {
   final String id;
