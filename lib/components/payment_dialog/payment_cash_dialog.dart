@@ -5,20 +5,19 @@ import 'package:pos/components/dialog/dialog_footer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class StatefulDialog extends ConsumerStatefulWidget {
+class PaymentCashDialog extends ConsumerStatefulWidget {
   final String paymentName;
   final IconData icon;
-  final String paymentType;
   final String orderId;
 
-  const StatefulDialog({super.key, required this.paymentName, required this.icon,
-    required this.paymentType, required this.orderId});
+  const PaymentCashDialog({super.key, required this.paymentName, required this.icon,
+    required this.orderId});
 
   @override
-  ConsumerState<StatefulDialog> createState() => StatefulDialogState();
+  ConsumerState<PaymentCashDialog> createState() => _PaymentCashDialogState();
 }
 
-class StatefulDialogState extends ConsumerState<StatefulDialog> {
+class _PaymentCashDialogState extends ConsumerState<PaymentCashDialog> {
   
   void onClickCancel() {
     context.pop();
@@ -34,9 +33,9 @@ class StatefulDialogState extends ConsumerState<StatefulDialog> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const DialogHeader(
-            icon: Icons.payment,
-            title: 'Payment',
+          DialogHeader(
+            icon: widget.icon,
+            title: widget.paymentName,
           ),
           DialogButtons(onClickOk: onClickOk, onClickCancel: onClickCancel),
           const DialogFooter(),

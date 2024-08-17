@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pos/screens/terminal/terminal_form/payment/payment_form.dart';
-import 'package:pos/screens/terminal/terminal_form/payment/payment_type_form.dart';
 import 'package:pos/theme.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/consts/payment_type.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos/components/payment_dialog/payment_member_dialog.dart';
+import 'package:pos/components/payment_dialog/payment_edc_dialog.dart';
+import 'package:pos/components/payment_dialog/payment_qris_dialog.dart';
+import 'package:pos/components/payment_dialog/payment_cash_dialog.dart';
+import 'package:pos/components/payment_dialog/payment_voucher_dialog.dart';
 
 class PaymentGrid extends ConsumerStatefulWidget {
   final String orderId;
@@ -36,8 +39,40 @@ class _PaymentGridState extends ConsumerState<PaymentGrid> {
             showGeneralDialog(
               context: context,
               pageBuilder: (context, animation, secondaryAnimation) {
-                return PaymentForm(paymentName: paymentType.name, icon: paymentType.icon,
-                  paymentType: paymentType.type, orderId: widget.orderId);
+                switch (paymentType.type) {
+                  case 'MEMBER':
+                    return PaymentMemberDialog(
+                      paymentName: paymentType.name,
+                      icon: paymentType.icon,
+                      orderId: widget.orderId,
+                    );
+                  case 'QRIS':
+                    return PaymentQrisDialog(
+                      paymentName: paymentType.name,
+                      icon: paymentType.icon,
+                      orderId: widget.orderId,
+                    );
+                   case 'EDC':
+                    return PaymentEdcDialog(
+                      paymentName: paymentType.name,
+                      icon: paymentType.icon,
+                      orderId: widget.orderId,
+                    );
+                  case 'CASH':
+                    return PaymentCashDialog(
+                      paymentName: paymentType.name,
+                      icon: paymentType.icon,
+                      orderId: widget.orderId,
+                    );
+                  case 'VOUCHER':
+                    return PaymentVoucherDialog(
+                      paymentName: paymentType.name,
+                      icon: paymentType.icon,
+                      orderId: widget.orderId,
+                    );
+                  default:
+                    return Container();
+                }
               },
             );
           },
