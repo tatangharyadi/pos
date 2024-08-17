@@ -12,9 +12,10 @@ class Payment extends _Payment with RealmEntity, RealmObjectBase, RealmObject {
 
   Payment(
     ObjectId id,
-    ObjectId orderId,
-    String paymentType,
-    DateTime paymentDate, {
+    String type,
+    DateTime paymentDate,
+    String reference,
+    ObjectId orderId, {
     double amount = 0.0,
     bool selected = false,
   }) {
@@ -25,10 +26,11 @@ class Payment extends _Payment with RealmEntity, RealmObjectBase, RealmObject {
       });
     }
     RealmObjectBase.set(this, '_id', id);
-    RealmObjectBase.set(this, 'orderId', orderId);
-    RealmObjectBase.set(this, 'paymentType', paymentType);
+    RealmObjectBase.set(this, 'type', type);
     RealmObjectBase.set(this, 'paymentDate', paymentDate);
+    RealmObjectBase.set(this, 'reference', reference);
     RealmObjectBase.set(this, 'amount', amount);
+    RealmObjectBase.set(this, 'orderId', orderId);
     RealmObjectBase.set(this, 'selected', selected);
   }
 
@@ -40,17 +42,9 @@ class Payment extends _Payment with RealmEntity, RealmObjectBase, RealmObject {
   set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
 
   @override
-  ObjectId get orderId =>
-      RealmObjectBase.get<ObjectId>(this, 'orderId') as ObjectId;
+  String get type => RealmObjectBase.get<String>(this, 'type') as String;
   @override
-  set orderId(ObjectId value) => RealmObjectBase.set(this, 'orderId', value);
-
-  @override
-  String get paymentType =>
-      RealmObjectBase.get<String>(this, 'paymentType') as String;
-  @override
-  set paymentType(String value) =>
-      RealmObjectBase.set(this, 'paymentType', value);
+  set type(String value) => RealmObjectBase.set(this, 'type', value);
 
   @override
   DateTime get paymentDate =>
@@ -60,9 +54,21 @@ class Payment extends _Payment with RealmEntity, RealmObjectBase, RealmObject {
       RealmObjectBase.set(this, 'paymentDate', value);
 
   @override
+  String get reference =>
+      RealmObjectBase.get<String>(this, 'reference') as String;
+  @override
+  set reference(String value) => RealmObjectBase.set(this, 'reference', value);
+
+  @override
   double get amount => RealmObjectBase.get<double>(this, 'amount') as double;
   @override
   set amount(double value) => RealmObjectBase.set(this, 'amount', value);
+
+  @override
+  ObjectId get orderId =>
+      RealmObjectBase.get<ObjectId>(this, 'orderId') as ObjectId;
+  @override
+  set orderId(ObjectId value) => RealmObjectBase.set(this, 'orderId', value);
 
   @override
   bool get selected => RealmObjectBase.get<bool>(this, 'selected') as bool;
@@ -83,10 +89,11 @@ class Payment extends _Payment with RealmEntity, RealmObjectBase, RealmObject {
   EJsonValue toEJson() {
     return <String, dynamic>{
       '_id': id.toEJson(),
-      'orderId': orderId.toEJson(),
-      'paymentType': paymentType.toEJson(),
+      'type': type.toEJson(),
       'paymentDate': paymentDate.toEJson(),
+      'reference': reference.toEJson(),
       'amount': amount.toEJson(),
+      'orderId': orderId.toEJson(),
       'selected': selected.toEJson(),
     };
   }
@@ -96,17 +103,19 @@ class Payment extends _Payment with RealmEntity, RealmObjectBase, RealmObject {
     return switch (ejson) {
       {
         '_id': EJsonValue id,
-        'orderId': EJsonValue orderId,
-        'paymentType': EJsonValue paymentType,
+        'type': EJsonValue type,
         'paymentDate': EJsonValue paymentDate,
+        'reference': EJsonValue reference,
         'amount': EJsonValue amount,
+        'orderId': EJsonValue orderId,
         'selected': EJsonValue selected,
       } =>
         Payment(
           fromEJson(id),
-          fromEJson(orderId),
-          fromEJson(paymentType),
+          fromEJson(type),
           fromEJson(paymentDate),
+          fromEJson(reference),
+          fromEJson(orderId),
           amount: fromEJson(amount),
           selected: fromEJson(selected),
         ),
@@ -120,11 +129,12 @@ class Payment extends _Payment with RealmEntity, RealmObjectBase, RealmObject {
     return SchemaObject(ObjectType.realmObject, Payment, 'payments', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
-      SchemaProperty('orderId', RealmPropertyType.objectid,
+      SchemaProperty('type', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
-      SchemaProperty('paymentType', RealmPropertyType.string),
       SchemaProperty('paymentDate', RealmPropertyType.timestamp),
+      SchemaProperty('reference', RealmPropertyType.string),
       SchemaProperty('amount', RealmPropertyType.double),
+      SchemaProperty('orderId', RealmPropertyType.objectid),
       SchemaProperty('selected', RealmPropertyType.bool),
     ]);
   }();

@@ -6,7 +6,7 @@ import 'package:pos/models/payment/payment_model.dart';
 part 'payment_repository.g.dart';
 
 @riverpod
-class ShiftRepository extends _$ShiftRepository {
+class PaymentRepository extends _$PaymentRepository {
   late Realm _realm;
 
   @override

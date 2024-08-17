@@ -6,7 +6,9 @@ import 'package:pos/components/dialog/dialog_buttons.dart';
 import 'package:pos/components/dialog/dialog_footer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos/theme.dart';
+import 'package:pos/models/payment/payment_model.dart';
+import 'package:pos/models/payment/payment_repository.dart';
+import 'package:realm/realm.dart';
 
 class PaymentCashDialog extends ConsumerStatefulWidget {
   final String paymentName;
@@ -27,6 +29,18 @@ class _PaymentCashDialogState extends ConsumerState<PaymentCashDialog> {
   }
 
   void onClickOk() {
+    final payment = Payment(
+      ObjectId(),
+      'CASH',
+      DateTime.now().toUtc(),
+     'CASH',
+     ObjectId.fromHexString(widget.orderId),
+      amount: 100000,
+    );
+
+    final paymentRepository = ref.read(paymentRepositoryProvider.notifier);
+    paymentRepository.create(payment);
+    
     context.pop();
   }
 

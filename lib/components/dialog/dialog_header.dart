@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:pos/theme.dart';
 
 class DialogHeader extends StatelessWidget {
   final IconData icon;
