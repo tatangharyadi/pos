@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pos/theme.dart';
-import 'package:pos/consts/payment_type.dart';
+import 'package:pos/consts/payment_option.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/components/payment_dialog/payment_member_dialog.dart';
 import 'package:pos/components/payment_dialog/payment_edc_dialog.dart';
@@ -20,7 +20,7 @@ class PaymentGrid extends ConsumerStatefulWidget {
 class _PaymentGridState extends ConsumerState<PaymentGrid> {
   @override
   Widget build(BuildContext context) {
-    List<PaymentType> paymentTypes = PaymentType.paymentTypes;
+    List<PaymentOption> paymentOptions = PaymentOption.paymentOptions;
 
     return GridView.builder(
       padding: const EdgeInsets.all(10),
@@ -30,44 +30,44 @@ class _PaymentGridState extends ConsumerState<PaymentGrid> {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10
       ),
-      itemCount: paymentTypes.length,
+      itemCount: paymentOptions.length,
       itemBuilder: (context, index) {
-        PaymentType paymentType = paymentTypes[index];
+        PaymentOption paymentOption = paymentOptions[index];
 
         return GestureDetector(
           onTap: () {
             showGeneralDialog(
               context: context,
               pageBuilder: (context, animation, secondaryAnimation) {
-                switch (paymentType.type) {
-                  case 'MEMBER':
+                switch (paymentOption.type) {
+                  case PaymentType.member:
                     return PaymentMemberDialog(
-                      paymentName: paymentType.name,
-                      icon: paymentType.icon,
+                      paymentName: paymentOption.name,
+                      icon: paymentOption.icon,
                       orderId: widget.orderId,
                     );
-                  case 'QRIS':
+                  case PaymentType.qris:
                     return PaymentQrisDialog(
-                      paymentName: paymentType.name,
-                      icon: paymentType.icon,
+                      paymentName: paymentOption.name,
+                      icon: paymentOption.icon,
                       orderId: widget.orderId,
                     );
-                   case 'EDC':
+                   case PaymentType.edc:
                     return PaymentEdcDialog(
-                      paymentName: paymentType.name,
-                      icon: paymentType.icon,
+                      paymentName: paymentOption.name,
+                      icon: paymentOption.icon,
                       orderId: widget.orderId,
                     );
-                  case 'CASH':
+                  case PaymentType.cash:
                     return PaymentCashDialog(
-                      paymentName: paymentType.name,
-                      icon: paymentType.icon,
+                      paymentName: paymentOption.name,
+                      icon: paymentOption.icon,
                       orderId: widget.orderId,
                     );
-                  case 'VOUCHER':
+                  case PaymentType.voucher:
                     return PaymentVoucherDialog(
-                      paymentName: paymentType.name,
-                      icon: paymentType.icon,
+                      paymentName: paymentOption.name,
+                      icon: paymentOption.icon,
                       orderId: widget.orderId,
                     );
                   default:
@@ -77,16 +77,16 @@ class _PaymentGridState extends ConsumerState<PaymentGrid> {
             );
           },
           child: GridTile(
-            footer: GridTileBar(
-              backgroundColor: tileBackground,
-              leading: Icon(paymentType.icon, size: 15),
-              title: Text(
-                paymentType.name,
-                maxLines: 2,
-                softWrap: true,
-              ),
+            child: InkWell(
+              child: Column(
+                children: [
+                  Icon(
+                    paymentOption.icon,
+                    size: 50,
+                  ),
+                  Text(paymentOption.name),
+                ],),
             ),
-            child: const InkWell(),
           ),
         );
       }
