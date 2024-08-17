@@ -52,7 +52,6 @@ class _PaymentTypeFormState extends ConsumerState<PaymentTypeForm> {
   }
 
   Widget _build() {
-    print(widget.paymentType);
     switch (widget.paymentType) {
       case 'MEMBERSHIP':
         return _buildMembership();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pos/screens/terminal/terminal_form/payment/payment_form.dart';
 import 'package:pos/screens/terminal/terminal_form/payment/payment_type_form.dart';
 import 'package:pos/theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +18,7 @@ class _PaymentGridState extends ConsumerState<PaymentGrid> {
   @override
   Widget build(BuildContext context) {
     List<PaymentType> paymentTypes = PaymentType.paymentTypes;
+
     return GridView.builder(
       padding: const EdgeInsets.all(10),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -34,7 +36,7 @@ class _PaymentGridState extends ConsumerState<PaymentGrid> {
             showGeneralDialog(
               context: context,
               pageBuilder: (context, animation, secondaryAnimation) {
-                return PaymentTypeForm(paymentName: paymentType.name, icon: paymentType.icon,
+                return PaymentForm(paymentName: paymentType.name, icon: paymentType.icon,
                   paymentType: paymentType.type, orderId: widget.orderId);
               },
             );
