@@ -134,7 +134,8 @@ class Payment extends _Payment with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('paymentDate', RealmPropertyType.timestamp),
       SchemaProperty('reference', RealmPropertyType.string),
       SchemaProperty('amount', RealmPropertyType.double),
-      SchemaProperty('orderId', RealmPropertyType.objectid),
+      SchemaProperty('orderId', RealmPropertyType.objectid,
+          indexType: RealmIndexType.regular),
       SchemaProperty('selected', RealmPropertyType.bool),
     ]);
   }();

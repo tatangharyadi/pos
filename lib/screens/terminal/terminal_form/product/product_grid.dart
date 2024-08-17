@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pos/states/total_due/total_due_provider.dart';
 import 'package:pos/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:pos/components/widgets.dart';
@@ -62,6 +63,7 @@ class ProductGrid extends ConsumerWidget {
                   modifiers: List<CartItemModifier>.empty(growable: true)
                 );
                 ref.read(cartItemRepositoryProvider.notifier).add(cartItem);
+                ref.read(totalDueProvider.notifier).increment(cartItem.unitPrice * cartItem.qty);
               },
               onLongPress: () {
                 showGeneralDialog(

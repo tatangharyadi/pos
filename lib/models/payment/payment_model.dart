@@ -14,6 +14,7 @@ class _Payment {
   late DateTime paymentDate;
   late String reference;
   late double amount = 0.0;
+  @Indexed()
   late ObjectId orderId;
 
   late bool selected = false;

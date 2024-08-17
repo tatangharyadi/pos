@@ -16,8 +16,20 @@ class PaymentRepository extends _$PaymentRepository {
   }
 
   Payment? findById(ObjectId? id) {
-    Payment? payment = _realm.find<Payment>(id);
+    Payment? payment = state.find<Payment>(id);
     return payment;
+  }
+
+  double totalAmount(String orderId) {
+    const query = r'''
+      orderId == $0
+    ''';
+
+    final queryParameter = ObjectId.fromHexString(orderId);
+    final results = state.query<Payment>(query, [queryParameter]);
+    double total = results.fold(0.0, (previousValue, item) => previousValue + item.amount);
+
+    return total;
   }
 
   Future<void> create(Payment payment) async{
@@ -31,4 +43,6 @@ class PaymentRepository extends _$PaymentRepository {
       state.delete(payment);
     });
   }
+
+
 }

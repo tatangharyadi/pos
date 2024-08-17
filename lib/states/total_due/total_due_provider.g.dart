@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'realm_service.dart';
+part of 'total_due_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$realmServiceHash() => r'5e9572c89250eef27c62cf86335626ed140e4991';
+String _$totalDueHash() => r'400daaf9295079ba489a21de016f7ef87b346ad7';
 
-/// See also [RealmService].
-@ProviderFor(RealmService)
-final realmServiceProvider = NotifierProvider<RealmService, Realm>.internal(
-  RealmService.new,
-  name: r'realmServiceProvider',
+/// See also [TotalDue].
+@ProviderFor(TotalDue)
+final totalDueProvider = AutoDisposeNotifierProvider<TotalDue, double>.internal(
+  TotalDue.new,
+  name: r'totalDueProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$realmServiceHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$totalDueHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$RealmService = Notifier<Realm>;
+typedef _$TotalDue = AutoDisposeNotifier<double>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

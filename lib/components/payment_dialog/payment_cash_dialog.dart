@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/payment/payment_model.dart';
 import 'package:pos/models/payment/payment_repository.dart';
+import 'package:pos/states/total_due/total_due_provider.dart';
 import 'package:realm/realm.dart';
 
 class PaymentCashDialog extends ConsumerStatefulWidget {
@@ -43,7 +44,8 @@ class _PaymentCashDialogState extends ConsumerState<PaymentCashDialog> {
 
     final paymentRepository = ref.read(paymentRepositoryProvider.notifier);
     paymentRepository.create(payment);
-    
+    ref.read(totalDueProvider.notifier).decrement(_amount);
+
     context.pop();
   }
 

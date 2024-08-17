@@ -10,6 +10,7 @@ import 'package:pos/components/modifier_card/radio_modifier_card.dart';
 import 'package:pos/models/product/product_repository.dart';
 import 'package:pos/models/cart/cart_item_repository.dart';
 import 'package:pos/models/product/product_utils.dart';
+import 'package:pos/states/total_due/total_due_provider.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/product/product_model.dart';
 import 'package:pos/models/cart/cart_model.dart';
@@ -57,6 +58,8 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
     _cartItem.qty = _quantity;
     ref.read(cartItemRepositoryProvider.notifier).remove(_cartItem.orderLineId);
     ref.read(cartItemRepositoryProvider.notifier).add(_cartItem);
+
+    ref.read(totalDueProvider.notifier).increment(_cartItem.unitPrice * _cartItem.qty);
   }
 
   @override
