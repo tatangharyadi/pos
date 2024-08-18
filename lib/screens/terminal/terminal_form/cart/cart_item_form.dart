@@ -8,11 +8,12 @@ import 'package:intl/intl.dart';
 import 'package:pos/components/modifier_card/checkbox_modifier_card.dart';
 import 'package:pos/components/modifier_card/radio_modifier_card.dart';
 import 'package:pos/models/product/product_repository.dart';
-import 'package:pos/models/cart/cart_repository.dart';
+import 'package:pos/models/cart/cart_item_repository.dart';
 import 'package:pos/models/product/product_utils.dart';
+import 'package:pos/states/total_due/total_due_provider.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/product/product_model.dart';
-import 'package:pos/models/cart/cart_item_model.dart';
+import 'package:pos/models/cart/cart_model.dart';
 
 class CartItemForm extends ConsumerStatefulWidget {
   final String orderLineId;
@@ -28,7 +29,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
   late CartItem _cartItem;
   late Product _product;
   late int _quantity;
-  late double _unitPrice, _totalModifierPrice;
+  late double _unitPrice, _totalModifierPrice, _totalLine;
 
   CartItem _new() {
     final cartItem = CartItem(
@@ -44,10 +45,22 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
   }
 
   CartItem _edit() {
-    final cartRepository = ref.read(cartRepositoryProvider.notifier);
-    final cartItem = cartRepository.findItemByOrderLineId(widget.orderLineId)!;
+    final cartItemRepository = ref.read(cartItemRepositoryProvider.notifier);
+    final cartItem = cartItemRepository.findById(widget.orderLineId)!;
 
     return cartItem;
+  }
+
+  void _submit() {
+    _cartItem.sku = _product.sku;
+    _cartItem.name = _product.name;
+    _cartItem.unitPrice = _unitPrice + _totalModifierPrice;
+    _cartItem.qty = _quantity;
+    ref.read(cartItemRepositoryProvider.notifier).remove(_cartItem.orderLineId);
+    ref.read(totalDueProvider.notifier).decrement(_totalLine);
+
+    ref.read(cartItemRepositoryProvider.notifier).add(_cartItem);
+    ref.read(totalDueProvider.notifier).increment(_cartItem.unitPrice * _cartItem.qty);
   }
 
   @override
@@ -61,6 +74,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
     _quantity = _cartItem.qty;
     _totalModifierPrice = _cartItem.modifiers.fold(0, (previousValue, modifier) =>
       previousValue + modifier.unitPrice);
+    _totalLine = _cartItem.unitPrice * _cartItem.qty;
   }
 
   void onChanged() {
@@ -86,17 +100,14 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
         for (var modifier in modifierCollection.modifiers) {
           final modifierPrice = ProductUtils.getValidPriceByModifier(modifier);
 
-          bool isSelected = false;
           int index = selectedModifiers.indexWhere((element) => element == modifier.id.hexString);
           if (index != -1) {
-            isSelected = true;
             _cartItem.modifiers.add(CartItemModifier(
               modifierId: modifier.id.hexString,
               collectionId: modifierCollection.id.hexString,
               sku: modifier.sku,
               name: modifier.name,
-              unitPrice: modifierPrice,
-              isSelected: isSelected));
+              unitPrice: modifierPrice));
             _totalModifierPrice += modifierPrice;
           }
         }
@@ -183,9 +194,9 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
                         if (value == null) return;
-                        if (int.tryParse(value.toString()) == null) return;
+                        if (int.tryParse(value) == null) return;
                         setState(() {
-                          _quantity = int.parse(value.toString());
+                          _quantity = int.parse(value);
                         });
                       },
                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -196,11 +207,6 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
                       ]),
                     ),
                   ),
-                  Text(_cartItem.name),
-                  Text(_cartItem.qty.toString()),
-                  for (var modifier in _cartItem.modifiers) ...[
-                    Text('${modifier.name} ${modifier.isSelected}'),
-                  ],
                 ],
               ),
             ],
@@ -215,13 +221,7 @@ class _CartItemModiferState extends ConsumerState<CartItemForm> {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () {
-          final cartItem = _cartItem.copyWith(
-            sku: _product.sku,
-            name: _product.name,
-            unitPrice: _unitPrice + _totalModifierPrice,
-            qty: _quantity);
-          ref.read(cartRepositoryProvider.notifier).removeItem(cartItem.orderLineId);
-          ref.read(cartRepositoryProvider.notifier).addItem(cartItem);
+          _submit();
           context.pop();
         },
         child: const Icon(Icons.check),
