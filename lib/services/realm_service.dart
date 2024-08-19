@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/shift/shift_model.dart';
-import 'package:pos/models/shift/v2/shift_model.dart';
 import 'package:pos/models/product/product_model.dart';
 import 'package:pos/models/order/order_model.dart';
 import 'package:pos/models/payment/payment_model.dart';
@@ -18,7 +17,7 @@ class RealmService extends _$RealmService {
     var config = Configuration.local([
       Price.schema, Modifier.schema, ModifierCollection.schema,
       Product.schema, Brand.schema, Category.schema,
-      DayShift.schema, ParentShift.schema, Shift.schema,
+      ParentShift.schema, Shift.schema,
       OrderLineModifier.schema, OrderLine.schema, Order.schema, ParentOrder.schema,
       Payment.schema],
       schemaVersion: 1);
@@ -113,32 +112,7 @@ class RealmService extends _$RealmService {
         ]);
       });
     }
-
-    var dayShifts = _realm.all<DayShift>();
-    if (dayShifts.isEmpty) {
-      List<Shift> shifts = [
-        Shift(ObjectId(), 'SHIFT01',
-          DateTime(now.year, now.month, now.day, 10, 00).toUtc(), DateTime(now.year, now.month, now.day, 15, 00).toUtc(),
-          'CLOSE', '123', openTime: DateTime(now.year, now.month, now.day, 10, 10).toUtc(),
-          closeTime: DateTime(now.year, now.month, now.day, 15, 00).toUtc(),
-          totalSales: 1000),
-        Shift(ObjectId(), 'SHIFT02',
-          DateTime(now.year, now.month, now.day, 15, 00).toUtc(), DateTime(now.year, now.month, now.day, 21, 00).toUtc(),        
-          'REOPENED', '456', openTime: DateTime(now.year, now.month, now.day, 15, 20).toUtc(),
-          closeTime: DateTime(now.year, now.month, now.day, 23, 00).toUtc(),
-          totalSales: 2000),
-        Shift(ObjectId(), 'SHIFT03', 
-          DateTime(now.year, now.month, now.day, 22, 00).toUtc(),  DateTime(next.year, next.month, next.day, 03, 00).toUtc(),
-          'OPEN', '789', totalSales: 0),
-      ];
-
-      DayShift seed = DayShift(ObjectId(), 'DAYSHIFTSEED', DateTime.now().toUtc(), totalSales: 6000, shifts: shifts);
-
-      _realm.write(() {
-        _realm.add(seed);
-      });
-    }
-
+    
     return _realm;
   }
 }

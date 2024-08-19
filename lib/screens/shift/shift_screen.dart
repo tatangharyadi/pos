@@ -15,9 +15,9 @@ class ShiftScreen extends StatelessWidget {
       ),
       body: const Row(
         children: [
-          // Expanded(
-          //   child: ShiftPanel()
-          // ),
+          Expanded(
+            child: ShiftPanel()
+          ),
         ]
       ),
       bottomNavigationBar: BottomAppBar(
