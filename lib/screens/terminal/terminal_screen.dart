@@ -5,6 +5,7 @@ import 'package:pos/components/login_dialog/login_shift_dialog.dart';
 import 'package:pos/screens/terminal/order_list/order_panel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos/states/shift/shift_auth_model.dart';
 import 'package:pos/states/shift/shift_auth_provider.dart';
 
 class TerminalScreen extends ConsumerStatefulWidget {
@@ -24,15 +25,14 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
   }
 
   void _onShiftChange(bool value) {
-    setState(() {
-      _isShift = value;
-    });
+    final shiftAuth = ref.watch(shiftAuthProvider.notifier);
+    shiftAuth.logout();
   }
 
   @override
   Widget build(BuildContext context) {
     final shiftAuth = ref.watch(shiftAuthProvider);
-    _isShift = shiftAuth == ShiftAuthState.shift ? true : false;
+    _isShift = shiftAuth.state == ShiftAuthOption.shift ? true : false;
 
     return Scaffold(
       drawer: const NavBar(),
@@ -53,17 +53,19 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              const Text("shift"),
+              Text(shiftAuth.id),
               const Gap(5),
               Switch(
                 value: _isShift, 
                 onChanged: (value){
-                  showGeneralDialog(
-                    context: context,
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      return const LoginShiftDialog();
-                    }
-                  );
+                  if(!_isShift) {
+                    showGeneralDialog(
+                      context: context,
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const LoginShiftDialog();
+                      }
+                    );
+                  } else {_onShiftChange(value);}
                 }
               ),
             ],
