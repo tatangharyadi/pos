@@ -63,7 +63,9 @@ class ShiftRepository extends _$ShiftRepository {
     for (var day in days) {
       final startTime = DateTime(day.year, day.month, day.day,
         parentShift.startTime.toLocal().hour, parentShift.startTime.toLocal().minute);
-      final endTime = DateTime(day.year, day.month, day.day,
+      final endShift = parentShift.startTime.toLocal().hour >= parentShift.endTime.toLocal().hour ?
+        day.add(const Duration(days: 1)) : day;
+      final endTime = DateTime(endShift.year, endShift.month, endShift.day,
         parentShift.endTime.toLocal().hour, parentShift.endTime.toLocal().minute);
 
       final shift = Shift(
