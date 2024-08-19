@@ -20,6 +20,28 @@ class ShiftRepository extends _$ShiftRepository {
     return parentShift;
   }
 
+  bool login(String secretPin) {
+        const query = r'''
+      (startTime <= $0 ||
+      endTime => $0) &&
+      secretPin == $1
+    ''';
+
+    final DateTime now = DateTime.now().toUtc();
+    List<Object> queryParameter = [now, secretPin];
+    final results = state.query<Shift>(query, [...queryParameter]);
+    if (results.isEmpty) {
+      return false;
+    }
+    state.write(() {
+      Shift shift = results.first;
+      shift.status = "OPEN";
+      shift.openTime = now;
+    });
+
+    return true;
+  }
+
   void _generateShifts(ParentShift parentShift) {
     final startDate = parentShift.startDate.toLocal();
     final endDate = parentShift.endDate.toLocal();
