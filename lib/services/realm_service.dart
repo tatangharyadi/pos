@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/shift/shift_model.dart';
+import 'package:pos/models/shift/v2/shift_model.dart';
 import 'package:pos/models/product/product_model.dart';
 import 'package:pos/models/order/order_model.dart';
 import 'package:pos/models/payment/payment_model.dart';
@@ -17,7 +18,7 @@ class RealmService extends _$RealmService {
     var config = Configuration.local([
       Price.schema, Modifier.schema, ModifierCollection.schema,
       Product.schema, Brand.schema, Category.schema,
-      DayShift.schema, Shift.schema,
+      DayShift.schema, ParentShift.schema, Shift.schema,
       OrderLineModifier.schema, OrderLine.schema, Order.schema, ParentOrder.schema,
       Payment.schema],
       schemaVersion: 1);

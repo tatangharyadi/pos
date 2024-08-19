@@ -15,9 +15,9 @@ class ShiftScreen extends StatelessWidget {
       ),
       body: const Row(
         children: [
-          Expanded(
-            child: ShiftPanel()
-          ),
+          // Expanded(
+          //   child: ShiftPanel()
+          // ),
         ]
       ),
       bottomNavigationBar: BottomAppBar(
@@ -29,7 +29,7 @@ class ShiftScreen extends StatelessWidget {
         shape: const CircleBorder(),
         onPressed: () {
             context.go(context.namedLocation(
-                'shift_detail',
+                'shift_form',
                 pathParameters: {
                   'id':'new',
                 }
