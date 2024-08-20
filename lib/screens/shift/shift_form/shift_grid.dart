@@ -22,12 +22,11 @@ class _ShiftGridState extends ConsumerState<ShiftGrid> {
     return ObjectId();
   }
 
-  void _delete(RealmResults<Shift> rows, ObjectId objectId) {
+  void _delete(ObjectId shiftId) {
     setState(() {
-      rows.realm.write(() {
-        // rows.removeWhere((element) => element.id == objectId);
+      final shiftRepository = ref.read(shiftRepositoryProvider.notifier);
+      shiftRepository.deleteShift(shiftId);
       });
-    });
   }
 
   DataTable _buildTable(RealmResults<Shift> shifts) {
@@ -101,7 +100,7 @@ class _ShiftGridState extends ConsumerState<ShiftGrid> {
                   child: IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () {
-                      _delete(shifts, shift.id);
+                      _delete(shift.id);
                     },
                   ),
                 ),

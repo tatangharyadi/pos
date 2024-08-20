@@ -65,6 +65,18 @@ class ShiftRepository extends _$ShiftRepository {
     });
   }
 
+  void deleteShift(ObjectId shiftId) {
+    const query = r'''
+      _id == $0
+    ''';
+    final queryParameter = shiftId;
+    final shift = state.query<Shift>(query, [queryParameter]);
+
+    state.write(() {
+      state.deleteMany(shift);
+    });
+  }
+
   void _deleteShifts(ObjectId parentId) {
     const query = r'''
       parentId == $0 &&
