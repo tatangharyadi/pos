@@ -77,111 +77,97 @@ class _ShiftFormState extends ConsumerState<ShiftForm>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TabBar(
-            controller: tabController,
-              tabs: const [
-                Tab(icon: Icon(Icons.edit_calendar)),
-                Tab(icon: Icon(Icons.date_range)),
-              ],
-            ),
             Expanded(
-              child: TabBarView(
-                controller: tabController,
-                children: [
-                  SingleChildScrollView(
-                    child: FormBuilder(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              child: SingleChildScrollView(
+                child: FormBuilder(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FormBuilderTextField(
+                        name: 'shiftName',
+                        decoration: const InputDecoration(
+                          labelText: 'Shift Name',
+                        ),
+                        initialValue: parentShift?.name ?? _initialValue.name,
+                      ),
+                      const Gap(5),
+                      Row(
                         children: [
-                          FormBuilderTextField(
-                            name: 'shiftName',
-                            decoration: const InputDecoration(
-                              labelText: 'Shift Name',
+                          Expanded(
+                            child: FormBuilderDateTimePicker(
+                              name: 'startTime',
+                              decoration: const InputDecoration(
+                                labelText: 'Start Time',
+                              ),
+                              inputType: InputType.time,
+                              format: DateFormat('HH:mm'),
+                              initialValue: parentShift?.startTime.toLocal() ??
+                                _initialValue.startTime,
                             ),
-                            initialValue: parentShift?.name ?? _initialValue.name,
                           ),
                           const Gap(5),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: FormBuilderDateTimePicker(
-                                  name: 'startTime',
-                                  decoration: const InputDecoration(
-                                    labelText: 'Start Time',
-                                  ),
-                                  inputType: InputType.time,
-                                  format: DateFormat('HH:mm'),
-                                  initialValue: parentShift?.startTime.toLocal() ??
-                                    _initialValue.startTime,
-                                ),
+                          Expanded(
+                            child: FormBuilderDateTimePicker(
+                              name: 'endTime',
+                              decoration: const InputDecoration(
+                                labelText: 'End Time',
                               ),
-                              const Gap(5),
-                              Expanded(
-                                child: FormBuilderDateTimePicker(
-                                  name: 'endTime',
-                                  decoration: const InputDecoration(
-                                    labelText: 'End Time',
-                                  ),
-                                  inputType: InputType.time,
-                                  format: DateFormat('HH:mm'),
-                                  initialValue: parentShift?.endTime.toLocal() ??
-                                    _initialValue.endTime,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Gap(5),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: FormBuilderDateTimePicker(
-                                  name: 'startDate',
-                                  decoration: const InputDecoration(
-                                    labelText: 'Start Date',
-                                  ),
-                                  inputType: InputType.date,
-                                  format: DateFormat('yyyy-MM-dd'),
-                                  initialValue: parentShift?.startDate.toLocal() ??
-                                    _initialValue.startDate,
-                                ),
-                              ),
-                              const Gap(5),
-                              Expanded(
-                                child: FormBuilderDateTimePicker(
-                                  name: 'endDate',
-                                  decoration: const InputDecoration(
-                                    labelText: 'End Date',
-                                  ),
-                                  inputType: InputType.date,
-                                  format: DateFormat('yyyy-MM-dd'),
-                                  initialValue: parentShift?.endDate.toLocal() ??
-                                    _initialValue.endDate,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Gap(5),
-                          FormBuilderTextField(
-                            name: 'secretPin',
-                            decoration: const InputDecoration(
-                              labelText: 'Secret Pin',
+                              inputType: InputType.time,
+                              format: DateFormat('HH:mm'),
+                              initialValue: parentShift?.endTime.toLocal() ??
+                                _initialValue.endTime,
                             ),
-                            initialValue: parentShift?.secretPin ?? _initialValue.secretPin,
                           ),
                         ],
                       ),
-                    ),
+                      const Gap(5),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: FormBuilderDateTimePicker(
+                              name: 'startDate',
+                              decoration: const InputDecoration(
+                                labelText: 'Start Date',
+                              ),
+                              inputType: InputType.date,
+                              format: DateFormat('yyyy-MM-dd'),
+                              initialValue: parentShift?.startDate.toLocal() ??
+                                _initialValue.startDate,
+                            ),
+                          ),
+                          const Gap(5),
+                          Expanded(
+                            child: FormBuilderDateTimePicker(
+                              name: 'endDate',
+                              decoration: const InputDecoration(
+                                labelText: 'End Date',
+                              ),
+                              inputType: InputType.date,
+                              format: DateFormat('yyyy-MM-dd'),
+                              initialValue: parentShift?.endDate.toLocal() ??
+                                _initialValue.endDate,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Gap(5),
+                      FormBuilderTextField(
+                        name: 'secretPin',
+                        decoration: const InputDecoration(
+                          labelText: 'Secret Pin',
+                        ),
+                        initialValue: parentShift?.secretPin ?? _initialValue.secretPin,
+                      ),
+                      const Gap(30),
+                      ShiftShiftsTab(id: _objectId.toString())
+                    ],
                   ),
-                          
-                  ShiftShiftsTab(id: _objectId.toString()),
-                ],
+                ),
               ),
             ),
           ],
         ),
-    
-    
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),

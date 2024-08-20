@@ -21,23 +21,15 @@ class _ShiftShiftsTabState extends ConsumerState<ShiftShiftsTab> {
     return ObjectId();
   }
 
-  void _selectedRow(bool value, Shift row) {
-    setState(() {
-      row.realm.write(() {
-        row.selected = value;
-      });
-    });
-  }
-
-  void _deleteSelected(RealmList<Shift> rows) {
+  void _delete(RealmList<Shift> rows, ObjectId objectId) {
     setState(() {
       rows.realm.write(() {
-        rows.removeWhere((element) => element.selected);
+        rows.removeWhere((element) => element.id == objectId);
       });
     });
   }
 
-  DataTable _buildTable(List<dynamic> shifts) {
+  DataTable _buildTable(RealmList<Shift> shifts) {
     final List<Map<String, dynamic>> header = [
       {"title": "Start", "numeric": false},
       {"title": "End", "numeric": false},
@@ -45,6 +37,7 @@ class _ShiftShiftsTabState extends ConsumerState<ShiftShiftsTab> {
       {"title": "Open", "numeric": false},
       {"title": "Close", "numeric": false},
       {"title": "Total Sales", "numeric": true},
+      {"title": "Actions", "numeric": false},
     ];
 
     return DataTable(
@@ -100,9 +93,18 @@ class _ShiftShiftsTabState extends ConsumerState<ShiftShiftsTab> {
                   shift.totalSales.toString(),
                 ),
               ),
+              DataCell(
+                Visibility(
+                  visible: shift.status == 'SCHEDULED',
+                  child: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      _delete(shifts, shift.id);
+                    },
+                  ),
+                ),
+              ),
             ],
-            selected: shift.selected,
-            onSelectChanged: (value) => _selectedRow(value!, shift),
           );
         },
       ),
@@ -122,33 +124,12 @@ class _ShiftShiftsTabState extends ConsumerState<ShiftShiftsTab> {
     final shifts = parentShift?.shifts ?? RealmList<Shift>([]);
 
     return Column(
-      children: [
-        Expanded(
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverAppBar(
-                title: const Text('Shifts'),
-                pinned: true,
-                automaticallyImplyLeading: false,
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => _deleteSelected(shifts),
-                  )
-                ],
-              ),
-              SliverToBoxAdapter(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child:
-                    _buildTable(shifts),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Shifts'),
+          _buildTable(shifts),
+        ],
+      );
   }
 }
 
