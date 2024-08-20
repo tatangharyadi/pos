@@ -10,6 +10,7 @@ class _Shift {
   late ObjectId id;
 
   @Indexed()
+  late ObjectId parentId;
   late String name;
   late DateTime startTime;
   late DateTime endTime;
@@ -19,8 +20,6 @@ class _Shift {
   late String secretPin;
 
   late double totalSales = 0.0;
-
-  late bool selected = false;
 }
 
 @RealmModel()
@@ -37,6 +36,4 @@ class _ParentShift {
   late DateTime startDate;
   late DateTime endDate;
   late String secretPin;
-
-  late List<_Shift> shifts;
 } 

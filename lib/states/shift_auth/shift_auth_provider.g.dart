@@ -6,7 +6,7 @@ part of 'shift_auth_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$shiftAuthHash() => r'1a325defb13d060653ca0a729c82e15874bc7775';
+String _$shiftAuthHash() => r'e83ed991215337475586867dfc0234e86bc98f5b';
 
 /// See also [ShiftAuth].
 @ProviderFor(ShiftAuth)

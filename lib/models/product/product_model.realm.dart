@@ -111,20 +111,18 @@ class Price extends _Price with RealmEntity, RealmObjectBase, RealmObject {
 
   static EJsonValue _toEJson(Price value) => value.toEJson();
   static Price _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
         'currencyCode': EJsonValue currencyCode,
-        'price': EJsonValue price,
-        'priceEffectiveTime': EJsonValue priceEffectiveTime,
-        'priceExpireTime': EJsonValue priceExpireTime,
       } =>
         Price(
           fromEJson(id),
           fromEJson(currencyCode),
-          price: fromEJson(price),
-          priceEffectiveTime: fromEJson(priceEffectiveTime),
-          priceExpireTime: fromEJson(priceExpireTime),
+          price: fromEJson(ejson['price'], defaultValue: 0.0),
+          priceEffectiveTime: fromEJson(ejson['priceEffectiveTime']),
+          priceExpireTime: fromEJson(ejson['priceExpireTime']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -133,7 +131,7 @@ class Price extends _Price with RealmEntity, RealmObjectBase, RealmObject {
   static final schema = () {
     RealmObjectBase.registerFactory(Price._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, Price, 'prices', [
+    return const SchemaObject(ObjectType.realmObject, Price, 'prices', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('currencyCode', RealmPropertyType.string),
@@ -236,22 +234,20 @@ class Modifier extends _Modifier
 
   static EJsonValue _toEJson(Modifier value) => value.toEJson();
   static Modifier _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
-        'sku': EJsonValue sku,
         'type': EJsonValue type,
         'name': EJsonValue name,
-        'description': EJsonValue description,
-        'prices': EJsonValue prices,
       } =>
         Modifier(
           fromEJson(id),
           fromEJson(type),
           fromEJson(name),
-          sku: fromEJson(sku),
-          description: fromEJson(description),
-          prices: fromEJson(prices),
+          sku: fromEJson(ejson['sku']),
+          description: fromEJson(ejson['description']),
+          prices: fromEJson(ejson['prices']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -260,7 +256,7 @@ class Modifier extends _Modifier
   static final schema = () {
     RealmObjectBase.registerFactory(Modifier._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, Modifier, 'modifiers', [
+    return const SchemaObject(ObjectType.realmObject, Modifier, 'modifiers', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('sku', RealmPropertyType.string,
@@ -349,20 +345,20 @@ class ModifierCollection extends _ModifierCollection
 
   static EJsonValue _toEJson(ModifierCollection value) => value.toEJson();
   static ModifierCollection _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
         'name': EJsonValue name,
         'min': EJsonValue min,
         'max': EJsonValue max,
-        'modifiers': EJsonValue modifiers,
       } =>
         ModifierCollection(
           fromEJson(id),
           fromEJson(name),
           fromEJson(min),
           fromEJson(max),
-          modifiers: fromEJson(modifiers),
+          modifiers: fromEJson(ejson['modifiers']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -371,7 +367,7 @@ class ModifierCollection extends _ModifierCollection
   static final schema = () {
     RealmObjectBase.registerFactory(ModifierCollection._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(
+    return const SchemaObject(
         ObjectType.realmObject, ModifierCollection, 'modifierCollections', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
@@ -524,30 +520,25 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
 
   static EJsonValue _toEJson(Product value) => value.toEJson();
   static Product _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
         'sku': EJsonValue sku,
         'type': EJsonValue type,
         'name': EJsonValue name,
-        'description': EJsonValue description,
-        'image': EJsonValue image,
-        'cost': EJsonValue cost,
-        'modifierCollections': EJsonValue modifierCollections,
-        'prices': EJsonValue prices,
-        'selected': EJsonValue selected,
       } =>
         Product(
           fromEJson(id),
           fromEJson(sku),
           fromEJson(type),
           fromEJson(name),
-          description: fromEJson(description),
-          image: fromEJson(image),
-          cost: fromEJson(cost),
-          modifierCollections: fromEJson(modifierCollections),
-          prices: fromEJson(prices),
-          selected: fromEJson(selected),
+          description: fromEJson(ejson['description']),
+          image: fromEJson(ejson['image']),
+          cost: fromEJson(ejson['cost']),
+          modifierCollections: fromEJson(ejson['modifierCollections']),
+          prices: fromEJson(ejson['prices']),
+          selected: fromEJson(ejson['selected'], defaultValue: false),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -556,7 +547,7 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
   static final schema = () {
     RealmObjectBase.registerFactory(Product._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, Product, 'products', [
+    return const SchemaObject(ObjectType.realmObject, Product, 'products', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('sku', RealmPropertyType.string,
@@ -654,20 +645,18 @@ class Brand extends _Brand with RealmEntity, RealmObjectBase, RealmObject {
 
   static EJsonValue _toEJson(Brand value) => value.toEJson();
   static Brand _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
         'name': EJsonValue name,
-        'description': EJsonValue description,
-        'image': EJsonValue image,
-        'products': EJsonValue products,
       } =>
         Brand(
           fromEJson(id),
           fromEJson(name),
-          description: fromEJson(description),
-          image: fromEJson(image),
-          products: fromEJson(products),
+          description: fromEJson(ejson['description']),
+          image: fromEJson(ejson['image']),
+          products: fromEJson(ejson['products']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -676,7 +665,7 @@ class Brand extends _Brand with RealmEntity, RealmObjectBase, RealmObject {
   static final schema = () {
     RealmObjectBase.registerFactory(Brand._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, Brand, 'brands', [
+    return const SchemaObject(ObjectType.realmObject, Brand, 'brands', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string,
@@ -753,18 +742,18 @@ class Category extends _Category
 
   static EJsonValue _toEJson(Category value) => value.toEJson();
   static Category _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
         'name': EJsonValue name,
         'sequence': EJsonValue sequence,
-        'products': EJsonValue products,
       } =>
         Category(
           fromEJson(id),
           fromEJson(name),
           fromEJson(sequence),
-          products: fromEJson(products),
+          products: fromEJson(ejson['products']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -773,7 +762,7 @@ class Category extends _Category
   static final schema = () {
     RealmObjectBase.registerFactory(Category._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, Category, 'categories', [
+    return const SchemaObject(ObjectType.realmObject, Category, 'categories', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string,

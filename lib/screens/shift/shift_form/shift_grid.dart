@@ -6,31 +6,31 @@ import 'package:realm/realm.dart';
 import 'package:pos/models/shift/shift_model.dart';
 import 'package:pos/models/shift/shift_repository.dart';
 
-class ShiftShiftsTab extends ConsumerStatefulWidget {
+class ShiftGrid extends ConsumerStatefulWidget {
   final String id; 
 
-  const ShiftShiftsTab({super.key, required this.id});
+  const ShiftGrid({super.key, required this.id});
 
   @override
-  ConsumerState<ShiftShiftsTab> createState() => _ShiftShiftsTabState();
+  ConsumerState<ShiftGrid> createState() => _ShiftGridState();
 }
 
-class _ShiftShiftsTabState extends ConsumerState<ShiftShiftsTab> {
+class _ShiftGridState extends ConsumerState<ShiftGrid> {
   late ObjectId _objectId;
 
   ObjectId _new() {
     return ObjectId();
   }
 
-  void _delete(RealmList<Shift> rows, ObjectId objectId) {
+  void _delete(RealmResults<Shift> rows, ObjectId objectId) {
     setState(() {
       rows.realm.write(() {
-        rows.removeWhere((element) => element.id == objectId);
+        // rows.removeWhere((element) => element.id == objectId);
       });
     });
   }
 
-  DataTable _buildTable(RealmList<Shift> shifts) {
+  DataTable _buildTable(RealmResults<Shift> shifts) {
     final List<Map<String, dynamic>> header = [
       {"title": "Start", "numeric": false},
       {"title": "End", "numeric": false},
@@ -122,8 +122,7 @@ class _ShiftShiftsTabState extends ConsumerState<ShiftShiftsTab> {
   @override
   Widget build(BuildContext context) {
     final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);
-    final parentShift = shiftRepository.findById(_objectId);
-    final shifts = parentShift?.shifts ?? RealmList<Shift>([]);
+    final shifts = shiftRepository.findShiftsById(_objectId);
 
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,

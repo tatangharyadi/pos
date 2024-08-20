@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:pos/screens/shift/shift_form/shift_shifts_tab.dart';
+import 'package:pos/screens/shift/shift_form/shift_grid.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realm/realm.dart';
@@ -160,7 +160,7 @@ class _ShiftFormState extends ConsumerState<ShiftForm>
                         initialValue: parentShift?.secretPin ?? _initialValue.secretPin,
                       ),
                       const Gap(30),
-                      ShiftShiftsTab(id: _objectId.toString())
+                      ShiftGrid(id: _objectId.toString())
                     ],
                   ),
                 ),
