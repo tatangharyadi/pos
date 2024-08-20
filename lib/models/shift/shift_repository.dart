@@ -139,8 +139,19 @@ class ShiftRepository extends _$ShiftRepository {
   }
 
   Future<void> delete(ParentShift parentShift) async{
-    state.write(() {
-      state.delete(parentShift);
-    });
+    _deleteShifts(parentShift.id);
+
+    const query = r'''
+      parentId == $0 &&
+      status != "SCHEDULED"
+    ''';
+    final queryParameter = parentShift.id;
+    final results = state.query<Shift>(query, [queryParameter]);
+
+    if (results.isEmpty) {
+      state.write(() {
+        state.delete(parentShift);
+      });
+    }
   }
 }
