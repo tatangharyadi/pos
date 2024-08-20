@@ -35,11 +35,13 @@ class ShiftRepository extends _$ShiftRepository {
     }
 
     Shift shift = results.first;
-    state.write(() {
-      shift.status = "OPEN";
-      shift.openTime = now;
-    });
-
+    if (shift.status != "OPEN") {
+      state.write(() {
+        shift.status = "OPEN";
+        shift.openTime = now;
+      });
+    }
+    
     return shift;
   }
 

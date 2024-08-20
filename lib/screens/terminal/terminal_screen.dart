@@ -5,8 +5,8 @@ import 'package:pos/components/login_dialog/login_shift_dialog.dart';
 import 'package:pos/screens/terminal/order_list/order_panel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos/states/shift/shift_auth_model.dart';
-import 'package:pos/states/shift/shift_auth_provider.dart';
+import 'package:pos/states/shift_auth/shift_auth_model.dart';
+import 'package:pos/states/shift_auth/shift_auth_provider.dart';
 
 class TerminalScreen extends ConsumerStatefulWidget {
   const TerminalScreen({super.key});

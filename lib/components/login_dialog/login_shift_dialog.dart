@@ -6,7 +6,7 @@ import 'package:pos/components/dialog/dialog_buttons.dart';
 import 'package:pos/components/dialog/dialog_footer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos/states/shift/shift_auth_provider.dart';
+import 'package:pos/states/shift_auth/shift_auth_provider.dart';
 
 
 class LoginShiftDialog extends ConsumerStatefulWidget {

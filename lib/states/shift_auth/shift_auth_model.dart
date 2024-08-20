@@ -6,6 +6,7 @@ class ShiftAuthState {
   late ShiftAuthOption state = ShiftAuthOption.none;
   late String id = 'no shift';
   late String name = "no shift";
+  late DateTime? startTime;
 
   ShiftAuthState({
     required this.state,

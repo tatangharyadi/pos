@@ -1,7 +1,7 @@
 import 'package:pos/models/shift/shift_repository.dart';
 import 'package:realm/realm.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:pos/states/shift/shift_auth_model.dart';
+import 'package:pos/states/shift_auth/shift_auth_model.dart';
 
 part 'shift_auth_provider.g.dart';
 
@@ -33,6 +33,7 @@ class ShiftAuth extends _$ShiftAuth {
       id: result.id.toString(),
       name: result.name,
     );
+    authState.startTime = result.startTime;
     state = authState;
     return true;
   }

@@ -13,3 +13,6 @@ const dismissibleBackground = Colors.red;
 
 final dialogTitleBackground = Colors.green.shade900;
 const dialogContentBackground = Colors.white;
+
+const activeText = Colors.black;
+const inactiveText = Colors.grey;
