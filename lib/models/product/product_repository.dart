@@ -24,4 +24,15 @@ class ProductRepository extends _$ProductRepository {
     Modifier? modifier = _realm.find<Modifier>(id);
     return modifier;
   }
+
+  void update(ObjectId id, bool isPin1, bool isPin2) {
+    Product? product = _realm.find<Product>(id);
+
+    if (product != null) {
+      state.write(() {
+        product.isPin1 = isPin1;
+        product.isPin2 = isPin2; 
+      });
+    }
+  }
 }

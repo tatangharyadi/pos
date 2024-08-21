@@ -96,19 +96,21 @@ class RealmService extends _$RealmService {
         _realm.addAll([
           Product(ObjectId(), 'HOUS00077162', 'PRODUCT', 'Spaghetti Aglio Olio',
             image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077162.png',
-            prices: pricesHOUS00077162),
+            prices: pricesHOUS00077162, isMto: true),
           Product(ObjectId(), 'HOUS00077118', 'PRODUCT', 'Chicken Steak Burger',
             image:  'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077118.png',
-            prices: pricesHOUS00077118),
+            prices: pricesHOUS00077118, isMto: true),
           Product(ObjectId(), 'HOUS00069085', 'PRODUCT', 'Butter Croissant',
             image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00069085.png',
             prices: pricesHHOUS00069085),
           Product(ObjectId(), 'MGM-ULI-002', 'PRODUCT', 'Hot Cappuccino',
             image:  'https://ik.imagekit.io/yummycorp/yummykitchen/MGM-ULI-002.png',
-            modifierCollections: modifierCollectionMGMULI002, prices: pricesMGMULI002),
+            modifierCollections: modifierCollectionMGMULI002,
+            prices: pricesMGMULI002, isMto: true),
           Product(ObjectId(), 'HOUS00076950', 'PRODUCT', 'Black Tea',
             image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00076950.png',
-            modifierCollections: modifierCollectionHOUS00076950, prices: pricesHOUS00076950),
+            modifierCollections: modifierCollectionHOUS00076950,
+            prices: pricesHOUS00076950, isMto: true),
         ]);
       });
     }

@@ -11,9 +11,15 @@ import 'package:pos/models/product/product_model.dart';
 @override
 class ProductDataTableSource extends DataTableSource {
   final BuildContext context;
+  final WidgetRef ref;
   final RealmResults<Product> products;
 
-  ProductDataTableSource(this.context, this.products);
+  ProductDataTableSource(this.context, this.ref, this.products);
+
+  void _onChanged(ObjectId productId, isPin1, isPin2) { 
+    final productRepository = ref.read(productRepositoryProvider.notifier);
+    productRepository.update(productId, isPin1, isPin2);
+  }
 
   @override
   DataRow getRow(int index) {
@@ -27,6 +33,18 @@ class ProductDataTableSource extends DataTableSource {
         DataCell(Text(product.type)),
         DataCell(Text(product.name)),
         DataCell(Text(price.toString())),
+        DataCell(Text(product.isTaxable ? 'Yes' : 'No')),
+        DataCell(Text(product.isMto ? 'Yes' : 'No')),
+        DataCell(Checkbox(
+          value: product.isPin1, 
+          onChanged: (value) {
+            _onChanged(product.id, value!, product.isPin2);
+          })),
+        DataCell(Checkbox( 
+          value: product.isPin2,
+          onChanged: (value) {
+            _onChanged(product.id, product.isPin1, value!);
+          })),
       ],
       onLongPress: () {
         context.push(context.namedLocation(
@@ -52,16 +70,21 @@ class ProductDataTableSource extends DataTableSource {
 class ProductGrid extends ConsumerWidget {
   const ProductGrid({super.key});
 
-  PaginatedDataTable _buildTable(BuildContext context, RealmResults<Product> products) {
+  PaginatedDataTable _buildTable(BuildContext context, WidgetRef ref,
+    RealmResults<Product> products) {
     final List<Map<String, dynamic>> header = [
       {"title": "SKU", "numeric": false},
       {"title": "Type", "numeric": false},
       {"title": "Name", "numeric": false},
       {"title": "Price", "numeric": true},
+      {"title": "Taxable", "numeric": false},
+      {"title": "MTO", "numeric": false},
+      {"title": "Pin1", "numeric": false},
+      {"title": "Pin2", "numeric": false},
     ];
 
     return PaginatedDataTable(
-      source: ProductDataTableSource(context, products),
+      source: ProductDataTableSource(context, ref, products),
       showCheckboxColumn: true,
       showFirstLastButtons: true,
       showEmptyRows: false,
@@ -97,7 +120,7 @@ class ProductGrid extends ConsumerWidget {
         }
 
         return Expanded(
-          child: _buildTable(context, results),
+          child: _buildTable(context, ref, results),
                 );
       },
     );

@@ -20,8 +20,11 @@ part 'app_router.g.dart';
     initialLocation: '/',
     redirect: (context, state) {
       if (appState.isLoading || appState.hasError) {
-        if(foundation.kDebugMode) {
-          print('DEBUG: isLoading or hasError');
+        if(foundation.kDebugMode && appState.isLoading) {
+          print('DEBUG: isLoading');
+        }
+        if(foundation.kDebugMode && appState.hasError) {
+          print('DEBUG: hasError');
         }
         return '/';
       }

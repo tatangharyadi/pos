@@ -13,13 +13,7 @@ class ProductScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Product'),
       ),
-      body: const Row(
-        children: [
-          Expanded(
-            child: ProductPanel()
-          ),
-        ]
-      ),
+      body: const ProductPanel(),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         height: 30,
