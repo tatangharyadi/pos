@@ -12,6 +12,7 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
 
   Shift(
     ObjectId id,
+    ObjectId parentId,
     String name,
     DateTime startTime,
     DateTime endTime,
@@ -20,15 +21,14 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
     DateTime? openTime,
     DateTime? closeTime,
     double totalSales = 0.0,
-    bool selected = false,
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObjectBase.setDefaults<Shift>({
         'totalSales': 0.0,
-        'selected': false,
       });
     }
     RealmObjectBase.set(this, '_id', id);
+    RealmObjectBase.set(this, 'parentId', parentId);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'startTime', startTime);
     RealmObjectBase.set(this, 'endTime', endTime);
@@ -37,7 +37,6 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'status', status);
     RealmObjectBase.set(this, 'secretPin', secretPin);
     RealmObjectBase.set(this, 'totalSales', totalSales);
-    RealmObjectBase.set(this, 'selected', selected);
   }
 
   Shift._();
@@ -46,6 +45,12 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
   ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
   @override
   set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
+
+  @override
+  ObjectId get parentId =>
+      RealmObjectBase.get<ObjectId>(this, 'parentId') as ObjectId;
+  @override
+  set parentId(ObjectId value) => RealmObjectBase.set(this, 'parentId', value);
 
   @override
   String get name => RealmObjectBase.get<String>(this, 'name') as String;
@@ -97,11 +102,6 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
       RealmObjectBase.set(this, 'totalSales', value);
 
   @override
-  bool get selected => RealmObjectBase.get<bool>(this, 'selected') as bool;
-  @override
-  set selected(bool value) => RealmObjectBase.set(this, 'selected', value);
-
-  @override
   Stream<RealmObjectChanges<Shift>> get changes =>
       RealmObjectBase.getChanges<Shift>(this);
 
@@ -115,6 +115,7 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
   EJsonValue toEJson() {
     return <String, dynamic>{
       '_id': id.toEJson(),
+      'parentId': parentId.toEJson(),
       'name': name.toEJson(),
       'startTime': startTime.toEJson(),
       'endTime': endTime.toEJson(),
@@ -123,36 +124,33 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
       'status': status.toEJson(),
       'secretPin': secretPin.toEJson(),
       'totalSales': totalSales.toEJson(),
-      'selected': selected.toEJson(),
     };
   }
 
   static EJsonValue _toEJson(Shift value) => value.toEJson();
   static Shift _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
+        'parentId': EJsonValue parentId,
         'name': EJsonValue name,
         'startTime': EJsonValue startTime,
         'endTime': EJsonValue endTime,
-        'openTime': EJsonValue openTime,
-        'closeTime': EJsonValue closeTime,
         'status': EJsonValue status,
         'secretPin': EJsonValue secretPin,
-        'totalSales': EJsonValue totalSales,
-        'selected': EJsonValue selected,
       } =>
         Shift(
           fromEJson(id),
+          fromEJson(parentId),
           fromEJson(name),
           fromEJson(startTime),
           fromEJson(endTime),
           fromEJson(status),
           fromEJson(secretPin),
-          openTime: fromEJson(openTime),
-          closeTime: fromEJson(closeTime),
-          totalSales: fromEJson(totalSales),
-          selected: fromEJson(selected),
+          openTime: fromEJson(ejson['openTime']),
+          closeTime: fromEJson(ejson['closeTime']),
+          totalSales: fromEJson(ejson['totalSales'], defaultValue: 0.0),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -161,11 +159,12 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
   static final schema = () {
     RealmObjectBase.registerFactory(Shift._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, Shift, 'shifts', [
+    return const SchemaObject(ObjectType.realmObject, Shift, 'shifts', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
-      SchemaProperty('name', RealmPropertyType.string,
+      SchemaProperty('parentId', RealmPropertyType.objectid,
           indexType: RealmIndexType.regular),
+      SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('startTime', RealmPropertyType.timestamp),
       SchemaProperty('endTime', RealmPropertyType.timestamp),
       SchemaProperty('openTime', RealmPropertyType.timestamp, optional: true),
@@ -173,7 +172,6 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('status', RealmPropertyType.string),
       SchemaProperty('secretPin', RealmPropertyType.string),
       SchemaProperty('totalSales', RealmPropertyType.double),
-      SchemaProperty('selected', RealmPropertyType.bool),
     ]);
   }();
 
@@ -181,31 +179,27 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
   SchemaObject get objectSchema => RealmObjectBase.getSchema(this) ?? schema;
 }
 
-class DayShift extends _DayShift
+class ParentShift extends _ParentShift
     with RealmEntity, RealmObjectBase, RealmObject {
-  static var _defaultsSet = false;
-
-  DayShift(
+  ParentShift(
     ObjectId id,
     String name,
-    DateTime dateShift, {
-    double totalSales = 0.0,
-    Iterable<Shift> shifts = const [],
-  }) {
-    if (!_defaultsSet) {
-      _defaultsSet = RealmObjectBase.setDefaults<DayShift>({
-        'totalSales': 0.0,
-      });
-    }
+    DateTime startTime,
+    DateTime endTime,
+    DateTime startDate,
+    DateTime endDate,
+    String secretPin,
+  ) {
     RealmObjectBase.set(this, '_id', id);
     RealmObjectBase.set(this, 'name', name);
-    RealmObjectBase.set(this, 'dateShift', dateShift);
-    RealmObjectBase.set(this, 'totalSales', totalSales);
-    RealmObjectBase.set<RealmList<Shift>>(
-        this, 'shifts', RealmList<Shift>(shifts));
+    RealmObjectBase.set(this, 'startTime', startTime);
+    RealmObjectBase.set(this, 'endTime', endTime);
+    RealmObjectBase.set(this, 'startDate', startDate);
+    RealmObjectBase.set(this, 'endDate', endDate);
+    RealmObjectBase.set(this, 'secretPin', secretPin);
   }
 
-  DayShift._();
+  ParentShift._();
 
   @override
   ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
@@ -218,80 +212,101 @@ class DayShift extends _DayShift
   set name(String value) => RealmObjectBase.set(this, 'name', value);
 
   @override
-  DateTime get dateShift =>
-      RealmObjectBase.get<DateTime>(this, 'dateShift') as DateTime;
+  DateTime get startTime =>
+      RealmObjectBase.get<DateTime>(this, 'startTime') as DateTime;
   @override
-  set dateShift(DateTime value) =>
-      RealmObjectBase.set(this, 'dateShift', value);
+  set startTime(DateTime value) =>
+      RealmObjectBase.set(this, 'startTime', value);
 
   @override
-  double get totalSales =>
-      RealmObjectBase.get<double>(this, 'totalSales') as double;
+  DateTime get endTime =>
+      RealmObjectBase.get<DateTime>(this, 'endTime') as DateTime;
   @override
-  set totalSales(double value) =>
-      RealmObjectBase.set(this, 'totalSales', value);
+  set endTime(DateTime value) => RealmObjectBase.set(this, 'endTime', value);
 
   @override
-  RealmList<Shift> get shifts =>
-      RealmObjectBase.get<Shift>(this, 'shifts') as RealmList<Shift>;
+  DateTime get startDate =>
+      RealmObjectBase.get<DateTime>(this, 'startDate') as DateTime;
   @override
-  set shifts(covariant RealmList<Shift> value) =>
-      throw RealmUnsupportedSetError();
+  set startDate(DateTime value) =>
+      RealmObjectBase.set(this, 'startDate', value);
 
   @override
-  Stream<RealmObjectChanges<DayShift>> get changes =>
-      RealmObjectBase.getChanges<DayShift>(this);
+  DateTime get endDate =>
+      RealmObjectBase.get<DateTime>(this, 'endDate') as DateTime;
+  @override
+  set endDate(DateTime value) => RealmObjectBase.set(this, 'endDate', value);
 
   @override
-  Stream<RealmObjectChanges<DayShift>> changesFor([List<String>? keyPaths]) =>
-      RealmObjectBase.getChangesFor<DayShift>(this, keyPaths);
+  String get secretPin =>
+      RealmObjectBase.get<String>(this, 'secretPin') as String;
+  @override
+  set secretPin(String value) => RealmObjectBase.set(this, 'secretPin', value);
 
   @override
-  DayShift freeze() => RealmObjectBase.freezeObject<DayShift>(this);
+  Stream<RealmObjectChanges<ParentShift>> get changes =>
+      RealmObjectBase.getChanges<ParentShift>(this);
+
+  @override
+  Stream<RealmObjectChanges<ParentShift>> changesFor(
+          [List<String>? keyPaths]) =>
+      RealmObjectBase.getChangesFor<ParentShift>(this, keyPaths);
+
+  @override
+  ParentShift freeze() => RealmObjectBase.freezeObject<ParentShift>(this);
 
   EJsonValue toEJson() {
     return <String, dynamic>{
       '_id': id.toEJson(),
       'name': name.toEJson(),
-      'dateShift': dateShift.toEJson(),
-      'totalSales': totalSales.toEJson(),
-      'shifts': shifts.toEJson(),
+      'startTime': startTime.toEJson(),
+      'endTime': endTime.toEJson(),
+      'startDate': startDate.toEJson(),
+      'endDate': endDate.toEJson(),
+      'secretPin': secretPin.toEJson(),
     };
   }
 
-  static EJsonValue _toEJson(DayShift value) => value.toEJson();
-  static DayShift _fromEJson(EJsonValue ejson) {
+  static EJsonValue _toEJson(ParentShift value) => value.toEJson();
+  static ParentShift _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
         'name': EJsonValue name,
-        'dateShift': EJsonValue dateShift,
-        'totalSales': EJsonValue totalSales,
-        'shifts': EJsonValue shifts,
+        'startTime': EJsonValue startTime,
+        'endTime': EJsonValue endTime,
+        'startDate': EJsonValue startDate,
+        'endDate': EJsonValue endDate,
+        'secretPin': EJsonValue secretPin,
       } =>
-        DayShift(
+        ParentShift(
           fromEJson(id),
           fromEJson(name),
-          fromEJson(dateShift),
-          totalSales: fromEJson(totalSales),
-          shifts: fromEJson(shifts),
+          fromEJson(startTime),
+          fromEJson(endTime),
+          fromEJson(startDate),
+          fromEJson(endDate),
+          fromEJson(secretPin),
         ),
       _ => raiseInvalidEJson(ejson),
     };
   }
 
   static final schema = () {
-    RealmObjectBase.registerFactory(DayShift._);
+    RealmObjectBase.registerFactory(ParentShift._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, DayShift, 'dayShifts', [
+    return const SchemaObject(
+        ObjectType.realmObject, ParentShift, 'parentShifts', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('name', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
-      SchemaProperty('dateShift', RealmPropertyType.timestamp),
-      SchemaProperty('totalSales', RealmPropertyType.double),
-      SchemaProperty('shifts', RealmPropertyType.object,
-          linkTarget: 'shifts', collectionType: RealmCollectionType.list),
+      SchemaProperty('startTime', RealmPropertyType.timestamp),
+      SchemaProperty('endTime', RealmPropertyType.timestamp),
+      SchemaProperty('startDate', RealmPropertyType.timestamp),
+      SchemaProperty('endDate', RealmPropertyType.timestamp),
+      SchemaProperty('secretPin', RealmPropertyType.string),
     ]);
   }();
 

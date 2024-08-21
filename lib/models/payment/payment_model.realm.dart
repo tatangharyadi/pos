@@ -100,15 +100,14 @@ class Payment extends _Payment with RealmEntity, RealmObjectBase, RealmObject {
 
   static EJsonValue _toEJson(Payment value) => value.toEJson();
   static Payment _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
         'type': EJsonValue type,
         'paymentDate': EJsonValue paymentDate,
         'reference': EJsonValue reference,
-        'amount': EJsonValue amount,
         'orderId': EJsonValue orderId,
-        'selected': EJsonValue selected,
       } =>
         Payment(
           fromEJson(id),
@@ -116,8 +115,8 @@ class Payment extends _Payment with RealmEntity, RealmObjectBase, RealmObject {
           fromEJson(paymentDate),
           fromEJson(reference),
           fromEJson(orderId),
-          amount: fromEJson(amount),
-          selected: fromEJson(selected),
+          amount: fromEJson(ejson['amount'], defaultValue: 0.0),
+          selected: fromEJson(ejson['selected'], defaultValue: false),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -126,7 +125,7 @@ class Payment extends _Payment with RealmEntity, RealmObjectBase, RealmObject {
   static final schema = () {
     RealmObjectBase.registerFactory(Payment._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, Payment, 'payments', [
+    return const SchemaObject(ObjectType.realmObject, Payment, 'payments', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('type', RealmPropertyType.string,

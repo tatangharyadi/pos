@@ -10,7 +10,7 @@ class DialogButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
+      height: 50,
       width: MediaQuery.of(context).size.width * 0.5,
       child: Material(
         child: Padding(

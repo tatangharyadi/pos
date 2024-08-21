@@ -29,7 +29,7 @@ class ShiftScreen extends StatelessWidget {
         shape: const CircleBorder(),
         onPressed: () {
             context.go(context.namedLocation(
-                'shift_detail',
+                'shift_form',
                 pathParameters: {
                   'id':'new',
                 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pos/components/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos/models/shift/shift_repository.dart';
-import 'package:realm/realm.dart';
 import 'package:pos/screens/shift/shift_list/shift_card.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:realm/realm.dart';
+import 'package:pos/models/shift/shift_repository.dart';
 import 'package:pos/models/shift/shift_model.dart';
 
 @override
@@ -15,8 +15,8 @@ class ShiftGrid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Realm realm = ref.watch(shiftRepositoryProvider);
 
-    return StreamBuilder<RealmResultsChanges<DayShift>>(
-      stream: realm.query<DayShift>('TRUEPREDICATE SORT(_id ASC)')
+    return StreamBuilder<RealmResultsChanges<ParentShift>>(
+      stream: realm.query<ParentShift>('TRUEPREDICATE SORT(_id ASC)')
           .changes,
       builder: (context, snapshot) {
         if (snapshot.data == null) {return progressIndicator();}
@@ -29,23 +29,23 @@ class ShiftGrid extends ConsumerWidget {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            childAspectRatio: 1.5,
+            childAspectRatio: 3,
           ),
           itemCount: results.realm.isClosed ? 0 :  results.length,
           itemBuilder: (context, index) {
             if (results[index].isValid) {
-              DayShift dayShift = results[index];
+              ParentShift parentShift = results[index];
               return GestureDetector(
                 onTap: () {
                   context.go(context.namedLocation(
-                      'shift_detail',
+                      'shift_form',
                       pathParameters: {
-                        'id': dayShift.id.toString(),
+                        'id': parentShift.id.toString(),
                       }
                     )
                   );
                 },
-                child: ShiftCard(dayShift: dayShift));
+                child: ShiftCard(object: parentShift));
             } else {return Container();}
           },
         );

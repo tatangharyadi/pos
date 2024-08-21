@@ -10,6 +10,7 @@ class _Shift {
   late ObjectId id;
 
   @Indexed()
+  late ObjectId parentId;
   late String name;
   late DateTime startTime;
   late DateTime endTime;
@@ -19,21 +20,20 @@ class _Shift {
   late String secretPin;
 
   late double totalSales = 0.0;
-
-  late bool selected = false;
 }
 
 @RealmModel()
-@MapTo("dayShifts")
-class _DayShift {
+@MapTo("parentShifts")
+class _ParentShift {
   @PrimaryKey()
   @MapTo("_id")
   late ObjectId id;
 
   @Indexed()
   late String name;
-  late DateTime dateShift;
-
-  late double totalSales = 0.0;
-  late List<_Shift> shifts;
-}
+  late DateTime startTime;
+  late DateTime endTime;
+  late DateTime startDate;
+  late DateTime endDate;
+  late String secretPin;
+} 

@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/shift/shift_repository.dart';
 import 'package:pos/models/shift/shift_model.dart';
 
 class ShiftCard extends ConsumerWidget {
-  final DayShift dayShift;
+  final ParentShift object;
 
-  const ShiftCard({super.key, required this.dayShift});
+  const ShiftCard({super.key, required this.object});
 
-  void _delete(ref, DayShift dayShift) {
+  void _delete(ref, ParentShift object) {
     final shiftRepository = ref.watch(shiftRepositoryProvider.notifier);
-    shiftRepository.delete(dayShift);
+    shiftRepository.delete(object);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final startTime = DateFormat("HH:mm").format(object.startTime.toLocal());
+    final endTime = DateFormat("HH:mm").format(object.endTime.toLocal());
+    final startDate = DateFormat("yyyy-MM-dd").format(object.startDate.toLocal());
+    final endDate = DateFormat("yyyy-MM-dd").format(object.endDate.toLocal());
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -29,13 +33,11 @@ class ShiftCard extends ConsumerWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,              
                   children: [
-                    Text(dayShift.name),
+                    Text(object.name),
+                    Text('$startTime - $endTime'),
                     Row(
                       children: [
-                        Text(DateFormat("yyyy-MM-dd").format(dayShift.dateShift.toLocal())),
-                        const Gap(5),
-                        const Icon(Icons.paid, size: 12),
-                        Text(dayShift.totalSales.toString()),
+                        Text('$startDate - $endDate'),
                       ],
                     ),
                   ],
@@ -46,61 +48,14 @@ class ShiftCard extends ConsumerWidget {
                     Row(
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.request_quote_rounded),                  
-                          onPressed: (){},
-                        ),
-                        IconButton(
                           icon: const Icon(Icons.delete_rounded),                  
-                          onPressed: (){_delete(ref, dayShift);},
+                          onPressed: (){_delete(ref, object);},
                         )
                       ],
                     ),
                   ],
                 ),
               ],
-            ),
-            Expanded(
-              child:
-                ListView.builder(
-                  itemCount: dayShift.shifts.length,
-                  itemBuilder: (context, index) {
-                    Shift shift = dayShift.shifts[index];
-
-                    late IconData icon;
-                    switch (shift.status) {
-                      case 'CLOSE' || 'REOPENED':
-                        icon = Icons.event_busy_rounded;
-                      break;
-                      case 'OPEN':
-                        icon = Icons.event_rounded;
-                      break;
-                      default:
-                        icon = Icons.calendar_today_rounded;
-                    }
-
-                    return ListTile(
-                      visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-                      leading: Icon(icon),
-                      title: Row(
-                        children: [
-                          Text(
-                            shift.name,
-                            style: const TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
-                          const Gap(5),
-                          Text(
-                            shift.totalSales.toString(),
-                            style: const TextStyle(
-                              fontSize: 12,
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
             ),
           ],
         ),

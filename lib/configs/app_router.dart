@@ -8,7 +8,6 @@ import 'package:pos/screens/product/product_screen.dart';
 import 'package:pos/screens/product/product_detail/product_detail_screen.dart';
 import 'package:pos/screens/shift/shift_screen.dart';
 import 'package:pos/screens/shift/shift_form/shift_form.dart';
-import 'package:pos/screens/shift/shift_form/shift_child_form.dart';
 import 'package:pos/screens/terminal/terminal_screen.dart';
 import 'package:pos/screens/terminal/terminal_form/terminal_form.dart';
 
@@ -71,20 +70,10 @@ part 'app_router.g.dart';
         routes: [
           GoRoute(
             path: 'detail/:id',
-            name: 'shift_detail',
+            name: 'shift_form',
             builder: (context, state) => ShiftForm(
               id: state.pathParameters['id']!,
-            ),
-            routes: [
-              GoRoute(
-                path: ':subId',
-                name: 'shift_subdetail',
-                builder: (context, state) => ShiftChildForm(
-                  id: state.pathParameters['id']!,
-                  subId: state.pathParameters['subId']!,
-                ),
-              ),
-            ] 
+            ), 
           )
         ],
       ),

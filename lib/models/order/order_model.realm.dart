@@ -59,6 +59,7 @@ class OrderLineModifier extends _OrderLineModifier
 
   static EJsonValue _toEJson(OrderLineModifier value) => value.toEJson();
   static OrderLineModifier _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
@@ -77,7 +78,7 @@ class OrderLineModifier extends _OrderLineModifier
   static final schema = () {
     RealmObjectBase.registerFactory(OrderLineModifier._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(
+    return const SchemaObject(
         ObjectType.realmObject, OrderLineModifier, 'orderLineModifiers', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
@@ -185,6 +186,7 @@ class OrderLine extends _OrderLine
 
   static EJsonValue _toEJson(OrderLine value) => value.toEJson();
   static OrderLine _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
@@ -192,8 +194,6 @@ class OrderLine extends _OrderLine
         'name': EJsonValue name,
         'quantity': EJsonValue quantity,
         'unitPrice': EJsonValue unitPrice,
-        'modifiers': EJsonValue modifiers,
-        'total': EJsonValue total,
       } =>
         OrderLine(
           fromEJson(id),
@@ -201,8 +201,8 @@ class OrderLine extends _OrderLine
           fromEJson(name),
           fromEJson(quantity),
           fromEJson(unitPrice),
-          modifiers: fromEJson(modifiers),
-          total: fromEJson(total),
+          modifiers: fromEJson(ejson['modifiers']),
+          total: fromEJson(ejson['total'], defaultValue: 0),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -211,7 +211,7 @@ class OrderLine extends _OrderLine
   static final schema = () {
     RealmObjectBase.registerFactory(OrderLine._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, OrderLine, 'orderLines', [
+    return const SchemaObject(ObjectType.realmObject, OrderLine, 'orderLines', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('sku', RealmPropertyType.string,
@@ -336,6 +336,7 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
 
   static EJsonValue _toEJson(Order value) => value.toEJson();
   static Order _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
@@ -344,8 +345,6 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
         'orderNumber': EJsonValue orderNumber,
         'status': EJsonValue status,
         'description': EJsonValue description,
-        'orderLines': EJsonValue orderLines,
-        'total': EJsonValue total,
       } =>
         Order(
           fromEJson(id),
@@ -354,8 +353,8 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
           fromEJson(orderNumber),
           fromEJson(status),
           fromEJson(description),
-          orderLines: fromEJson(orderLines),
-          total: fromEJson(total),
+          orderLines: fromEJson(ejson['orderLines']),
+          total: fromEJson(ejson['total'], defaultValue: 0),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -364,7 +363,7 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
   static final schema = () {
     RealmObjectBase.registerFactory(Order._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, Order, 'orders', [
+    return const SchemaObject(ObjectType.realmObject, Order, 'orders', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('shift', RealmPropertyType.string,
@@ -444,16 +443,15 @@ class ParentOrder extends _ParentOrder
 
   static EJsonValue _toEJson(ParentOrder value) => value.toEJson();
   static ParentOrder _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
         '_id': EJsonValue id,
-        'orders': EJsonValue orders,
-        'total': EJsonValue total,
       } =>
         ParentOrder(
           fromEJson(id),
-          orders: fromEJson(orders),
-          total: fromEJson(total),
+          orders: fromEJson(ejson['orders']),
+          total: fromEJson(ejson['total'], defaultValue: 0),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -462,7 +460,8 @@ class ParentOrder extends _ParentOrder
   static final schema = () {
     RealmObjectBase.registerFactory(ParentOrder._);
     register(_toEJson, _fromEJson);
-    return SchemaObject(ObjectType.realmObject, ParentOrder, 'parentOrders', [
+    return const SchemaObject(
+        ObjectType.realmObject, ParentOrder, 'parentOrders', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('orders', RealmPropertyType.object,
