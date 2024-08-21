@@ -63,32 +63,6 @@ class Price extends _Price with RealmEntity, RealmObjectBase, RealmObject {
       RealmObjectBase.set(this, 'priceExpireTime', value);
 
   @override
-  RealmResults<Product> get linkedProduct {
-    if (!isManaged) {
-      throw RealmError('Using backlinks is only possible for managed objects.');
-    }
-    return RealmObjectBase.get<Product>(this, 'linkedProduct')
-        as RealmResults<Product>;
-  }
-
-  @override
-  set linkedProduct(covariant RealmResults<Product> value) =>
-      throw RealmUnsupportedSetError();
-
-  @override
-  RealmResults<Modifier> get linkedModifier {
-    if (!isManaged) {
-      throw RealmError('Using backlinks is only possible for managed objects.');
-    }
-    return RealmObjectBase.get<Modifier>(this, 'linkedModifier')
-        as RealmResults<Modifier>;
-  }
-
-  @override
-  set linkedModifier(covariant RealmResults<Modifier> value) =>
-      throw RealmUnsupportedSetError();
-
-  @override
   Stream<RealmObjectChanges<Price>> get changes =>
       RealmObjectBase.getChanges<Price>(this);
 
@@ -140,14 +114,6 @@ class Price extends _Price with RealmEntity, RealmObjectBase, RealmObject {
           optional: true),
       SchemaProperty('priceExpireTime', RealmPropertyType.timestamp,
           optional: true),
-      SchemaProperty('linkedProduct', RealmPropertyType.linkingObjects,
-          linkOriginProperty: 'prices',
-          collectionType: RealmCollectionType.list,
-          linkTarget: 'products'),
-      SchemaProperty('linkedModifier', RealmPropertyType.linkingObjects,
-          linkOriginProperty: 'prices',
-          collectionType: RealmCollectionType.list,
-          linkTarget: 'modifiers'),
     ]);
   }();
 
@@ -395,12 +361,20 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
     String? description,
     String? image,
     double? cost,
+    bool isMto = false,
+    bool isTaxable = false,
+    bool isPin1 = false,
+    bool isPin2 = false,
     Iterable<ModifierCollection> modifierCollections = const [],
     Iterable<Price> prices = const [],
     bool selected = false,
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObjectBase.setDefaults<Product>({
+        'isMto': false,
+        'isTaxable': false,
+        'isPin1': false,
+        'isPin2': false,
         'selected': false,
       });
     }
@@ -411,6 +385,10 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'description', description);
     RealmObjectBase.set(this, 'image', image);
     RealmObjectBase.set(this, 'cost', cost);
+    RealmObjectBase.set(this, 'isMto', isMto);
+    RealmObjectBase.set(this, 'isTaxable', isTaxable);
+    RealmObjectBase.set(this, 'isPin1', isPin1);
+    RealmObjectBase.set(this, 'isPin2', isPin2);
     RealmObjectBase.set<RealmList<ModifierCollection>>(
         this,
         'modifierCollections',
@@ -458,6 +436,26 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
   double? get cost => RealmObjectBase.get<double>(this, 'cost') as double?;
   @override
   set cost(double? value) => RealmObjectBase.set(this, 'cost', value);
+
+  @override
+  bool get isMto => RealmObjectBase.get<bool>(this, 'isMto') as bool;
+  @override
+  set isMto(bool value) => RealmObjectBase.set(this, 'isMto', value);
+
+  @override
+  bool get isTaxable => RealmObjectBase.get<bool>(this, 'isTaxable') as bool;
+  @override
+  set isTaxable(bool value) => RealmObjectBase.set(this, 'isTaxable', value);
+
+  @override
+  bool get isPin1 => RealmObjectBase.get<bool>(this, 'isPin1') as bool;
+  @override
+  set isPin1(bool value) => RealmObjectBase.set(this, 'isPin1', value);
+
+  @override
+  bool get isPin2 => RealmObjectBase.get<bool>(this, 'isPin2') as bool;
+  @override
+  set isPin2(bool value) => RealmObjectBase.set(this, 'isPin2', value);
 
   @override
   RealmList<ModifierCollection> get modifierCollections =>
@@ -512,6 +510,10 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
       'description': description.toEJson(),
       'image': image.toEJson(),
       'cost': cost.toEJson(),
+      'isMto': isMto.toEJson(),
+      'isTaxable': isTaxable.toEJson(),
+      'isPin1': isPin1.toEJson(),
+      'isPin2': isPin2.toEJson(),
       'modifierCollections': modifierCollections.toEJson(),
       'prices': prices.toEJson(),
       'selected': selected.toEJson(),
@@ -536,6 +538,10 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
           description: fromEJson(ejson['description']),
           image: fromEJson(ejson['image']),
           cost: fromEJson(ejson['cost']),
+          isMto: fromEJson(ejson['isMto'], defaultValue: false),
+          isTaxable: fromEJson(ejson['isTaxable'], defaultValue: false),
+          isPin1: fromEJson(ejson['isPin1'], defaultValue: false),
+          isPin2: fromEJson(ejson['isPin2'], defaultValue: false),
           modifierCollections: fromEJson(ejson['modifierCollections']),
           prices: fromEJson(ejson['prices']),
           selected: fromEJson(ejson['selected'], defaultValue: false),
@@ -558,6 +564,10 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('description', RealmPropertyType.string, optional: true),
       SchemaProperty('image', RealmPropertyType.string, optional: true),
       SchemaProperty('cost', RealmPropertyType.double, optional: true),
+      SchemaProperty('isMto', RealmPropertyType.bool),
+      SchemaProperty('isTaxable', RealmPropertyType.bool),
+      SchemaProperty('isPin1', RealmPropertyType.bool),
+      SchemaProperty('isPin2', RealmPropertyType.bool),
       SchemaProperty('modifierCollections', RealmPropertyType.object,
           linkTarget: 'modifierCollections',
           collectionType: RealmCollectionType.list),

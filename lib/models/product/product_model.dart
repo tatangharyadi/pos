@@ -13,11 +13,6 @@ class _Price {
   late double price = 0.0;
   late DateTime? priceEffectiveTime;
   late DateTime? priceExpireTime;
-
-  @Backlink(#prices)
-  late Iterable<_Product> linkedProduct;
-  @Backlink(#prices)
-  late Iterable<_Modifier> linkedModifier;
 }
 
 @RealmModel()
@@ -65,6 +60,11 @@ class _Product {
   late String? description;
   late String? image;
   late double? cost;
+  late bool isMto = false;
+  late bool isTaxable = false;
+  late bool isPin1 = false;
+  late bool isPin2 = false;
+
   @Backlink(#products)
   late Iterable<_Brand> linkedBrand;
   late List<_ModifierCollection> modifierCollections;

@@ -23,14 +23,20 @@ class _ProductPanelState extends ConsumerState<ProductPanel> {
   @override
   Widget build(BuildContext context) {
     
-    return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 18.0, right: 18.0),
-            child: queryForm(context, _formKey, _onQueryPressed),
-          ),
-          const ProductGrid()
-        ],
+    return SingleChildScrollView(
+      child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 18.0, right: 18.0),
+              child: queryForm(context, _formKey, _onQueryPressed),
+            ),
+            const Row(
+              children: [
+                ProductGrid(),
+              ],
+            )
+          ],
+      ),
     );
   }
 }
