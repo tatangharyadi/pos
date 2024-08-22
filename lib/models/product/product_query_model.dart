@@ -1,6 +1,6 @@
 class QueryParameter {
   final String key;
-  final String value;
+  final Object value;
 
   QueryParameter({
     required this.key,

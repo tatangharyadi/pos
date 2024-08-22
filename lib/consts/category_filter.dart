@@ -12,7 +12,7 @@ class CategoryFilter {
     CategoryFilter('', Icons.home, 75, 'all'),
     CategoryFilter('', Icons.search, 75, 'all'),
     CategoryFilter('RTE', Icons.fastfood, 125, 'rte'),
-    CategoryFilter('Drinks', Icons.coffee, 125, 'beverage'),
-    CategoryFilter('Meals', Icons.flatware, 125, 'food'),
+    CategoryFilter('Pin1', Icons.bookmark, 125, 'PIN1'),
+    CategoryFilter('Pin2', Icons.bookmark, 125, 'PIN2'),
   ];
 }

@@ -7,6 +7,11 @@ part 'product_query_repository.g.dart';
 class ProductQueryRepository extends _$ProductQueryRepository {
   @override
   Query build() {
+    final query = _initQuerty();
+    return query;
+  }
+
+  Query _initQuerty() {
     final parameter = QueryParameter(
       key: 'BASEQUERY',
       value: '*',
@@ -35,7 +40,9 @@ class ProductQueryRepository extends _$ProductQueryRepository {
     return objects;
   }
 
-  void setQuery(String value) {
+  void filterByBase(String value) {
+    state = _initQuerty();
+
     List<QueryParameter> parameters;
     parameters = [...state.parameters];
     int index = parameters.indexWhere((element) => element.key == 'BASEQUERY');
@@ -45,9 +52,8 @@ class ProductQueryRepository extends _$ProductQueryRepository {
         value: '*$value*',
       );
     }
-    _generateValues(parameters);
 
-    final query = Query(
+    Query query = Query(
       baseQuery: state.baseQuery,
       query: state.query,
       parameters: parameters,
@@ -56,4 +62,36 @@ class ProductQueryRepository extends _$ProductQueryRepository {
 
     state = query;
   }
+
+  void filterByPin1() {
+    const baseQuery = r'''
+      isPin1 == true
+    ''';
+
+
+    final query = Query(
+      baseQuery: state.baseQuery,
+      query: baseQuery,
+      parameters: [],
+      values: []
+    );
+
+    state = query;
+  }
+
+  void filterByPin2() {
+    const baseQuery = r'''
+      isPin2 == true
+    ''';
+
+
+    final query = Query(
+      baseQuery: state.baseQuery,
+      query: baseQuery,
+      parameters: [],
+      values: []
+    );
+
+    state = query;
+  }  
 }
