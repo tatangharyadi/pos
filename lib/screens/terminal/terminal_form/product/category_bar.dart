@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos/components/barcode_dialog/barcode_dialog.dart';
 import 'package:pos/consts/category_filter.dart';
 import 'package:pos/models/product/product_query_repository.dart';
 
@@ -27,6 +28,14 @@ class CategoryBar extends ConsumerWidget {
                   break;
                 case 'PIN2':
                   queryRepository.filterByPin2();
+                  break;
+                case 'BARCODE':
+                  showGeneralDialog(
+                    context: context,
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                          return const BarcodeDialog();
+                    },
+                  );
                   break;
                 default:
                   queryRepository.filterByBase('*');

@@ -1,39 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:pos/components/dialog/dialog_header.dart';
 import 'package:pos/components/dialog/dialog_buttons.dart';
 import 'package:pos/components/dialog/dialog_footer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos/states/shift_auth/shift_auth_provider.dart';
+import 'package:pos/models/cart/cart_item_repository.dart';
+import 'package:pos/models/product/product_repository.dart';
+import 'package:pos/models/product/product_utils.dart';
+import 'package:pos/states/total_due/total_due_provider.dart';
+import 'package:pos/models/cart/cart_model.dart';
+import 'package:realm/realm.dart';
 
 
-class LoginShiftDialog extends ConsumerStatefulWidget {
-  const LoginShiftDialog({super.key});
+class BarcodeDialog extends ConsumerStatefulWidget {
+  const BarcodeDialog({super.key});
 
   @override
-  ConsumerState<LoginShiftDialog> createState() => _LoginShiftDialogState();
+  ConsumerState<BarcodeDialog> createState() => _BarcodeDialogState();
 }
 
-class _LoginShiftDialogState extends ConsumerState<LoginShiftDialog> {
+class _BarcodeDialogState extends ConsumerState<BarcodeDialog> {
   final _formKey = GlobalKey<FormBuilderState>();
-  late String _pin;
   
   void onClickCancel() {
     context.pop();
   }
 
+  void _onSubmit() {
+    final barcode = _formKey.currentState!.fields['barcode']!.value as String;
+    final productRepository = ref.read(productRepositoryProvider.notifier);
+    final product = productRepository.findByBarcode(barcode);
+    if (product == null) {
+      return;
+    }
+
+    final price = ProductUtils.getValidPriceByProduct(product);
+    final cartItem = CartItem(
+        orderLineId: ObjectId().hexString,
+        productId: product.id.hexString,
+        sku: product.sku,
+        name: product.name,
+        unitPrice: price,
+        qty: 1,
+        modifiers: List<CartItemModifier>.empty(growable: true)
+      );
+      ref.read(cartItemRepositoryProvider.notifier).add(cartItem);
+      ref.read(totalDueProvider.notifier).increment(cartItem.unitPrice * cartItem.qty);
+  }
+
   void onClickOk() {
-    final shiftAuth = ref.read(shiftAuthProvider.notifier);
-    shiftAuth.login(_pin);
     context.pop();
   }
 
   @override
   void initState() {
     super.initState();
-    _pin = '';
   }
 
   @override
@@ -43,8 +65,8 @@ class _LoginShiftDialogState extends ConsumerState<LoginShiftDialog> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const DialogHeader(
-            icon: Icons.pin,
-            title: "Shift Login",
+            icon: Icons.barcode_reader,
+            title: "Barcode Reader",
           ),
           Container(
             height: 200,
@@ -59,23 +81,14 @@ class _LoginShiftDialogState extends ConsumerState<LoginShiftDialog> {
                     children: [
                       Expanded(
                         child: FormBuilderTextField(
-                          name: 'secretPin',
+                          name: 'barcode',
                           decoration: const InputDecoration(
-                            hintText: 'Secret Pin',
+                            hintText: 'Type or scan barcode',
                           ),
                           initialValue: '',
-                          keyboardType: TextInputType.number,
-                          obscureText: true,
-                          onChanged: (value) {
-                            if (value == null) return;
-                              setState(() {
-                              _pin = value.toString();
-                            });
+                          onSubmitted: (value) {
+                            _onSubmit();
                           },
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(),
-                              FormBuilderValidators.numeric()])
                         )
                       ),
                     ],

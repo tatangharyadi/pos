@@ -11,8 +11,8 @@ class CategoryFilter {
   static List<CategoryFilter> categoryFilters = [
     CategoryFilter('', Icons.home, 75, 'all'),
     CategoryFilter('', Icons.search, 75, 'all'),
-    CategoryFilter('RTE', Icons.fastfood, 125, 'rte'),
     CategoryFilter('Pin1', Icons.bookmark, 125, 'PIN1'),
     CategoryFilter('Pin2', Icons.bookmark, 125, 'PIN2'),
+    CategoryFilter('Barcode', Icons.barcode_reader, 150, 'BARCODE'),
   ];
 }

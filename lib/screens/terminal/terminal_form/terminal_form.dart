@@ -57,7 +57,7 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
                   Expanded(
                     child: PageView(
                       children: [
-                        const SkuPanel(),
+                        // const SkuPanel(),
                         const ProductPanel(),
                         PaymentPanel(orderId: _objectId.hexString),
                       ],

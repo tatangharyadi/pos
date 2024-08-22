@@ -20,6 +20,18 @@ class ProductRepository extends _$ProductRepository {
     return product;
   }
 
+  Product? findByBarcode(String barcode) {
+    const query = r'''
+      barcode ==[c] $0
+    ''';
+
+    final result = _realm.query<Product>(query, [barcode]);
+    if (result.isEmpty) {
+      return null;
+    }
+    return result.first;
+  }
+
   Modifier? findModifierById(ObjectId? id) {
     Modifier? modifier = _realm.find<Modifier>(id);
     return modifier;

@@ -93,7 +93,7 @@ flutter:
   fonts:
     - family: LibreBarcode128Text
       fonts:
-        - asset: fonts/LibreBarcode128Text-Regular.ttf
+        - asset: assets/fonts/LibreBarcode128Text-Regular.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
