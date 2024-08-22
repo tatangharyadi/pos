@@ -7,7 +7,7 @@ part of 'product_query_repository.dart';
 // **************************************************************************
 
 String _$productQueryRepositoryHash() =>
-    r'd729446fabaca7c525166f759f987728a61f322d';
+    r'1de5411a5d570cd793adf99999d8abe884cd56cd';
 
 /// See also [ProductQueryRepository].
 @ProviderFor(ProductQueryRepository)

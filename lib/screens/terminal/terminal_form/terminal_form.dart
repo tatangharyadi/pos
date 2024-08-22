@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pos/screens/terminal/terminal_form/payment/payment_panel.dart';
+import 'package:pos/screens/terminal/terminal_form/sku/sku_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/product/product_panel.dart';
+import 'package:pos/screens/terminal/terminal_form/payment/payment_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_panel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/cart/cart_item_repository.dart';
@@ -56,6 +57,7 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
                   Expanded(
                     child: PageView(
                       children: [
+                        const SkuPanel(),
                         const ProductPanel(),
                         PaymentPanel(orderId: _objectId.hexString),
                       ],

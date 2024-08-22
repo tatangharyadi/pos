@@ -54,6 +54,8 @@ class _Product {
 
   @Indexed()
   late String sku;
+  @Indexed()
+  late String barcode;
   late String type;
   @Indexed()
   late String name;

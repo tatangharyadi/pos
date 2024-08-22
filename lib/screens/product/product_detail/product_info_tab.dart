@@ -28,8 +28,18 @@ class ProductInfoTab extends StatelessWidget {
           const Gap(8),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(product.sku),
+              const Gap(5),
+              Text(
+                product.barcode,
+                style: const TextStyle(
+                  fontFamily: 'LibreBarcode128Text',
+                  fontSize: 35,
+                )
+              ),
+              const Gap(5),
               Text(product.description ?? ''),
             ],
           ),
