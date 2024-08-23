@@ -61,23 +61,23 @@ class RealmService extends _$RealmService {
       List<ModifierCollection> modifierCollectionMGMULI002 = [
         ModifierCollection(ObjectId(), 'Add-On', 0, 3,
           modifiers: [
-            Modifier(ObjectId(), 'MODIFIER', 'Hazelnut Syrup',
+            Modifier(ObjectId(), 'MOD003', 'MODIFIER', 'Hazelnut Syrup',
               prices: [
                 Price(ObjectId(), 'IDR', price: 6000),
               ]),
-            Modifier(ObjectId(), 'MODIFIER', 'Vanilla Syrup',
+            Modifier(ObjectId(), 'MOD004', 'MODIFIER', 'Vanilla Syrup',
               prices: [
                 Price(ObjectId(), 'IDR', price: 6000),
               ]),
-            Modifier(ObjectId(), 'MODIFIER', 'Oat Milk',
+            Modifier(ObjectId(), 'MOD005', 'MODIFIER', 'Oat Milk',
               prices: [
                 Price(ObjectId(), 'IDR', price: 12000),
               ]),
-            Modifier(ObjectId(), 'MODIFIER', 'Expresso',
+            Modifier(ObjectId(), 'MOD006', 'MODIFIER', 'Expresso',
               prices: [
                 Price(ObjectId(), 'IDR', price: 5000),
               ]),
-            Modifier(ObjectId(), 'MODIFIER', 'Double Expresso',
+            Modifier(ObjectId(), 'MOD007', 'MODIFIER', 'Double Expresso',
               prices: [
                 Price(ObjectId(), 'IDR', price: 10000),
               ]),
@@ -87,8 +87,8 @@ class RealmService extends _$RealmService {
       List<ModifierCollection> modifierCollectionHOUS00076950 = [
         ModifierCollection(ObjectId(), 'Temp', 1, 1,
           modifiers: [
-            Modifier(ObjectId(), 'MODIFIER', 'Hot'),
-            Modifier(ObjectId(), 'MODIFIER', 'Iced'),
+            Modifier(ObjectId(), 'MOD001', 'MODIFIER', 'Hot'),
+            Modifier(ObjectId(), 'MOD002', 'MODIFIER', 'Iced'),
           ]),
       ];
 

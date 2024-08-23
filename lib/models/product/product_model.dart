@@ -23,7 +23,7 @@ class _Modifier {
   late ObjectId id;
 
   @Indexed()
-  late String? sku;
+  late String sku;
   late String type;
   @Indexed()
   late String name;

@@ -125,9 +125,9 @@ class Modifier extends _Modifier
     with RealmEntity, RealmObjectBase, RealmObject {
   Modifier(
     ObjectId id,
+    String sku,
     String type,
     String name, {
-    String? sku,
     String? description,
     Iterable<Price> prices = const [],
   }) {
@@ -148,9 +148,9 @@ class Modifier extends _Modifier
   set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
 
   @override
-  String? get sku => RealmObjectBase.get<String>(this, 'sku') as String?;
+  String get sku => RealmObjectBase.get<String>(this, 'sku') as String;
   @override
-  set sku(String? value) => RealmObjectBase.set(this, 'sku', value);
+  set sku(String value) => RealmObjectBase.set(this, 'sku', value);
 
   @override
   String get type => RealmObjectBase.get<String>(this, 'type') as String;
@@ -204,14 +204,15 @@ class Modifier extends _Modifier
     return switch (ejson) {
       {
         '_id': EJsonValue id,
+        'sku': EJsonValue sku,
         'type': EJsonValue type,
         'name': EJsonValue name,
       } =>
         Modifier(
           fromEJson(id),
+          fromEJson(sku),
           fromEJson(type),
           fromEJson(name),
-          sku: fromEJson(ejson['sku']),
           description: fromEJson(ejson['description']),
           prices: fromEJson(ejson['prices']),
         ),
@@ -226,7 +227,7 @@ class Modifier extends _Modifier
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('sku', RealmPropertyType.string,
-          optional: true, indexType: RealmIndexType.regular),
+          indexType: RealmIndexType.regular),
       SchemaProperty('type', RealmPropertyType.string),
       SchemaProperty('name', RealmPropertyType.string,
           indexType: RealmIndexType.regular),

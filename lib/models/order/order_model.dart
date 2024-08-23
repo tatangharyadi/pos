@@ -39,9 +39,10 @@ class _Order {
   late ObjectId id;
 
   @Indexed()
+  late String orderNumber;
+  @Indexed()
   late ObjectId parentId;
   late DateTime orderDate;
-  late String orderNumber;
   late String status;
   late String description;
 

@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/cart/cart_model.dart';
 import 'package:pos/models/cart/cart_item_repository.dart';
 import 'package:pos/models/order/order_repository.dart';
-import 'package:pos/states/shift_auth/shift_auth_model.dart';
 import 'package:pos/states/shift_auth/shift_auth_provider.dart';
 import 'package:pos/states/total_due/total_due_provider.dart';
 import 'package:realm/realm.dart';
@@ -49,7 +48,7 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
       final lineTotal = cartItem.qty * cartItem.unitPrice;
       final orderLine = OrderLine(
         ObjectId(),
-        cartItem.sku!,
+        cartItem.sku,
         cartItem.name,
         cartItem.qty,
         cartItem.unitPrice,
@@ -62,9 +61,9 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
     final now = DateTime.now();
     final object = Order(
       _objectId,
+      "1",
       _parentId,
       now,
-      "1",
       "CREATED",
       "",
       total: orderTotal,

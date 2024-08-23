@@ -1,14 +1,14 @@
 class CartItemModifier {
   String modifierId;
   String collectionId;
-  String? sku;
+  String sku;
   String name;
   double unitPrice = 0.0;
 
   CartItemModifier({
     required this.modifierId,
     required this.collectionId,
-    this.sku,
+    required this.sku,
     required this.name,
     required this.unitPrice,
   });
@@ -17,7 +17,7 @@ class CartItemModifier {
 class CartItem {
     String orderLineId;
     String productId;
-    String? sku;
+    String sku;
     String name;
     double unitPrice = 0.0;
     int qty;
@@ -26,7 +26,7 @@ class CartItem {
   CartItem({
     required this.orderLineId,
     required this.productId,
-    this.sku,
+    required this.sku,
     required this.name,
     required this.unitPrice,
     required this.qty,
