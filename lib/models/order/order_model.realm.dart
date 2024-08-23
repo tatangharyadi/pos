@@ -114,7 +114,7 @@ class OrderLine extends _OrderLine
     int quantity,
     double unitPrice, {
     Iterable<OrderLineModifier> modifiers = const [],
-    double? total = 0,
+    double total = 0,
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObjectBase.setDefaults<OrderLine>({
@@ -168,9 +168,9 @@ class OrderLine extends _OrderLine
       throw RealmUnsupportedSetError();
 
   @override
-  double? get total => RealmObjectBase.get<double>(this, 'total') as double?;
+  double get total => RealmObjectBase.get<double>(this, 'total') as double;
   @override
-  set total(double? value) => RealmObjectBase.set(this, 'total', value);
+  set total(double value) => RealmObjectBase.set(this, 'total', value);
 
   @override
   Stream<RealmObjectChanges<OrderLine>> get changes =>
@@ -233,7 +233,7 @@ class OrderLine extends _OrderLine
       SchemaProperty('modifiers', RealmPropertyType.object,
           linkTarget: 'orderLineModifiers',
           collectionType: RealmCollectionType.list),
-      SchemaProperty('total', RealmPropertyType.double, optional: true),
+      SchemaProperty('total', RealmPropertyType.double),
     ]);
   }();
 
@@ -252,7 +252,7 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
     String status,
     String description, {
     Iterable<OrderLine> orderLines = const [],
-    double? total = 0,
+    double total = 0,
     String? shift,
     DateTime? shiftDate,
     String? memberId,
@@ -324,9 +324,9 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
       throw RealmUnsupportedSetError();
 
   @override
-  double? get total => RealmObjectBase.get<double>(this, 'total') as double?;
+  double get total => RealmObjectBase.get<double>(this, 'total') as double;
   @override
-  set total(double? value) => RealmObjectBase.set(this, 'total', value);
+  set total(double value) => RealmObjectBase.set(this, 'total', value);
 
   @override
   String? get shift => RealmObjectBase.get<String>(this, 'shift') as String?;
@@ -417,7 +417,7 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('description', RealmPropertyType.string),
       SchemaProperty('orderLines', RealmPropertyType.object,
           linkTarget: 'orderLines', collectionType: RealmCollectionType.list),
-      SchemaProperty('total', RealmPropertyType.double, optional: true),
+      SchemaProperty('total', RealmPropertyType.double),
       SchemaProperty('shift', RealmPropertyType.string,
           optional: true, indexType: RealmIndexType.regular),
       SchemaProperty('shiftDate', RealmPropertyType.timestamp, optional: true),

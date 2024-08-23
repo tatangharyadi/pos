@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/components/widgets.dart';
+import 'package:pos/screens/terminal/order_list/order_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos/models/order/order_model.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/order/order_repository.dart';
+import 'package:pos/models/order/order_model.dart';
 
 @override
 class OrderGrid extends ConsumerWidget {
@@ -14,8 +15,8 @@ class OrderGrid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Realm realm = ref.watch(orderRepositoryProvider);
 
-    return StreamBuilder<RealmResultsChanges<Order>>(
-      stream: realm.query<Order>('TRUEPREDICATE SORT(_id ASC)')
+    return StreamBuilder<RealmResultsChanges<ParentOrder>>(
+      stream: realm.query<ParentOrder>('TRUEPREDICATE SORT(_id ASC)')
           .changes,
       builder: (context, snapshot) {
         if (snapshot.data == null) {return progressIndicator();}
@@ -33,18 +34,18 @@ class OrderGrid extends ConsumerWidget {
           itemCount: results.realm.isClosed ? 0 :  results.length,
           itemBuilder: (context, index) {
             if (results[index].isValid) {
-              Order order = results[index];
-              // return GestureDetector(
-              //   onTap: () {
-              //     context.go(context.namedLocation(
-              //         'shift_detail',
-              //         pathParameters: {
-              //           'id': dayShift.id.toString(),
-              //         }
-              //       )
-              //     );
-              //   },
-              //   child: ShiftCard(dayShift: dayShift));
+              ParentOrder parentOrder = results[index];
+              return GestureDetector(
+                onTap: () {
+                  // context.go(context.namedLocation(
+                  //     'shift_detail',
+                  //     pathParameters: {
+                  //       'id': dayShift.id.toString(),
+                  //     }
+                  //   )
+                  // );
+                },
+                child: OrderCard(parentOrder: parentOrder));
             } else {return Container();}
           },
         );

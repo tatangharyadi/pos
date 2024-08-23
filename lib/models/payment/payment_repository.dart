@@ -20,17 +20,15 @@ class PaymentRepository extends _$PaymentRepository {
     return payment;
   }
 
-  double totalAmount(String orderId) {
+  double sumByParentId(ObjectId parentId) {
     const query = r'''
-      orderId == $0
+      parentId == $0
     ''';
-
-    final queryParameter = ObjectId.fromHexString(orderId);
-    final results = state.query<Payment>(query, [queryParameter]);
-    double total = results.fold(0.0, (previousValue, item) => previousValue + item.amount);
-
-    return total;
-  }
+    final queryParameter = parentId;
+    final orders = state.query<Payment>(query, [queryParameter]);
+    double sum = orders.fold(0, (previousValue, item) => previousValue + (item.amount));
+    return sum;
+  }  
 
   Future<void> create(Payment payment) async{
     state.write(() {

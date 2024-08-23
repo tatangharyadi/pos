@@ -29,7 +29,7 @@ class _OrderLine {
   late double unitPrice;
 
   late List<_OrderLineModifier> modifiers;
-  late double? total = 0;
+  late double total = 0;
 }
 
 @RealmModel()
@@ -48,7 +48,7 @@ class _Order {
   late String description;
 
   late List<_OrderLine> orderLines;
-  late double? total = 0;
+  late double total = 0;
 
   @Indexed()
   String? shift;

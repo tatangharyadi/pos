@@ -20,6 +20,24 @@ class OrderRepository extends _$OrderRepository {
     return order;
   }
 
+  RealmResults<Order> findByParentId(ObjectId parentId) {
+    const query = r'''
+      parentId == $0
+    ''';
+    final queryParameter = parentId;
+    return state.query<Order>(query, [queryParameter]);
+  }
+
+  double sumByParentId(ObjectId parentId) {
+    const query = r'''
+      parentId == $0
+    ''';
+    final queryParameter = parentId;
+    final orders = state.query<Order>(query, [queryParameter]);
+    double sum = orders.fold(0, (previousValue, item) => previousValue + (item.total));
+    return sum;
+  }
+
   void createParentOrder(ParentOrder parentOrder) {
     state.write(() {
       state.add(parentOrder, update: true);
