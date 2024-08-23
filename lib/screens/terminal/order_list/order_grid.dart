@@ -29,7 +29,7 @@ class OrderGrid extends ConsumerWidget {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            childAspectRatio: 1.5,
+            childAspectRatio: 1.8,
           ),
           itemCount: results.realm.isClosed ? 0 :  results.length,
           itemBuilder: (context, index) {

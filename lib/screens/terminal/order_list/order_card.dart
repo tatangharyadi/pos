@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/order/order_repository.dart';
 import 'package:pos/models/order/order_model.dart';
@@ -41,10 +42,13 @@ class OrderCard extends ConsumerWidget {
             ),
             Expanded(
               child: ListView(
+                padding: const EdgeInsets.all(8),
                 children: orders.map((item) {
                   return ListTile(
-                    title: Text(DateFormat('dd, MMM - HH:mm').format(item.orderDate.toLocal())),
-                    subtitle: Text(item.status),
+                    dense: true,
+                    visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
+                    leading: const Icon(Icons.pending_outlined),
+                    title: Text(DateFormat('dd MMM - HH:mm').format(item.orderDate.toLocal())),
                   );
                 }).toList(),
               ),
@@ -56,7 +60,15 @@ class OrderCard extends ConsumerWidget {
                 TextButton.icon(
                   icon: const Icon(Icons.add_shopping_cart),
                   label: const Text(''),
-                  onPressed: () {},
+                  onPressed: () {
+                    context.go(context.namedLocation(
+                      'terminal_form',
+                      pathParameters: {
+                        'id':'new',
+                        'parentId':parentOrder.id.hexString,
+                      }
+                    ));
+                  },
                 ),
                 TextButton.icon(
                   icon: const Icon(Icons.paid),
