@@ -16,7 +16,7 @@ class ProductRepository extends _$ProductRepository {
   }
 
   Product? findById(ObjectId? id) {
-    Product? product = _realm.find<Product>(id);
+    Product? product = state.find<Product>(id);
     return product;
   }
 
@@ -25,7 +25,7 @@ class ProductRepository extends _$ProductRepository {
       barcode ==[c] $0
     ''';
 
-    final result = _realm.query<Product>(query, [barcode]);
+    final result = state.query<Product>(query, [barcode]);
     if (result.isEmpty) {
       return null;
     }
@@ -33,12 +33,12 @@ class ProductRepository extends _$ProductRepository {
   }
 
   Modifier? findModifierById(ObjectId? id) {
-    Modifier? modifier = _realm.find<Modifier>(id);
+    Modifier? modifier = state.find<Modifier>(id);
     return modifier;
   }
 
   void update(ObjectId id, bool isPin1, bool isPin2) {
-    Product? product = _realm.find<Product>(id);
+    Product? product = state.find<Product>(id);
 
     if (product != null) {
       state.write(() {
