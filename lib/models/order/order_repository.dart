@@ -16,7 +16,19 @@ class OrderRepository extends _$OrderRepository {
   }
 
    Order? findById(ObjectId? id) {
-    Order? order = _realm.find<Order>(id);
+    Order? order = state.find<Order>(id);
     return order;
-  } 
+  }
+
+  void createParentOrder(ParentOrder parentOrder) {
+    state.write(() {
+      state.add(parentOrder, update: true);
+    });
+  }
+
+  void createOrder(Order order) {
+    state.write(() {
+      state.add(order, update: true);
+    });
+  }
 }

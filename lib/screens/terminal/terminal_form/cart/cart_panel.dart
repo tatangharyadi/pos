@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_item_tab.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_payment_tab.dart';
 
-class CartPanel extends ConsumerWidget {
+class CartPanel extends StatelessWidget {
   final String orderId;
+  final String parentId;
 
-  const CartPanel({super.key, required this.orderId});
+  const CartPanel({super.key, required this.orderId, required this.parentId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {        
+  Widget build(BuildContext context) {        
     return Column(
       children: [
         Expanded(

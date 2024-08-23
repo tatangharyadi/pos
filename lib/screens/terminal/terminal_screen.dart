@@ -79,6 +79,7 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
                 'terminal_form',
                 pathParameters: {
                   'id':'new',
+                  'parentId':'new',
                 }
             )
           );      

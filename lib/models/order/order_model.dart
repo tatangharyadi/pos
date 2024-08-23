@@ -39,7 +39,7 @@ class _Order {
   late ObjectId id;
 
   @Indexed()
-  late String shift;
+  late ObjectId parentId;
   late DateTime orderDate;
   late String orderNumber;
   late String status;
@@ -47,6 +47,12 @@ class _Order {
 
   late List<_OrderLine> orderLines;
   late double? total = 0;
+
+  @Indexed()
+  String? shift;
+  DateTime? shiftDate;
+  @Indexed()
+  String? memberId;  
 }
 
 @RealmModel()
@@ -56,7 +62,7 @@ class _ParentOrder {
   @MapTo("_id")
   late ObjectId id;
 
-  late List<_Order> orders;
-  late double? total = 0;
+  late double? totalOrders = 0;
+  late double? totalPayments = 0;
 }
 
