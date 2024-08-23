@@ -28,8 +28,17 @@ class OrderCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(parentOrder.id.hexString),
-            const Gap(5),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const Icon(Icons.shopping_bag),
+                const Gap(5),
+                Text(
+                  NumberFormat.decimalPattern().format(totalOrders),
+                    textAlign: TextAlign.end,
+                ),
+              ]
+            ),
             Expanded(
               child: ListView(
                 children: orders.map((item) {
@@ -41,45 +50,18 @@ class OrderCard extends ConsumerWidget {
               ),
             ),
             const Gap(5),
-            Row(
-              children: [
-              const Icon(Icons.shopping_cart),
-              const Gap(5),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  NumberFormat.decimalPattern().format(totalOrders),
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-              ]
-            ),
-            const Gap(5),
-            Row(
-              children: [
-              const Icon(Icons.paid),
-              const Gap(5),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  NumberFormat.decimalPattern().format(totalDue),
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-              ]
-            ),
             OverflowBar(
               alignment: MainAxisAlignment.end,
               children: [
-                TextButton(
-                  onPressed: () {
-                  },
-                  child: const Icon(Icons.shopping_cart),
+                TextButton.icon(
+                  icon: const Icon(Icons.add_shopping_cart),
+                  label: const Text(''),
+                  onPressed: () {},
                 ),
-                TextButton(
-                  onPressed: () {
-                  },
-                  child: const Icon(Icons.paid),
+                TextButton.icon(
+                  icon: const Icon(Icons.paid),
+                  label: Text(NumberFormat.decimalPattern().format(totalDue)),
+                  onPressed: () {},
                 ),
               ],
             ),
