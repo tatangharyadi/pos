@@ -45,6 +45,17 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
     List<OrderLine> orderLines = [];
     double orderTotal = 0;
     for (var cartItem in cartItemList) {
+      List<OrderLineModifier> orderLineModifiers = [];
+      for (var modifier in cartItem.modifiers) {
+        final orderLineModifier = OrderLineModifier(
+          ObjectId(),
+          modifier.sku,
+          modifier.name,
+          modifier.unitPrice,
+        );
+        orderLineModifiers.add(orderLineModifier);
+      }
+
       final lineTotal = cartItem.qty * cartItem.unitPrice;
       final orderLine = OrderLine(
         ObjectId(),
@@ -53,6 +64,7 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
         cartItem.qty,
         cartItem.unitPrice,
         total: lineTotal,
+        modifiers: orderLineModifiers,
       );
       orderLines.add(orderLine);
       orderTotal += lineTotal;

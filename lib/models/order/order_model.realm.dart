@@ -11,10 +11,12 @@ class OrderLineModifier extends _OrderLineModifier
     with RealmEntity, RealmObjectBase, RealmObject {
   OrderLineModifier(
     ObjectId id,
+    String sku,
     String name,
     double price,
   ) {
     RealmObjectBase.set(this, '_id', id);
+    RealmObjectBase.set(this, 'sku', sku);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'price', price);
   }
@@ -25,6 +27,11 @@ class OrderLineModifier extends _OrderLineModifier
   ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
   @override
   set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
+
+  @override
+  String get sku => RealmObjectBase.get<String>(this, 'sku') as String;
+  @override
+  set sku(String value) => RealmObjectBase.set(this, 'sku', value);
 
   @override
   String get name => RealmObjectBase.get<String>(this, 'name') as String;
@@ -52,6 +59,7 @@ class OrderLineModifier extends _OrderLineModifier
   EJsonValue toEJson() {
     return <String, dynamic>{
       '_id': id.toEJson(),
+      'sku': sku.toEJson(),
       'name': name.toEJson(),
       'price': price.toEJson(),
     };
@@ -63,11 +71,13 @@ class OrderLineModifier extends _OrderLineModifier
     return switch (ejson) {
       {
         '_id': EJsonValue id,
+        'sku': EJsonValue sku,
         'name': EJsonValue name,
         'price': EJsonValue price,
       } =>
         OrderLineModifier(
           fromEJson(id),
+          fromEJson(sku),
           fromEJson(name),
           fromEJson(price),
         ),
@@ -82,8 +92,9 @@ class OrderLineModifier extends _OrderLineModifier
         ObjectType.realmObject, OrderLineModifier, 'orderLineModifiers', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
-      SchemaProperty('name', RealmPropertyType.string,
+      SchemaProperty('sku', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
+      SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('price', RealmPropertyType.double),
     ]);
   }();

@@ -10,6 +10,7 @@ class _OrderLineModifier {
   late ObjectId id;
 
   @Indexed()
+  late String sku;
   late String name;
   late double price;
 }
