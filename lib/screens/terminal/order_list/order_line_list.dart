@@ -75,7 +75,7 @@ class OrderLineList extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       tileColor: listTileBackground,
-                      title: Text(orderLine.name),
+                      title: Text('[${orderLine.quantity}] ${orderLine.name}'),
                       subtitle: Text(modifiers),
                     ),
                 ),

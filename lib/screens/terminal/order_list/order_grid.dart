@@ -65,6 +65,18 @@ class OrderGrid extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        height: 30,
+        child: Container(height: 5),
+      ),
+      floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
+        onPressed: () {     
+        },    
+        child: const Icon(Icons.refresh),
+      ), 
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
