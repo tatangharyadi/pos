@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/order/order_repository.dart';
 import 'package:pos/models/order/order_model.dart';
 import 'package:pos/models/payment/payment_repository.dart';
+import 'package:pos/screens/terminal/order_list/order_list.dart';
 
 @override
 class OrderParentCard extends ConsumerWidget {
@@ -40,32 +41,8 @@ class OrderParentCard extends ConsumerWidget {
                 ),
               ]
             ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(8),
-                children: orders.map((item) {
-
-                  IconData icon;
-                  switch (item.status) {
-                    case 'NEW':
-                      icon = Icons.pending_outlined;
-                    case 'PREPARING':
-                      icon = Icons.run_circle_outlined;
-                    case 'READY':
-                      icon = Icons.check_circle_outline;
-                    default:
-                      icon = Icons.pending_outlined;
-                  }
-
-                  return ListTile(
-                    dense: true,
-                    visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
-                    leading: Icon(icon),
-                    title: Text(DateFormat('dd MMM - HH:mm').format(item.orderDate.toLocal())),
-                  );
-                }).toList(),
-              ),
-            ),
+            const Gap(5),
+            OrderList(parentOrder: parentOrder),
             const Gap(5),
             OverflowBar(
               alignment: MainAxisAlignment.end,
