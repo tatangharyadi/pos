@@ -44,10 +44,23 @@ class OrderParentCard extends ConsumerWidget {
               child: ListView(
                 padding: const EdgeInsets.all(8),
                 children: orders.map((item) {
+
+                  IconData icon;
+                  switch (item.status) {
+                    case 'NEW':
+                      icon = Icons.pending_outlined;
+                    case 'PREPARING':
+                      icon = Icons.run_circle_outlined;
+                    case 'READY':
+                      icon = Icons.check_circle_outline;
+                    default:
+                      icon = Icons.pending_outlined;
+                  }
+
                   return ListTile(
                     dense: true,
                     visualDensity: const VisualDensity(horizontal: 0, vertical: -3),
-                    leading: const Icon(Icons.pending_outlined),
+                    leading: Icon(icon),
                     title: Text(DateFormat('dd MMM - HH:mm').format(item.orderDate.toLocal())),
                   );
                 }).toList(),

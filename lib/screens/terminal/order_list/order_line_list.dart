@@ -15,6 +15,10 @@ class OrderLineList extends ConsumerWidget {
   const OrderLineList({super.key, required this.parentId, required this.status});
 
   void _updateOrderLineStatus(WidgetRef ref, OrderLine orderLine, String status) {
+    if (orderLine.status == 'READY') {
+      return;
+    }
+    
     String nextStatus;
     switch (status) {
       case 'NEW':

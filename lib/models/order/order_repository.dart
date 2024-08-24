@@ -50,13 +50,45 @@ class OrderRepository extends _$OrderRepository {
     });
   }
 
-  void updateOrderLineStatus(ObjectId orderLineId, String status) {
-    OrderLine? order = state.find<OrderLine>(orderLineId);
+  void _updateOrderStatus(ObjectId parentOrderId, String status) {
+    String prevStatus;
+    switch (status) {
+      case 'PREPARING':
+        prevStatus = 'NEW';
+        break;
+      case 'READY':
+        prevStatus = 'PREPARING';
+        break;
+      default:
+        prevStatus = 'NEW';
+        break;
+    }
 
-    if (order != null) {
+    const query = r'''
+      parentId == $0
+    ''';
+
+    final List<Object> queryParameters = [parentOrderId];
+    final results = state.query<Order>(query, [queryParameters]);
+    for (Order order in results) {
+      final orderLineStatus = order.orderLines.where((element) => element.status == prevStatus).toList();
+      if (orderLineStatus.isEmpty) {
+        state.write(() {
+          order.status = status;
+        });
+      }
+    }
+  }
+
+  void updateOrderLineStatus(ObjectId orderLineId, String status) {
+    OrderLine? orderLine = state.find<OrderLine>(orderLineId);
+
+    if (orderLine != null) {
       state.write(() {
-        order.status = status;
+        orderLine.status = status;
       });
+      _updateOrderStatus(orderLine.parentId, status);
+
     }
   }
 }
