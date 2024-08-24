@@ -8,6 +8,7 @@ appThemeData() {
 }
 
 final tileBackground = Colors.green.shade900.withOpacity(0.7);
+final listTileBackground = Colors.green.shade900.withOpacity(0.1);
 
 const dismissibleBackground = Colors.red;
 

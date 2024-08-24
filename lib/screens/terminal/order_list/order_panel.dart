@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pos/screens/terminal/order_list/order_grid.dart';
+import 'package:pos/screens/terminal/order_list/order_parent_grid.dart';
 
 class OrderPanel extends StatelessWidget {
   const OrderPanel({super.key});
@@ -9,7 +9,7 @@ class OrderPanel extends StatelessWidget {
     return const Column(
         children: [
           Expanded(
-            child: OrderGrid()
+            child: OrderParentGrid()
           )
         ],
     );

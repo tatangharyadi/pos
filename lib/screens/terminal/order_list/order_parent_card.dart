@@ -8,10 +8,10 @@ import 'package:pos/models/order/order_model.dart';
 import 'package:pos/models/payment/payment_repository.dart';
 
 @override
-class OrderCard extends ConsumerWidget {
+class OrderParentCard extends ConsumerWidget {
   final ParentOrder parentOrder;
 
-  const OrderCard({super.key, required this.parentOrder});
+  const OrderParentCard({super.key, required this.parentOrder});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,10 +32,10 @@ class OrderCard extends ConsumerWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const Icon(Icons.shopping_bag),
+                const Icon(Icons.shopping_bag_outlined),
                 const Gap(5),
                 Text(
-                  NumberFormat.decimalPattern().format(totalOrders),
+                  '[${orders.length}] ${NumberFormat.decimalPattern().format(totalOrders)}',
                     textAlign: TextAlign.end,
                 ),
               ]

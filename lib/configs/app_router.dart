@@ -10,6 +10,7 @@ import 'package:pos/screens/shift/shift_screen.dart';
 import 'package:pos/screens/shift/shift_form/shift_form.dart';
 import 'package:pos/screens/terminal/terminal_screen.dart';
 import 'package:pos/screens/terminal/terminal_form/terminal_form.dart';
+import 'package:pos/screens/terminal/order_list/order_grid.dart';
 
 part 'app_router.g.dart';
 
@@ -48,6 +49,13 @@ part 'app_router.g.dart';
             name: 'terminal_form',
             builder: (context, state) => TerminalForm(
               id: state.pathParameters['id']!,
+              parentId: state.pathParameters['parentId']!,
+            ),
+          ),
+          GoRoute(
+            path: 'order/:parentId',
+            name: 'terminal_order',
+            builder: (context, state) => OrderGrid(
               parentId: state.pathParameters['parentId']!,
             ),
           )

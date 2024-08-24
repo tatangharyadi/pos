@@ -59,6 +59,8 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
       final lineTotal = cartItem.qty * cartItem.unitPrice;
       final orderLine = OrderLine(
         ObjectId(),
+        _parentId,
+        "NEW",        
         cartItem.sku,
         cartItem.name,
         cartItem.qty,
@@ -73,10 +75,10 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
     final now = DateTime.now();
     final object = Order(
       _objectId,
-      "1",
       _parentId,
+      "NEW",
+      "1",
       now,
-      "CREATED",
       "",
       total: orderTotal,
       shift: shiftAuth.id,

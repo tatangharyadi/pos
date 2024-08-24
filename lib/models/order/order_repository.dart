@@ -49,4 +49,14 @@ class OrderRepository extends _$OrderRepository {
       state.add(order, update: true);
     });
   }
+
+  void updateOrderLineStatus(ObjectId orderLineId, String status) {
+    OrderLine? order = state.find<OrderLine>(orderLineId);
+
+    if (order != null) {
+      state.write(() {
+        order.status = status;
+      });
+    }
+  }
 }

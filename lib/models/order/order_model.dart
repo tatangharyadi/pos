@@ -21,6 +21,11 @@ class _OrderLine {
   @PrimaryKey()
   @MapTo("_id")
   late ObjectId id;
+  
+  @Indexed()
+  late ObjectId parentId;
+  @Indexed()
+  late String status;
 
   @Indexed()
   late String sku;
@@ -40,11 +45,13 @@ class _Order {
   late ObjectId id;
 
   @Indexed()
-  late String orderNumber;
-  @Indexed()
   late ObjectId parentId;
-  late DateTime orderDate;
+  @Indexed()
   late String status;
+
+  @Indexed()
+  late String orderNumber;
+  late DateTime orderDate;
   late String description;
 
   late List<_OrderLine> orderLines;
