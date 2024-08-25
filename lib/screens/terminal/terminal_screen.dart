@@ -3,11 +3,11 @@ import 'package:pos/navbar.dart';
 import 'package:gap/gap.dart';
 import 'package:pos/components/login_dialog/login_shift_dialog.dart';
 import 'package:pos/screens/terminal/order_list/order_panel.dart';
+import 'package:pos/consts/order_option.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/states/shift_auth/shift_auth_model.dart';
 import 'package:pos/states/shift_auth/shift_auth_provider.dart';
-import 'package:pos/theme.dart';
 
 class TerminalScreen extends ConsumerStatefulWidget {
   const TerminalScreen({super.key});
@@ -17,6 +17,7 @@ class TerminalScreen extends ConsumerStatefulWidget {
 }
 
 class _TerminalScreenState extends ConsumerState<TerminalScreen> {
+  final _overlayController = OverlayPortalController();
   late bool _isShift;
 
   @override
@@ -32,7 +33,7 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var _overlayController = OverlayPortalController();
+    List<OrderOption> orderOptions = OrderOption.orderOptions;
     final shiftAuth = ref.watch(shiftAuthProvider);
     _isShift = shiftAuth.state == ShiftAuthOption.shift ? true : false;
 
@@ -41,16 +42,50 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
       appBar: AppBar(
         title: const Text('Terminal'),
       ),
-      body: const Row(
+      body: Row(
         children: [
-          Expanded(
-            child: OrderPanel()
+          const Expanded(
+            child: OrderPanel(),
+          ),
+          OverlayPortal(
+            controller: _overlayController,
+            overlayChildBuilder: (BuildContext context) {
+              return Positioned(
+                bottom: 80,
+                left: MediaQuery.of(context).size.width * 0.38,
+                child: Row(
+                  children: orderOptions.map((option) =>
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Material(
+                        color: Theme.of(context).colorScheme.primary,
+                        elevation: 7,
+                        shape: const CircleBorder(),
+                        child: IconButton(
+                          color: Theme.of(context).colorScheme.onSecondary,
+                          iconSize: 48,
+                          icon: Icon(option.icon),
+                          onPressed: () {
+                            context.go(context.namedLocation(
+                              'terminal_form',
+                              pathParameters: {
+                                'id':'new',
+                                'parentId':'new',
+                              }
+                            ));  
+                          },
+                        ),
+                      ),
+                    ),
+                ).toList(),
+              ));
+            },
           ),
         ]
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
-        height: 50,
+        height: 40,
         child: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -75,88 +110,11 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, 
-      // floatingActionButton: FloatingActionButton(
-      //   shape: const CircleBorder(),
-      //   onPressed: () {
-      //       context.go(context.namedLocation(
-      //           'terminal_form',
-      //           pathParameters: {
-      //             'id':'new',
-      //             'parentId':'new',
-      //           }
-      //       )
-      //     );      
-      //   },
-      //   child: const Icon(Icons.add),
-      // ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: _overlayController.toggle,
-        child: OverlayPortal(
-          controller: _overlayController,
-          overlayChildBuilder: (BuildContext context) {
-            return Positioned(
-              bottom: 100,
-              left: MediaQuery.of(context).size.width * 0.39,
-              child: Row(
-                children: [
-                  Material(
-                      color: Theme.of(context).colorScheme.secondary,
-                      shape: const CircleBorder(),
-                      clipBehavior: Clip.antiAlias,
-                      elevation: 4,       
-                      child: IconButton(
-                        color: Theme.of(context).colorScheme.onSecondary,
-                        iconSize: 32,
-                        icon: const Icon(Icons.shopping_bag_outlined),
-                        onPressed: () {
-                          context.go(context.namedLocation(
-                            'terminal_form',
-                            pathParameters: {
-                              'id':'new',
-                              'parentId':'new',
-                            }
-                          ));  
-                          _overlayController.toggle();
-                        },
-                      ),
-                  ),
-                  const Gap(35),
-                  Material(
-                      color: Theme.of(context).colorScheme.secondary,
-                      shape: const CircleBorder(),
-                      clipBehavior: Clip.antiAlias,
-                      elevation: 4,       
-                      child: IconButton(
-                        color: Theme.of(context).colorScheme.onSecondary,
-                        iconSize: 32,
-                        icon: const Icon(Icons.dining_outlined),
-                        onPressed: () {
-                          _overlayController.toggle();
-                        },
-                      ),
-                  ),
-                  const Gap(35),
-                  Material(
-                      color: Theme.of(context).colorScheme.secondary,
-                      shape: const CircleBorder(),
-                      clipBehavior: Clip.antiAlias,
-                      elevation: 4,       
-                      child: IconButton(
-                        color: Theme.of(context).colorScheme.onSecondary,
-                        iconSize: 32,
-                        icon: const Icon(Icons.shopping_basket_outlined),
-                        onPressed: () {
-                          _overlayController.toggle();
-                        },
-                      ),
-                  ),
-                ],
-              ));
-          },
         child: const Icon(Icons.add),
         ),
-      ),
     );
   }
 }
