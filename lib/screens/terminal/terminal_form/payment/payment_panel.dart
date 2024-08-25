@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/screens/terminal/terminal_form/payment/payment_grid.dart';
 
-class PaymentPanel extends ConsumerStatefulWidget {
+class PaymentPanel extends StatelessWidget {
   final String orderId;
+  final String parentId;
   
-  const PaymentPanel({super.key, required this.orderId});
+  const PaymentPanel({super.key, required this.orderId, required this.parentId});
   
-  @override
-  ConsumerState<PaymentPanel> createState() => _PaymentPanelState();
-}
-
-class _PaymentPanelState extends ConsumerState<PaymentPanel> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
-          child: PaymentGrid(orderId: widget.orderId,)
+          child: PaymentGrid(orderId: orderId, parentId: parentId),
         )
       ],
     );

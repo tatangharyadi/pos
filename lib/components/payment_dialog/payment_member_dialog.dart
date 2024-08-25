@@ -9,9 +9,10 @@ class PaymentMemberDialog extends ConsumerStatefulWidget {
   final String paymentName;
   final IconData icon;
   final String orderId;
+  final String parentId;
 
   const PaymentMemberDialog({super.key, required this.paymentName, required this.icon,
-    required this.orderId});
+    required this.orderId, required this.parentId});
 
   @override
   ConsumerState<PaymentMemberDialog> createState() => _PaymentMemberDialogState();

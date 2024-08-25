@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos/components/barcode_dialog/barcode_dialog.dart';
 import 'package:pos/consts/category_filter.dart';
-import 'package:pos/models/category/category_query_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos/models/product/product_query_repository.dart';
 
 class CategoryBar extends ConsumerWidget {
   const CategoryBar({super.key});
@@ -20,9 +21,25 @@ class CategoryBar extends ConsumerWidget {
           CategoryFilter categoryFilter = categoryFilters[index];
           return GestureDetector(
             onTap: () {
-              ref.read(categoryQueryRepositoryProvider.notifier).setQuery(
-                categoryFilter.filter
-              );
+              final queryRepository = ref.read(productQueryRepositoryProvider.notifier);
+              switch (categoryFilter.filter) {
+                case 'PIN1':
+                  queryRepository.filterByPin1();
+                  break;
+                case 'PIN2':
+                  queryRepository.filterByPin2();
+                  break;
+                case 'BARCODE':
+                  showGeneralDialog(
+                    context: context,
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                          return const BarcodeDialog();
+                    },
+                  );
+                  break;
+                default:
+                  queryRepository.filterByBase('*');
+              }
             },
             child: SizedBox(
               width: categoryFilter.width,

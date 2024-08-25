@@ -61,23 +61,23 @@ class RealmService extends _$RealmService {
       List<ModifierCollection> modifierCollectionMGMULI002 = [
         ModifierCollection(ObjectId(), 'Add-On', 0, 3,
           modifiers: [
-            Modifier(ObjectId(), 'MODIFIER', 'Hazelnut Syrup',
+            Modifier(ObjectId(), 'MOD003', 'MODIFIER', 'Hazelnut Syrup',
               prices: [
                 Price(ObjectId(), 'IDR', price: 6000),
               ]),
-            Modifier(ObjectId(), 'MODIFIER', 'Vanilla Syrup',
+            Modifier(ObjectId(), 'MOD004', 'MODIFIER', 'Vanilla Syrup',
               prices: [
                 Price(ObjectId(), 'IDR', price: 6000),
               ]),
-            Modifier(ObjectId(), 'MODIFIER', 'Oat Milk',
+            Modifier(ObjectId(), 'MOD005', 'MODIFIER', 'Oat Milk',
               prices: [
                 Price(ObjectId(), 'IDR', price: 12000),
               ]),
-            Modifier(ObjectId(), 'MODIFIER', 'Expresso',
+            Modifier(ObjectId(), 'MOD006', 'MODIFIER', 'Expresso',
               prices: [
                 Price(ObjectId(), 'IDR', price: 5000),
               ]),
-            Modifier(ObjectId(), 'MODIFIER', 'Double Expresso',
+            Modifier(ObjectId(), 'MOD007', 'MODIFIER', 'Double Expresso',
               prices: [
                 Price(ObjectId(), 'IDR', price: 10000),
               ]),
@@ -87,27 +87,32 @@ class RealmService extends _$RealmService {
       List<ModifierCollection> modifierCollectionHOUS00076950 = [
         ModifierCollection(ObjectId(), 'Temp', 1, 1,
           modifiers: [
-            Modifier(ObjectId(), 'MODIFIER', 'Hot'),
-            Modifier(ObjectId(), 'MODIFIER', 'Iced'),
+            Modifier(ObjectId(), 'MOD001', 'MODIFIER', 'Hot'),
+            Modifier(ObjectId(), 'MOD002', 'MODIFIER', 'Iced'),
           ]),
       ];
 
       _realm.write(() {
         _realm.addAll([
-          Product(ObjectId(), 'HOUS00077162', 'PRODUCT', 'Spaghetti Aglio Olio',
+          Product(ObjectId(), 'HOUS00077162', 'HOUS00077162',
+            'PRODUCT', 'Spaghetti Aglio Olio',
             image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077162.png',
             prices: pricesHOUS00077162, isMto: true),
-          Product(ObjectId(), 'HOUS00077118', 'PRODUCT', 'Chicken Steak Burger',
+          Product(ObjectId(), 'HOUS00077118', 'HOUS00077118',
+            'PRODUCT', 'Chicken Steak Burger',
             image:  'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00077118.png',
             prices: pricesHOUS00077118, isMto: true),
-          Product(ObjectId(), 'HOUS00069085', 'PRODUCT', 'Butter Croissant',
+          Product(ObjectId(), 'HOUS00069085', 'HOUS00069085',
+            'PRODUCT', 'Butter Croissant',
             image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00069085.png',
             prices: pricesHHOUS00069085),
-          Product(ObjectId(), 'MGM-ULI-002', 'PRODUCT', 'Hot Cappuccino',
+          Product(ObjectId(), 'MGM-ULI-002', 'MGM-ULI-002',
+            'PRODUCT', 'Hot Cappuccino',
             image:  'https://ik.imagekit.io/yummycorp/yummykitchen/MGM-ULI-002.png',
             modifierCollections: modifierCollectionMGMULI002,
             prices: pricesMGMULI002, isMto: true),
-          Product(ObjectId(), 'HOUS00076950', 'PRODUCT', 'Black Tea',
+          Product(ObjectId(), 'HOUS00076950', 'HOUS00076950',
+            'PRODUCT', 'Black Tea',
             image: 'https://ik.imagekit.io/yummycorp/yummykitchen/HOUS00076950.png',
             modifierCollections: modifierCollectionHOUS00076950,
             prices: pricesHOUS00076950, isMto: true),

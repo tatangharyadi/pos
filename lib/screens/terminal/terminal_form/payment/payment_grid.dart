@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pos/consts/payment_option.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/components/payment_dialog/payment_member_dialog.dart';
 import 'package:pos/components/payment_dialog/payment_edc_dialog.dart';
 import 'package:pos/components/payment_dialog/payment_qris_dialog.dart';
 import 'package:pos/components/payment_dialog/payment_cash_dialog.dart';
 import 'package:pos/components/payment_dialog/payment_voucher_dialog.dart';
 
-class PaymentGrid extends ConsumerStatefulWidget {
+class PaymentGrid extends StatelessWidget {
   final String orderId;
+  final String parentId;
 
-  const PaymentGrid({super.key, required this.orderId});
+  const PaymentGrid({super.key, required this.orderId, required this.parentId});
 
-  @override
-  ConsumerState<PaymentGrid> createState() => _PaymentGridState();
-}
-
-class _PaymentGridState extends ConsumerState<PaymentGrid> {
   @override
   Widget build(BuildContext context) {
     List<PaymentOption> paymentOptions = PaymentOption.paymentOptions;
@@ -43,31 +38,36 @@ class _PaymentGridState extends ConsumerState<PaymentGrid> {
                     return PaymentMemberDialog(
                       paymentName: paymentOption.name,
                       icon: paymentOption.icon,
-                      orderId: widget.orderId,
+                      orderId: orderId,
+                      parentId: parentId,
                     );
                   case PaymentType.qris:
                     return PaymentQrisDialog(
                       paymentName: paymentOption.name,
                       icon: paymentOption.icon,
-                      orderId: widget.orderId,
+                      orderId: orderId,
+                      parentId: parentId,
                     );
                    case PaymentType.edc:
                     return PaymentEdcDialog(
                       paymentName: paymentOption.name,
                       icon: paymentOption.icon,
-                      orderId: widget.orderId,
+                      orderId: orderId,
+                      parentId: parentId,
                     );
                   case PaymentType.cash:
                     return PaymentCashDialog(
                       paymentName: paymentOption.name,
                       icon: paymentOption.icon,
-                      orderId: widget.orderId,
+                      orderId: orderId,
+                      parentId: parentId,
                     );
                   case PaymentType.voucher:
                     return PaymentVoucherDialog(
                       paymentName: paymentOption.name,
                       icon: paymentOption.icon,
-                      orderId: widget.orderId,
+                      orderId: orderId,
+                      parentId: parentId,
                     );
                   default:
                     return Container();

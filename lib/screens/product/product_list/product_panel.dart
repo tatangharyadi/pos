@@ -17,7 +17,7 @@ class _ProductPanelState extends ConsumerState<ProductPanel> {
 
   void _onQueryPressed(String value) {
       final queryRepository = ref.read(productQueryRepositoryProvider.notifier);
-      queryRepository.setQuery(value);
+      queryRepository.filterByBase(value);
   }
   
   @override

@@ -11,10 +11,12 @@ class OrderLineModifier extends _OrderLineModifier
     with RealmEntity, RealmObjectBase, RealmObject {
   OrderLineModifier(
     ObjectId id,
+    String sku,
     String name,
     double price,
   ) {
     RealmObjectBase.set(this, '_id', id);
+    RealmObjectBase.set(this, 'sku', sku);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'price', price);
   }
@@ -25,6 +27,11 @@ class OrderLineModifier extends _OrderLineModifier
   ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
   @override
   set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
+
+  @override
+  String get sku => RealmObjectBase.get<String>(this, 'sku') as String;
+  @override
+  set sku(String value) => RealmObjectBase.set(this, 'sku', value);
 
   @override
   String get name => RealmObjectBase.get<String>(this, 'name') as String;
@@ -52,6 +59,7 @@ class OrderLineModifier extends _OrderLineModifier
   EJsonValue toEJson() {
     return <String, dynamic>{
       '_id': id.toEJson(),
+      'sku': sku.toEJson(),
       'name': name.toEJson(),
       'price': price.toEJson(),
     };
@@ -63,11 +71,13 @@ class OrderLineModifier extends _OrderLineModifier
     return switch (ejson) {
       {
         '_id': EJsonValue id,
+        'sku': EJsonValue sku,
         'name': EJsonValue name,
         'price': EJsonValue price,
       } =>
         OrderLineModifier(
           fromEJson(id),
+          fromEJson(sku),
           fromEJson(name),
           fromEJson(price),
         ),
@@ -82,8 +92,9 @@ class OrderLineModifier extends _OrderLineModifier
         ObjectType.realmObject, OrderLineModifier, 'orderLineModifiers', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
-      SchemaProperty('name', RealmPropertyType.string,
+      SchemaProperty('sku', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
+      SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('price', RealmPropertyType.double),
     ]);
   }();
@@ -98,12 +109,14 @@ class OrderLine extends _OrderLine
 
   OrderLine(
     ObjectId id,
+    ObjectId parentId,
+    String status,
     String sku,
     String name,
     int quantity,
     double unitPrice, {
     Iterable<OrderLineModifier> modifiers = const [],
-    double? total = 0,
+    double total = 0,
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObjectBase.setDefaults<OrderLine>({
@@ -111,6 +124,8 @@ class OrderLine extends _OrderLine
       });
     }
     RealmObjectBase.set(this, '_id', id);
+    RealmObjectBase.set(this, 'parentId', parentId);
+    RealmObjectBase.set(this, 'status', status);
     RealmObjectBase.set(this, 'sku', sku);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'quantity', quantity);
@@ -126,6 +141,17 @@ class OrderLine extends _OrderLine
   ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
   @override
   set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
+
+  @override
+  ObjectId get parentId =>
+      RealmObjectBase.get<ObjectId>(this, 'parentId') as ObjectId;
+  @override
+  set parentId(ObjectId value) => RealmObjectBase.set(this, 'parentId', value);
+
+  @override
+  String get status => RealmObjectBase.get<String>(this, 'status') as String;
+  @override
+  set status(String value) => RealmObjectBase.set(this, 'status', value);
 
   @override
   String get sku => RealmObjectBase.get<String>(this, 'sku') as String;
@@ -157,9 +183,9 @@ class OrderLine extends _OrderLine
       throw RealmUnsupportedSetError();
 
   @override
-  double? get total => RealmObjectBase.get<double>(this, 'total') as double?;
+  double get total => RealmObjectBase.get<double>(this, 'total') as double;
   @override
-  set total(double? value) => RealmObjectBase.set(this, 'total', value);
+  set total(double value) => RealmObjectBase.set(this, 'total', value);
 
   @override
   Stream<RealmObjectChanges<OrderLine>> get changes =>
@@ -175,6 +201,8 @@ class OrderLine extends _OrderLine
   EJsonValue toEJson() {
     return <String, dynamic>{
       '_id': id.toEJson(),
+      'parentId': parentId.toEJson(),
+      'status': status.toEJson(),
       'sku': sku.toEJson(),
       'name': name.toEJson(),
       'quantity': quantity.toEJson(),
@@ -190,6 +218,8 @@ class OrderLine extends _OrderLine
     return switch (ejson) {
       {
         '_id': EJsonValue id,
+        'parentId': EJsonValue parentId,
+        'status': EJsonValue status,
         'sku': EJsonValue sku,
         'name': EJsonValue name,
         'quantity': EJsonValue quantity,
@@ -197,6 +227,8 @@ class OrderLine extends _OrderLine
       } =>
         OrderLine(
           fromEJson(id),
+          fromEJson(parentId),
+          fromEJson(status),
           fromEJson(sku),
           fromEJson(name),
           fromEJson(quantity),
@@ -214,6 +246,10 @@ class OrderLine extends _OrderLine
     return const SchemaObject(ObjectType.realmObject, OrderLine, 'orderLines', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
+      SchemaProperty('parentId', RealmPropertyType.objectid,
+          indexType: RealmIndexType.regular),
+      SchemaProperty('status', RealmPropertyType.string,
+          indexType: RealmIndexType.regular),
       SchemaProperty('sku', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
       SchemaProperty('name', RealmPropertyType.string),
@@ -222,7 +258,7 @@ class OrderLine extends _OrderLine
       SchemaProperty('modifiers', RealmPropertyType.object,
           linkTarget: 'orderLineModifiers',
           collectionType: RealmCollectionType.list),
-      SchemaProperty('total', RealmPropertyType.double, optional: true),
+      SchemaProperty('total', RealmPropertyType.double),
     ]);
   }();
 
@@ -235,13 +271,17 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
 
   Order(
     ObjectId id,
-    String shift,
-    DateTime orderDate,
-    String orderNumber,
+    ObjectId parentId,
+    String type,
     String status,
+    String orderNumber,
+    DateTime orderDate,
     String description, {
     Iterable<OrderLine> orderLines = const [],
-    double? total = 0,
+    double total = 0,
+    String? shift,
+    DateTime? shiftDate,
+    String? memberId,
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObjectBase.setDefaults<Order>({
@@ -249,14 +289,18 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
       });
     }
     RealmObjectBase.set(this, '_id', id);
-    RealmObjectBase.set(this, 'shift', shift);
-    RealmObjectBase.set(this, 'orderDate', orderDate);
-    RealmObjectBase.set(this, 'orderNumber', orderNumber);
+    RealmObjectBase.set(this, 'parentId', parentId);
+    RealmObjectBase.set(this, 'type', type);
     RealmObjectBase.set(this, 'status', status);
+    RealmObjectBase.set(this, 'orderNumber', orderNumber);
+    RealmObjectBase.set(this, 'orderDate', orderDate);
     RealmObjectBase.set(this, 'description', description);
     RealmObjectBase.set<RealmList<OrderLine>>(
         this, 'orderLines', RealmList<OrderLine>(orderLines));
     RealmObjectBase.set(this, 'total', total);
+    RealmObjectBase.set(this, 'shift', shift);
+    RealmObjectBase.set(this, 'shiftDate', shiftDate);
+    RealmObjectBase.set(this, 'memberId', memberId);
   }
 
   Order._();
@@ -267,16 +311,20 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
   set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
 
   @override
-  String get shift => RealmObjectBase.get<String>(this, 'shift') as String;
+  ObjectId get parentId =>
+      RealmObjectBase.get<ObjectId>(this, 'parentId') as ObjectId;
   @override
-  set shift(String value) => RealmObjectBase.set(this, 'shift', value);
+  set parentId(ObjectId value) => RealmObjectBase.set(this, 'parentId', value);
 
   @override
-  DateTime get orderDate =>
-      RealmObjectBase.get<DateTime>(this, 'orderDate') as DateTime;
+  String get type => RealmObjectBase.get<String>(this, 'type') as String;
   @override
-  set orderDate(DateTime value) =>
-      RealmObjectBase.set(this, 'orderDate', value);
+  set type(String value) => RealmObjectBase.set(this, 'type', value);
+
+  @override
+  String get status => RealmObjectBase.get<String>(this, 'status') as String;
+  @override
+  set status(String value) => RealmObjectBase.set(this, 'status', value);
 
   @override
   String get orderNumber =>
@@ -286,9 +334,11 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
       RealmObjectBase.set(this, 'orderNumber', value);
 
   @override
-  String get status => RealmObjectBase.get<String>(this, 'status') as String;
+  DateTime get orderDate =>
+      RealmObjectBase.get<DateTime>(this, 'orderDate') as DateTime;
   @override
-  set status(String value) => RealmObjectBase.set(this, 'status', value);
+  set orderDate(DateTime value) =>
+      RealmObjectBase.set(this, 'orderDate', value);
 
   @override
   String get description =>
@@ -306,9 +356,27 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
       throw RealmUnsupportedSetError();
 
   @override
-  double? get total => RealmObjectBase.get<double>(this, 'total') as double?;
+  double get total => RealmObjectBase.get<double>(this, 'total') as double;
   @override
-  set total(double? value) => RealmObjectBase.set(this, 'total', value);
+  set total(double value) => RealmObjectBase.set(this, 'total', value);
+
+  @override
+  String? get shift => RealmObjectBase.get<String>(this, 'shift') as String?;
+  @override
+  set shift(String? value) => RealmObjectBase.set(this, 'shift', value);
+
+  @override
+  DateTime? get shiftDate =>
+      RealmObjectBase.get<DateTime>(this, 'shiftDate') as DateTime?;
+  @override
+  set shiftDate(DateTime? value) =>
+      RealmObjectBase.set(this, 'shiftDate', value);
+
+  @override
+  String? get memberId =>
+      RealmObjectBase.get<String>(this, 'memberId') as String?;
+  @override
+  set memberId(String? value) => RealmObjectBase.set(this, 'memberId', value);
 
   @override
   Stream<RealmObjectChanges<Order>> get changes =>
@@ -324,13 +392,17 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
   EJsonValue toEJson() {
     return <String, dynamic>{
       '_id': id.toEJson(),
-      'shift': shift.toEJson(),
-      'orderDate': orderDate.toEJson(),
-      'orderNumber': orderNumber.toEJson(),
+      'parentId': parentId.toEJson(),
+      'type': type.toEJson(),
       'status': status.toEJson(),
+      'orderNumber': orderNumber.toEJson(),
+      'orderDate': orderDate.toEJson(),
       'description': description.toEJson(),
       'orderLines': orderLines.toEJson(),
       'total': total.toEJson(),
+      'shift': shift.toEJson(),
+      'shiftDate': shiftDate.toEJson(),
+      'memberId': memberId.toEJson(),
     };
   }
 
@@ -340,21 +412,26 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
     return switch (ejson) {
       {
         '_id': EJsonValue id,
-        'shift': EJsonValue shift,
-        'orderDate': EJsonValue orderDate,
-        'orderNumber': EJsonValue orderNumber,
+        'parentId': EJsonValue parentId,
+        'type': EJsonValue type,
         'status': EJsonValue status,
+        'orderNumber': EJsonValue orderNumber,
+        'orderDate': EJsonValue orderDate,
         'description': EJsonValue description,
       } =>
         Order(
           fromEJson(id),
-          fromEJson(shift),
-          fromEJson(orderDate),
-          fromEJson(orderNumber),
+          fromEJson(parentId),
+          fromEJson(type),
           fromEJson(status),
+          fromEJson(orderNumber),
+          fromEJson(orderDate),
           fromEJson(description),
           orderLines: fromEJson(ejson['orderLines']),
           total: fromEJson(ejson['total'], defaultValue: 0),
+          shift: fromEJson(ejson['shift']),
+          shiftDate: fromEJson(ejson['shiftDate']),
+          memberId: fromEJson(ejson['memberId']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -366,15 +443,24 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
     return const SchemaObject(ObjectType.realmObject, Order, 'orders', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
-      SchemaProperty('shift', RealmPropertyType.string,
+      SchemaProperty('parentId', RealmPropertyType.objectid,
+          indexType: RealmIndexType.regular),
+      SchemaProperty('type', RealmPropertyType.string,
+          indexType: RealmIndexType.regular),
+      SchemaProperty('status', RealmPropertyType.string,
+          indexType: RealmIndexType.regular),
+      SchemaProperty('orderNumber', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
       SchemaProperty('orderDate', RealmPropertyType.timestamp),
-      SchemaProperty('orderNumber', RealmPropertyType.string),
-      SchemaProperty('status', RealmPropertyType.string),
       SchemaProperty('description', RealmPropertyType.string),
       SchemaProperty('orderLines', RealmPropertyType.object,
           linkTarget: 'orderLines', collectionType: RealmCollectionType.list),
-      SchemaProperty('total', RealmPropertyType.double, optional: true),
+      SchemaProperty('total', RealmPropertyType.double),
+      SchemaProperty('shift', RealmPropertyType.string,
+          optional: true, indexType: RealmIndexType.regular),
+      SchemaProperty('shiftDate', RealmPropertyType.timestamp, optional: true),
+      SchemaProperty('memberId', RealmPropertyType.string,
+          optional: true, indexType: RealmIndexType.regular),
     ]);
   }();
 
@@ -387,19 +473,21 @@ class ParentOrder extends _ParentOrder
   static var _defaultsSet = false;
 
   ParentOrder(
-    ObjectId id, {
-    Iterable<Order> orders = const [],
-    double? total = 0,
+    ObjectId id,
+    String type, {
+    double? totalOrders = 0,
+    double? totalPayments = 0,
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObjectBase.setDefaults<ParentOrder>({
-        'total': 0,
+        'totalOrders': 0,
+        'totalPayments': 0,
       });
     }
     RealmObjectBase.set(this, '_id', id);
-    RealmObjectBase.set<RealmList<Order>>(
-        this, 'orders', RealmList<Order>(orders));
-    RealmObjectBase.set(this, 'total', total);
+    RealmObjectBase.set(this, 'type', type);
+    RealmObjectBase.set(this, 'totalOrders', totalOrders);
+    RealmObjectBase.set(this, 'totalPayments', totalPayments);
   }
 
   ParentOrder._();
@@ -410,16 +498,23 @@ class ParentOrder extends _ParentOrder
   set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
 
   @override
-  RealmList<Order> get orders =>
-      RealmObjectBase.get<Order>(this, 'orders') as RealmList<Order>;
+  String get type => RealmObjectBase.get<String>(this, 'type') as String;
   @override
-  set orders(covariant RealmList<Order> value) =>
-      throw RealmUnsupportedSetError();
+  set type(String value) => RealmObjectBase.set(this, 'type', value);
 
   @override
-  double? get total => RealmObjectBase.get<double>(this, 'total') as double?;
+  double? get totalOrders =>
+      RealmObjectBase.get<double>(this, 'totalOrders') as double?;
   @override
-  set total(double? value) => RealmObjectBase.set(this, 'total', value);
+  set totalOrders(double? value) =>
+      RealmObjectBase.set(this, 'totalOrders', value);
+
+  @override
+  double? get totalPayments =>
+      RealmObjectBase.get<double>(this, 'totalPayments') as double?;
+  @override
+  set totalPayments(double? value) =>
+      RealmObjectBase.set(this, 'totalPayments', value);
 
   @override
   Stream<RealmObjectChanges<ParentOrder>> get changes =>
@@ -436,8 +531,9 @@ class ParentOrder extends _ParentOrder
   EJsonValue toEJson() {
     return <String, dynamic>{
       '_id': id.toEJson(),
-      'orders': orders.toEJson(),
-      'total': total.toEJson(),
+      'type': type.toEJson(),
+      'totalOrders': totalOrders.toEJson(),
+      'totalPayments': totalPayments.toEJson(),
     };
   }
 
@@ -447,11 +543,13 @@ class ParentOrder extends _ParentOrder
     return switch (ejson) {
       {
         '_id': EJsonValue id,
+        'type': EJsonValue type,
       } =>
         ParentOrder(
           fromEJson(id),
-          orders: fromEJson(ejson['orders']),
-          total: fromEJson(ejson['total'], defaultValue: 0),
+          fromEJson(type),
+          totalOrders: fromEJson(ejson['totalOrders'], defaultValue: 0),
+          totalPayments: fromEJson(ejson['totalPayments'], defaultValue: 0),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -464,9 +562,10 @@ class ParentOrder extends _ParentOrder
         ObjectType.realmObject, ParentOrder, 'parentOrders', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
-      SchemaProperty('orders', RealmPropertyType.object,
-          linkTarget: 'orders', collectionType: RealmCollectionType.list),
-      SchemaProperty('total', RealmPropertyType.double, optional: true),
+      SchemaProperty('type', RealmPropertyType.string,
+          indexType: RealmIndexType.regular),
+      SchemaProperty('totalOrders', RealmPropertyType.double, optional: true),
+      SchemaProperty('totalPayments', RealmPropertyType.double, optional: true),
     ]);
   }();
 

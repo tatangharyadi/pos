@@ -10,6 +10,7 @@ class _OrderLineModifier {
   late ObjectId id;
 
   @Indexed()
+  late String sku;
   late String name;
   late double price;
 }
@@ -20,6 +21,11 @@ class _OrderLine {
   @PrimaryKey()
   @MapTo("_id")
   late ObjectId id;
+  
+  @Indexed()
+  late ObjectId parentId;
+  @Indexed()
+  late String status;
 
   @Indexed()
   late String sku;
@@ -28,7 +34,7 @@ class _OrderLine {
   late double unitPrice;
 
   late List<_OrderLineModifier> modifiers;
-  late double? total = 0;
+  late double total = 0;
 }
 
 @RealmModel()
@@ -39,14 +45,25 @@ class _Order {
   late ObjectId id;
 
   @Indexed()
-  late String shift;
-  late DateTime orderDate;
-  late String orderNumber;
+  late ObjectId parentId;
+  @Indexed()
+  late String type;
+  @Indexed()
   late String status;
+
+  @Indexed()
+  late String orderNumber;
+  late DateTime orderDate;
   late String description;
 
   late List<_OrderLine> orderLines;
-  late double? total = 0;
+  late double total = 0;
+
+  @Indexed()
+  String? shift;
+  DateTime? shiftDate;
+  @Indexed()
+  String? memberId;  
 }
 
 @RealmModel()
@@ -56,7 +73,9 @@ class _ParentOrder {
   @MapTo("_id")
   late ObjectId id;
 
-  late List<_Order> orders;
-  late double? total = 0;
+  @Indexed()
+  late String type;
+  late double? totalOrders = 0;
+  late double? totalPayments = 0;
 }
 

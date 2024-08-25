@@ -18,17 +18,11 @@ class ProductGrid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const query = r'''
-      sku LIKE[c] $0 ||
-      name LIKE[c] $0
-    ''';
-
     Realm realm = ref.watch(productRepositoryProvider);
-    String queryParameter = ref.watch(productQueryRepositoryProvider);
-    queryParameter = '*';
+    final query = ref.watch(productQueryRepositoryProvider);
 
     return StreamBuilder<RealmResultsChanges<Product>>(
-      stream: realm.query<Product>(query, [queryParameter]).changes,
+      stream: realm.query<Product>(query.query, [query.values]).changes,
       builder: (context, snapshot) {
         if (snapshot.data == null) {return progressIndicator();}
         

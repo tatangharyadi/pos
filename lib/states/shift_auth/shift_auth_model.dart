@@ -4,13 +4,13 @@ enum ShiftAuthOption  {
 }
 class ShiftAuthState {
   late ShiftAuthOption state = ShiftAuthOption.none;
-  late String id = 'no shift';
+  late String id = 'NONE';
   late String name = "no shift";
-  late DateTime? startTime;
+  DateTime? startTime;
 
   ShiftAuthState({
     required this.state,
-    this.id = 'no shift',
+    this.id = 'NONE',
     this.name = "no shift",
   });
 }

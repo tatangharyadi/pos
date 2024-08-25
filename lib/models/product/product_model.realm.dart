@@ -125,9 +125,9 @@ class Modifier extends _Modifier
     with RealmEntity, RealmObjectBase, RealmObject {
   Modifier(
     ObjectId id,
+    String sku,
     String type,
     String name, {
-    String? sku,
     String? description,
     Iterable<Price> prices = const [],
   }) {
@@ -148,9 +148,9 @@ class Modifier extends _Modifier
   set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
 
   @override
-  String? get sku => RealmObjectBase.get<String>(this, 'sku') as String?;
+  String get sku => RealmObjectBase.get<String>(this, 'sku') as String;
   @override
-  set sku(String? value) => RealmObjectBase.set(this, 'sku', value);
+  set sku(String value) => RealmObjectBase.set(this, 'sku', value);
 
   @override
   String get type => RealmObjectBase.get<String>(this, 'type') as String;
@@ -204,14 +204,15 @@ class Modifier extends _Modifier
     return switch (ejson) {
       {
         '_id': EJsonValue id,
+        'sku': EJsonValue sku,
         'type': EJsonValue type,
         'name': EJsonValue name,
       } =>
         Modifier(
           fromEJson(id),
+          fromEJson(sku),
           fromEJson(type),
           fromEJson(name),
-          sku: fromEJson(ejson['sku']),
           description: fromEJson(ejson['description']),
           prices: fromEJson(ejson['prices']),
         ),
@@ -226,7 +227,7 @@ class Modifier extends _Modifier
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('sku', RealmPropertyType.string,
-          optional: true, indexType: RealmIndexType.regular),
+          indexType: RealmIndexType.regular),
       SchemaProperty('type', RealmPropertyType.string),
       SchemaProperty('name', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
@@ -356,6 +357,7 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
   Product(
     ObjectId id,
     String sku,
+    String barcode,
     String type,
     String name, {
     String? description,
@@ -380,6 +382,7 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
     }
     RealmObjectBase.set(this, '_id', id);
     RealmObjectBase.set(this, 'sku', sku);
+    RealmObjectBase.set(this, 'barcode', barcode);
     RealmObjectBase.set(this, 'type', type);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'description', description);
@@ -409,6 +412,11 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
   String get sku => RealmObjectBase.get<String>(this, 'sku') as String;
   @override
   set sku(String value) => RealmObjectBase.set(this, 'sku', value);
+
+  @override
+  String get barcode => RealmObjectBase.get<String>(this, 'barcode') as String;
+  @override
+  set barcode(String value) => RealmObjectBase.set(this, 'barcode', value);
 
   @override
   String get type => RealmObjectBase.get<String>(this, 'type') as String;
@@ -505,6 +513,7 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
     return <String, dynamic>{
       '_id': id.toEJson(),
       'sku': sku.toEJson(),
+      'barcode': barcode.toEJson(),
       'type': type.toEJson(),
       'name': name.toEJson(),
       'description': description.toEJson(),
@@ -527,12 +536,14 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
       {
         '_id': EJsonValue id,
         'sku': EJsonValue sku,
+        'barcode': EJsonValue barcode,
         'type': EJsonValue type,
         'name': EJsonValue name,
       } =>
         Product(
           fromEJson(id),
           fromEJson(sku),
+          fromEJson(barcode),
           fromEJson(type),
           fromEJson(name),
           description: fromEJson(ejson['description']),
@@ -557,6 +568,8 @@ class Product extends _Product with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('sku', RealmPropertyType.string,
+          indexType: RealmIndexType.regular),
+      SchemaProperty('barcode', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
       SchemaProperty('type', RealmPropertyType.string),
       SchemaProperty('name', RealmPropertyType.string,

@@ -10,12 +10,12 @@ class _Payment {
   late ObjectId id;
 
   @Indexed()
+  late ObjectId parentId;
+  @Indexed()
+  late ObjectId orderId;
+  @Indexed()
   late String type;
   late DateTime paymentDate;
   late String reference;
   late double amount = 0.0;
-  @Indexed()
-  late ObjectId orderId;
-
-  late bool selected = false;
 }

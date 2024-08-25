@@ -21,14 +21,7 @@ class ProductScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
-        onPressed: () {
-          //   context.go(context.namedLocation(
-          //       'shift_detail',
-          //       pathParameters: {
-          //         'id':'new',
-          //       }
-          //   )
-          // );      
+        onPressed: () {     
         },    
         child: const Icon(Icons.refresh),
       ), 

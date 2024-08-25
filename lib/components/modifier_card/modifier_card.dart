@@ -19,10 +19,11 @@ class ModifierCollectionCard implements BaseModifierCard {
 }
 
 class ModifierCard implements BaseModifierCard {
+  final String sku;
   final String name;
   final double price;
 
-  ModifierCard(this.name, this.price);
+  ModifierCard(this.sku, this.name, this.price);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class ModifierCard implements BaseModifierCard {
       children: [
         SizedBox(
           width: 250,
-          child: Text(name)),
+          child: Text('$sku $name')),
         const Gap(5),
         SizedBox(
           width: 100,

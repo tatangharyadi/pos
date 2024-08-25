@@ -14,7 +14,7 @@ class ProductModifierTab extends StatelessWidget {
       modifierCards.add(ModifierCollectionCard(modifierCollection.name, modifierCollection.min, modifierCollection.max));
       for (var modifier in modifierCollection.modifiers) {
         final price = ProductUtils.getValidPriceByModifier(modifier);
-        modifierCards.add(ModifierCard(modifier.name, price));
+        modifierCards.add(ModifierCard(modifier.sku, modifier.name, price));
       }
     }
 
