@@ -24,6 +24,18 @@ class OrderParentCard extends ConsumerWidget {
     final totalPayments = paymentRepository.sumByParentId(parentOrder.id);
     final totalDue = totalOrders - totalPayments;
 
+    IconData icon;
+    switch (parentOrder.type) {
+      case 'TAKEAWAY':
+        icon = Icons.shopping_bag_outlined;
+        break;
+      case 'DINING':
+        icon = Icons.dining_outlined;
+        break;
+      default:
+        icon = Icons.shopping_basket_outlined;
+    }
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -33,7 +45,7 @@ class OrderParentCard extends ConsumerWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const Icon(Icons.shopping_bag_outlined),
+                Icon(icon),
                 const Gap(5),
                 Text(
                   '[${orders.length}] ${NumberFormat.decimalPattern().format(totalOrders)}',
@@ -54,8 +66,9 @@ class OrderParentCard extends ConsumerWidget {
                     context.go(context.namedLocation(
                       'terminal_form',
                       pathParameters: {
-                        'id':'new',
+                        'orderType':parentOrder.type,
                         'parentId':parentOrder.id.hexString,
+                        'id':'new',
                       }
                     ));
                   },

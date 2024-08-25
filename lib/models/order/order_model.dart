@@ -47,6 +47,8 @@ class _Order {
   @Indexed()
   late ObjectId parentId;
   @Indexed()
+  late String type;
+  @Indexed()
   late String status;
 
   @Indexed()
@@ -71,6 +73,8 @@ class _ParentOrder {
   @MapTo("_id")
   late ObjectId id;
 
+  @Indexed()
+  late String type;
   late double? totalOrders = 0;
   late double? totalPayments = 0;
 }

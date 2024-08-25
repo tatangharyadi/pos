@@ -15,10 +15,12 @@ import 'package:realm/realm.dart';
 import 'package:pos/models/order/order_model.dart';
 
 class TerminalForm extends ConsumerStatefulWidget {
-  final String id;
+  final String orderType;
   final String parentId;
+  final String id;
 
-  const TerminalForm({super.key, required this.id, required this.parentId});
+  const TerminalForm({super.key, required this.orderType,
+    required this.parentId, required this.id});
 
   @override
   ConsumerState<TerminalForm> createState() => _TerminalFormState();
@@ -38,7 +40,8 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
     final order = ref.read(orderRepositoryProvider.notifier);
 
     final parentOrder = ParentOrder(
-      _parentId
+      _parentId,
+      widget.orderType
     );
     order.createParentOrder(parentOrder);
 
@@ -76,6 +79,7 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
     final object = Order(
       _objectId,
       _parentId,
+      widget.orderType,
       "NEW",
       "1",
       now,

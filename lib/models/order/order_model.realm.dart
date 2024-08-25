@@ -272,6 +272,7 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
   Order(
     ObjectId id,
     ObjectId parentId,
+    String type,
     String status,
     String orderNumber,
     DateTime orderDate,
@@ -289,6 +290,7 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
     }
     RealmObjectBase.set(this, '_id', id);
     RealmObjectBase.set(this, 'parentId', parentId);
+    RealmObjectBase.set(this, 'type', type);
     RealmObjectBase.set(this, 'status', status);
     RealmObjectBase.set(this, 'orderNumber', orderNumber);
     RealmObjectBase.set(this, 'orderDate', orderDate);
@@ -313,6 +315,11 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
       RealmObjectBase.get<ObjectId>(this, 'parentId') as ObjectId;
   @override
   set parentId(ObjectId value) => RealmObjectBase.set(this, 'parentId', value);
+
+  @override
+  String get type => RealmObjectBase.get<String>(this, 'type') as String;
+  @override
+  set type(String value) => RealmObjectBase.set(this, 'type', value);
 
   @override
   String get status => RealmObjectBase.get<String>(this, 'status') as String;
@@ -386,6 +393,7 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
     return <String, dynamic>{
       '_id': id.toEJson(),
       'parentId': parentId.toEJson(),
+      'type': type.toEJson(),
       'status': status.toEJson(),
       'orderNumber': orderNumber.toEJson(),
       'orderDate': orderDate.toEJson(),
@@ -405,6 +413,7 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
       {
         '_id': EJsonValue id,
         'parentId': EJsonValue parentId,
+        'type': EJsonValue type,
         'status': EJsonValue status,
         'orderNumber': EJsonValue orderNumber,
         'orderDate': EJsonValue orderDate,
@@ -413,6 +422,7 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
         Order(
           fromEJson(id),
           fromEJson(parentId),
+          fromEJson(type),
           fromEJson(status),
           fromEJson(orderNumber),
           fromEJson(orderDate),
@@ -434,6 +444,8 @@ class Order extends _Order with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('parentId', RealmPropertyType.objectid,
+          indexType: RealmIndexType.regular),
+      SchemaProperty('type', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
       SchemaProperty('status', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
@@ -461,7 +473,8 @@ class ParentOrder extends _ParentOrder
   static var _defaultsSet = false;
 
   ParentOrder(
-    ObjectId id, {
+    ObjectId id,
+    String type, {
     double? totalOrders = 0,
     double? totalPayments = 0,
   }) {
@@ -472,6 +485,7 @@ class ParentOrder extends _ParentOrder
       });
     }
     RealmObjectBase.set(this, '_id', id);
+    RealmObjectBase.set(this, 'type', type);
     RealmObjectBase.set(this, 'totalOrders', totalOrders);
     RealmObjectBase.set(this, 'totalPayments', totalPayments);
   }
@@ -482,6 +496,11 @@ class ParentOrder extends _ParentOrder
   ObjectId get id => RealmObjectBase.get<ObjectId>(this, '_id') as ObjectId;
   @override
   set id(ObjectId value) => RealmObjectBase.set(this, '_id', value);
+
+  @override
+  String get type => RealmObjectBase.get<String>(this, 'type') as String;
+  @override
+  set type(String value) => RealmObjectBase.set(this, 'type', value);
 
   @override
   double? get totalOrders =>
@@ -512,6 +531,7 @@ class ParentOrder extends _ParentOrder
   EJsonValue toEJson() {
     return <String, dynamic>{
       '_id': id.toEJson(),
+      'type': type.toEJson(),
       'totalOrders': totalOrders.toEJson(),
       'totalPayments': totalPayments.toEJson(),
     };
@@ -523,9 +543,11 @@ class ParentOrder extends _ParentOrder
     return switch (ejson) {
       {
         '_id': EJsonValue id,
+        'type': EJsonValue type,
       } =>
         ParentOrder(
           fromEJson(id),
+          fromEJson(type),
           totalOrders: fromEJson(ejson['totalOrders'], defaultValue: 0),
           totalPayments: fromEJson(ejson['totalPayments'], defaultValue: 0),
         ),
@@ -540,6 +562,8 @@ class ParentOrder extends _ParentOrder
         ObjectType.realmObject, ParentOrder, 'parentOrders', [
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
+      SchemaProperty('type', RealmPropertyType.string,
+          indexType: RealmIndexType.regular),
       SchemaProperty('totalOrders', RealmPropertyType.double, optional: true),
       SchemaProperty('totalPayments', RealmPropertyType.double, optional: true),
     ]);

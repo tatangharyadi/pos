@@ -45,11 +45,12 @@ part 'app_router.g.dart';
         builder: (context, state) => const TerminalScreen(),
         routes: [
           GoRoute(
-            path: 'detail/:parentId/:id',
+            path: 'detail/:orderType/:parentId/:id',
             name: 'terminal_form',
             builder: (context, state) => TerminalForm(
-              id: state.pathParameters['id']!,
               parentId: state.pathParameters['parentId']!,
+              id: state.pathParameters['id']!,
+              orderType: state.pathParameters['orderType']!,
             ),
           ),
           GoRoute(

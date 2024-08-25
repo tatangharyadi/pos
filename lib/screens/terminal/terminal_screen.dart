@@ -69,8 +69,9 @@ class _TerminalScreenState extends ConsumerState<TerminalScreen> {
                             context.go(context.namedLocation(
                               'terminal_form',
                               pathParameters: {
-                                'id':'new',
+                                'orderType': option.type,
                                 'parentId':'new',
+                                'id':'new',
                               }
                             ));  
                           },
