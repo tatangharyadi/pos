@@ -1,17 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pos/services/auth_service.dart';
 
-class NavBar extends StatelessWidget {
+class NavBar extends ConsumerWidget {
   const NavBar({super.key});
 
+  void _signOut(BuildContext context, WidgetRef ref) {
+    final authService = ref.read(authServiceProvider.notifier);
+    authService.signout();
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    late String accountEmail;
+
+    accountEmail = 'Signin';
+    final authService = ref.watch(authServiceProvider);
+    if (authService != null) {
+      accountEmail = authService.email!;
+    }
+
     return NavigationDrawer(
       children: [
-        const UserAccountsDrawerHeader(
-          accountName: Text('Cashier'),
-          accountEmail: Text('cashier@pos.com'),
-          currentAccountPicture: CircleAvatar(),
+        UserAccountsDrawerHeader(
+          accountName: const Text(''),
+          accountEmail: Text(accountEmail),
+          currentAccountPicture: const CircleAvatar(),
         ),
         ListTile(
           leading: const Icon(Icons.home),
@@ -59,9 +74,10 @@ class NavBar extends StatelessWidget {
             );
           },
         ),
-        const ListTile(
-          leading: Icon(Icons.logout),
-          title: Text('Sign out'),
+        ListTile(
+          leading: const Icon(Icons.logout),
+          title: const Text('Sign out'),
+          onTap: () => _signOut(context, ref),
         ),
       ],
     );
