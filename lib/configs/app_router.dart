@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/services/app_service.dart';
+import 'package:pos/services/auth_service.dart';
+import 'package:pos/screens/login/login_screen.dart';
 import 'package:pos/screens/home/home_screen.dart';
 import 'package:pos/screens/setting/setting_screen.dart';
 import 'package:pos/screens/product/product_screen.dart';
@@ -18,6 +20,8 @@ part 'app_router.g.dart';
 @riverpod
   GoRouter goRouter(GoRouterRef ref) {
   final appState = ref.watch(appServiceProvider);
+  final user = ref.watch(authServiceProvider);
+
   return GoRouter (
     initialLocation: '/',
     redirect: (context, state) {
@@ -30,9 +34,17 @@ part 'app_router.g.dart';
         }
         return '/';
       }
+      if (user == null) {
+        return '/login';
+      }
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/login',
+        name: 'login',
+        builder: (context, state) => const LoginScreen(),
+      ),
       GoRoute(
         path: '/',
         name: 'home',
