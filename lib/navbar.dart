@@ -50,9 +50,14 @@ class NavBar extends StatelessWidget {
           },
         ),
         const Divider(),
-        const ListTile(
-          leading: Icon(Icons.settings),
-          title: Text('Settings'),
+        ListTile(
+          leading: const Icon(Icons.settings),
+          title: const Text('Settings'),
+          onTap: () {
+            return context.go(
+              context.namedLocation('setting'),
+            );
+          },
         ),
         const ListTile(
           leading: Icon(Icons.logout),

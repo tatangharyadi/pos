@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -13,10 +12,5 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseMessaging.instance.subscribeToTopic('pos');
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  if(foundation.kDebugMode) {
-    print('FCM Token: $fcmToken');
-  }
-
   runApp(const ProviderScope(child: MyApp()),);
 }

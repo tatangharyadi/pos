@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/services/app_service.dart';
 import 'package:pos/screens/home/home_screen.dart';
+import 'package:pos/screens/setting/setting_screen.dart';
 import 'package:pos/screens/product/product_screen.dart';
 import 'package:pos/screens/product/product_detail/product_detail_screen.dart';
 import 'package:pos/screens/shift/shift_screen.dart';
@@ -89,6 +90,11 @@ part 'app_router.g.dart';
             ), 
           )
         ],
+      ),
+      GoRoute(
+        path: '/setting',
+        name: 'setting',
+        builder: (context, state) => const SettingScreen(),
       ),
     ],
   );
