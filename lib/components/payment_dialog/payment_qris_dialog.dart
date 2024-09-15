@@ -1,5 +1,5 @@
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:pos/components/dialog/dialog_header.dart';
 import 'package:pos/components/dialog/dialog_buttons.dart';
 import 'package:pos/components/dialog/dialog_footer.dart';
@@ -27,8 +27,15 @@ class _PaymentQrisDialogState extends ConsumerState<PaymentQrisDialog> {
   void initState() {
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+
+      if(foundation.kDebugMode) {
+        print('DEBUG: QR Payment Title ${message.notification?.title}');
+        print('DEBUG: QR Payment Body ${message.notification?.body}');
+        print('DEBUG: QR Payment Data ${message.data}');
+      }
+
       setState(() {
-        _message = message.notification?.body ?? 'No message body';
+        _message = message.data['status'].toString();
       });
     });
   }
