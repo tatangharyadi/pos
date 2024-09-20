@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:pos/api_key.dart';
 import 'package:pos/components/dialog/dialog_header.dart';
 import 'package:pos/components/dialog/dialog_buttons.dart';
 import 'package:pos/components/dialog/dialog_footer.dart';
@@ -24,7 +25,7 @@ class _MemberDialogState extends ConsumerState<MemberDialog> {
   void onClickOk() {
     final dio = Dio();
     final memberApi = MemberApi(dio);
-    memberApi.getMember('GPAS-123', 'AIzaSyCf2k5jFzmZemeutSKGVHrNAuX3sqhsfeM').then((value) {
+    memberApi.getMember('GPAS-123', api_key).then((value) {
       print(value.name);
     });
     context.pop();
