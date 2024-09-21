@@ -13,9 +13,7 @@ class _MemberApi implements MemberApi {
     this._dio, {
     this.baseUrl,
     this.errorLogger,
-  }) {
-    baseUrl ??= 'https://pos-31k66m0a.an.gateway.dev';
-  }
+  });
 
   final Dio _dio;
 

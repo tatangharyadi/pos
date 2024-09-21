@@ -4,7 +4,7 @@ import 'package:pos/models/member/member_model.dart';
 
 part 'member_api.g.dart';
 
-@RestApi(baseUrl: 'https://pos-31k66m0a.an.gateway.dev')
+@RestApi()
 abstract class MemberApi {
   factory MemberApi(Dio dio, {String? baseUrl}) = _MemberApi;
 

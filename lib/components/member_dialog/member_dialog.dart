@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:pos/api_key.dart';
 import 'package:pos/components/dialog/dialog_header.dart';
 import 'package:pos/components/dialog/dialog_buttons.dart';
 import 'package:pos/components/dialog/dialog_footer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos/configs/env.dart';
 import 'package:pos/models/member/member_api.dart';
 
 class MemberDialog extends ConsumerStatefulWidget {
@@ -24,8 +24,8 @@ class _MemberDialogState extends ConsumerState<MemberDialog> {
 
   void onClickOk() {
     final dio = Dio();
-    final memberApi = MemberApi(dio);
-    memberApi.getMember('GPAS-123', api_key).then((value) {
+    final memberApi = MemberApi(dio, baseUrl: Env.apiUrl);
+    memberApi.getMember('GPAS-123', Env.apiKey).then((value) {
       print(value.name);
     });
     context.pop();
