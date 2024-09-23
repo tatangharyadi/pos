@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pos/models/member/member_repository.dart';
 import 'package:pos/screens/terminal/terminal_form/member/member_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/product/product_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/payment/payment_panel.dart';
@@ -111,13 +112,15 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
 
   @override
   Widget build(BuildContext context) {
+    final member = ref.watch(memberRepositoryProvider);
     List<CartItem> cartItemList = ref.watch(cartItemRepositoryProvider);
     double cartTotal = ref.watch(cartItemRepositoryProvider.notifier).sum();
     final totalDue = ref.watch(totalDueProvider);
+    final title = '${member.name}: ${widget.id}';
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.id),
+        title: Text(title),
       ),
       body: Row(
           children: [

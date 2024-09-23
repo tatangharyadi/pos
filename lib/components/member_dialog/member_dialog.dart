@@ -1,12 +1,11 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:pos/components/dialog/dialog_header.dart';
 import 'package:pos/components/dialog/dialog_buttons.dart';
 import 'package:pos/components/dialog/dialog_footer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pos/configs/env.dart';
-import 'package:pos/models/member/member_api.dart';
+import 'package:pos/models/member/member_repository.dart';
 
 class MemberDialog extends ConsumerStatefulWidget {
 
@@ -17,16 +16,16 @@ class MemberDialog extends ConsumerStatefulWidget {
 }
 
 class _MemberDialogState extends ConsumerState<MemberDialog> {
+  final _formKey = GlobalKey<FormBuilderState>();
   
   void onClickCancel() {
     context.pop();
   }
 
-  void onClickOk() async {
-    final dio = Dio();
-    final memberApi = MemberApi(dio, baseUrl: Env.apiUrl);
-    final member = await memberApi.getMember('GPAS-123', Env.apiKey);
-    print(member);
+  void onClickOk() {
+    final memberId = _formKey.currentState!.fields['memberId']!.value as String;
+    final memberRepository = ref.read(memberRepositoryProvider.notifier);
+    memberRepository.getById(memberId);
     context.pop();
   }
 
@@ -38,7 +37,33 @@ class _MemberDialogState extends ConsumerState<MemberDialog> {
         children: [
           const DialogHeader(
             icon: Icons.card_membership,
-            title: "Scan member ID",
+            title: "Member ID",
+          ),
+          Container(
+            height: 200,
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: Material(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                child: FormBuilder(
+                  key: _formKey,
+                  child: Column (
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: FormBuilderTextField(
+                          name: 'memberId',
+                          decoration: const InputDecoration(
+                            hintText: 'Type or scan member ID',
+                          ),
+                          initialValue: '',
+                        )
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
           DialogButtons(onClickOk: onClickOk, onClickCancel: onClickCancel),
           const DialogFooter(),
