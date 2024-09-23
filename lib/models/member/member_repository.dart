@@ -14,7 +14,11 @@ class MemberRepository extends _$MemberRepository {
     return Member(
       id: 'id',
       name: 'non member',
-      email: 'no email',
+      companyBenefit: CompanyBenefit(
+        cycle: 'cycle',
+        limit: 0,
+        balance: 0,
+      ),
     );
   }
 

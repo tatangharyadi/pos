@@ -18,22 +18,38 @@ class MemberPanel extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      Text(member.name),
-                      Text(member.email),
+                      Text(
+                        member.name,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      Text(member.email ?? 'no email'),
+                      Text(member.phone ?? 'no phone'),
+                      const Gap(12),
+                      Text(
+                        'Company Benefit',
+                        style: Theme.of(context).textTheme.labelLarge
+                      ),
+                      Text(member.companyBenefit.cycle),
+                      Text(member.companyBenefit.limit.toString()),
+                      Text(member.companyBenefit.balance.toString()),
+                      Text(member.companyBenefit.transactionTimestamp.toString()),                      
                     ],
                   ),
                 ),
               const Gap(5),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      Text('Available Promotion'),
+                      Text('Campaigns',
+                        style: Theme.of(context).textTheme.labelLarge
+                      ),
                     ],
                   ),
                 ),
