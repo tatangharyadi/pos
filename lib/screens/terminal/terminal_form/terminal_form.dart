@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pos/screens/terminal/terminal_form/member/member_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/product/product_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/payment/payment_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_panel.dart';
@@ -13,6 +14,7 @@ import 'package:pos/states/shift_auth/shift_auth_provider.dart';
 import 'package:pos/states/total_due/total_due_provider.dart';
 import 'package:realm/realm.dart';
 import 'package:pos/models/order/order_model.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class TerminalForm extends ConsumerStatefulWidget {
   final String orderType;
@@ -27,6 +29,7 @@ class TerminalForm extends ConsumerStatefulWidget {
 }
 
 class _TerminalFormState extends ConsumerState<TerminalForm> {
+  late PageController _pageViewController;
   late ObjectId _objectId;
   late ObjectId _parentId;
 
@@ -95,8 +98,15 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
   @override
   void initState() {
     super.initState();
+    _pageViewController = PageController(initialPage: 1);
     _objectId = (widget.id != 'new') ? ObjectId.fromHexString(widget.id) : _new();
     _parentId = (widget.parentId != 'new') ? ObjectId.fromHexString(widget.parentId) : ObjectId();
+  }
+
+  @override
+  void dispose() {
+    _pageViewController.dispose();
+    super.dispose();
   }
 
   @override
@@ -117,8 +127,10 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
                 children: [
                   Expanded(
                     child: PageView(
+                      controller: _pageViewController,
                       children: [
                         // const SkuPanel(),
+                        const MemberPanel(),
                         const ProductPanel(),
                         PaymentPanel(orderId: _objectId.hexString, parentId: _parentId.hexString,),
                       ],
@@ -177,7 +189,23 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         height: 30,
-        child: Container(height: 5),
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SmoothPageIndicator(
+                controller: _pageViewController,
+                count: 3,
+                effect: WormEffect(
+                  dotWidth: 8,
+                  dotHeight: 8,
+                  activeDotColor: Theme.of(context).primaryColor,
+                ),
+                onDotClicked: (index) {},
+              ),
+            ],
+          ),          
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),

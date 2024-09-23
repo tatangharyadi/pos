@@ -22,12 +22,11 @@ class _MemberDialogState extends ConsumerState<MemberDialog> {
     context.pop();
   }
 
-  void onClickOk() {
+  void onClickOk() async {
     final dio = Dio();
     final memberApi = MemberApi(dio, baseUrl: Env.apiUrl);
-    memberApi.getMember('GPAS-123', Env.apiKey).then((value) {
-      print(value.name);
-    });
+    final member = await memberApi.getMember('GPAS-123', Env.apiKey);
+    print(member);
     context.pop();
   }
 
