@@ -13,8 +13,19 @@ class MemberRepository extends _$MemberRepository {
   Member build() {
     return Member(
       id: 'id',
+      employeeId: 'employee id',
       name: 'non member',
-      companyBenefit: CompanyBenefit(
+      mealBenefit: Credit(
+        cycle: 'cycle',
+        limit: 0,
+        balance: 0,
+      ),
+      creditBenefit: Credit(
+        cycle: 'cycle',
+        limit: 0,
+        balance: 0,
+      ),
+      personalCredit: Credit(
         cycle: 'cycle',
         limit: 0,
         balance: 0,

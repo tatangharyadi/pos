@@ -32,13 +32,13 @@ class MemberPanel extends ConsumerWidget {
                       Text(member.phone ?? 'no phone'),
                       const Gap(12),
                       Text(
-                        'Company Benefit',
+                        'Credit Benefit',
                         style: Theme.of(context).textTheme.labelLarge
                       ),
-                      Text(member.companyBenefit.cycle),
-                      Text(member.companyBenefit.limit.toString()),
-                      Text(member.companyBenefit.balance.toString()),
-                      Text(member.companyBenefit.transactionTimestamp.toString()),                      
+                      Text(member.creditBenefit.cycle),
+                      Text(member.creditBenefit.limit.toString()),
+                      Text(member.creditBenefit.balance.toString()),
+                      Text(member.creditBenefit.transactionTimestamp.toString()),                      
                     ],
                   ),
                 ),
