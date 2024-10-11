@@ -10,6 +10,7 @@ Credit _$CreditFromJson(Map<String, dynamic> json) => Credit(
       cycle: json['cycle'] as String,
       limit: (json['limit'] as num).toDouble(),
       balance: (json['balance'] as num).toDouble(),
+      availableBalance: (json['available_balance'] as num).toDouble(),
     )..transactionTimestamp = json['transaction_timestamp'] == null
         ? null
         : DateTime.parse(json['transaction_timestamp'] as String);
@@ -29,6 +30,7 @@ Map<String, dynamic> _$CreditToJson(Credit instance) {
 
   writeNotNull('transaction_timestamp',
       instance.transactionTimestamp?.toIso8601String());
+  val['available_balance'] = instance.availableBalance;
   return val;
 }
 

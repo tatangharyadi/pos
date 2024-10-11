@@ -9,11 +9,14 @@ class Credit {
   double balance;
   @JsonKey(name: 'transaction_timestamp', includeIfNull: false)
   DateTime? transactionTimestamp;
+  @JsonKey(name: 'available_balance')
+  double availableBalance;
 
   Credit({
     required this.cycle,
     required this.limit,
     required this.balance,
+    required this.availableBalance,
   });
 
   factory Credit.fromJson(Map<String, dynamic> json) => _$CreditFromJson(json);
