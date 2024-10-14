@@ -3,6 +3,40 @@ import 'package:json_annotation/json_annotation.dart';
 part 'member_model.g.dart';
 
 @JsonSerializable()
+class VoucherDiscount{
+  String type;
+  @JsonKey(name: 'percent_off')
+  int percentOff;
+
+  VoucherDiscount({
+    required this.type,
+    required this.percentOff,
+  });
+
+  factory VoucherDiscount.fromJson(Map<String, dynamic> json) => _$VoucherDiscountFromJson(json);
+  Map<String, dynamic> toJson() => _$VoucherDiscountToJson(this);
+}
+
+@JsonSerializable()
+class Voucher {
+  String code;
+  String category;
+  String type;
+  VoucherDiscount? discount;
+  bool active;
+
+  Voucher({
+    required this.code,
+    required this.category,
+    required this.type,
+    required this.active,
+  });
+
+  factory Voucher.fromJson(Map<String, dynamic> json) => _$VoucherFromJson(json);
+  Map<String, dynamic> toJson() => _$VoucherToJson(this);
+}
+
+@JsonSerializable()
 class Credit {
   String cycle;
   double limit;
@@ -39,6 +73,7 @@ class Member {
   Credit creditBenefit;
   @JsonKey(name: 'personal_credit')
   Credit personalCredit;
+  List<Voucher> vouchers = [];
 
   Member({
     required this.id,
@@ -47,6 +82,7 @@ class Member {
     required this.mealBenefit,
     required this.creditBenefit,
     required this.personalCredit,
+    this.vouchers = const [],
   });
 
   factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);

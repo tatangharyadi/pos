@@ -7,7 +7,7 @@ part of 'qris_payment_repository.dart';
 // **************************************************************************
 
 String _$qrisPaymentRepositoryHash() =>
-    r'7f3e481766662ea5c93d99197d671fc4c1b4f44a';
+    r'b0b912157d32d5244487750330545f2cfc94d406';
 
 /// See also [QrisPaymentRepository].
 @ProviderFor(QrisPaymentRepository)

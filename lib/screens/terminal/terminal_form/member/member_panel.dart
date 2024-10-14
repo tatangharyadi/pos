@@ -48,9 +48,11 @@ class MemberPanel extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      Text('Campaigns',
+                      Text('Vouchers',
                         style: Theme.of(context).textTheme.labelLarge
                       ),
+                      for (var voucher in member.vouchers)
+                        Text(voucher.code),
                     ],
                   ),
                 ),
