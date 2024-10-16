@@ -6,8 +6,12 @@ import 'package:pos/components/dialog/dialog_buttons.dart';
 import 'package:pos/components/dialog/dialog_footer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos/models/member/member_repository.dart';
+import 'package:pos/models/payment/payment_model.dart';
+import 'package:pos/models/payment/payment_repository.dart';
 import 'package:pos/models/redemption/redemption_repository.dart';
 import 'package:pos/states/total_due/total_due_provider.dart';
+import 'package:realm/realm.dart';
 
 class PaymentVoucherDialog extends ConsumerStatefulWidget {
   final String paymentName;
@@ -25,15 +29,16 @@ class PaymentVoucherDialog extends ConsumerStatefulWidget {
 class _PaymentVoucherDialogState extends ConsumerState<PaymentVoucherDialog> {
   final _formKey = GlobalKey<FormBuilderState>();
   late double _amount;
-  late String _voucher;
-  Future<String> _message = Future.value('Waiting...');
+  late String _voucher, _message;
+  late Future<String> _redeem;
   
   Future<String> redeemVoucher() async {
+    final member = ref.read(memberRepositoryProvider);
     final redemption  = ref.read(redemptionRepositoryProvider.notifier);
     return await redemption.redeem(
       _voucher,
       widget.orderId,
-      'GPAS-123',
+      member.id,
       _amount
       );
   }
@@ -43,8 +48,13 @@ class _PaymentVoucherDialogState extends ConsumerState<PaymentVoucherDialog> {
     super.initState();
 
     _amount = ref.read(totalDueProvider) >= 0 ? ref.read(totalDueProvider) : 0;
-    _voucher = widget.paymentName == 'Voucher' ? '' : widget.paymentName;
-    _message = redeemVoucher();
+
+    if (widget.paymentName == 'Voucher') {
+      return;
+    } 
+    
+    _voucher = widget.paymentName;
+    _redeem = redeemVoucher();
   }
 
   void onClickCancel() {
@@ -52,6 +62,25 @@ class _PaymentVoucherDialogState extends ConsumerState<PaymentVoucherDialog> {
   }
 
   void onClickOk() {
+    if(_message != 'SUCCEEDED') {
+       context.pop();
+        return;
+    }
+
+    final payment = Payment(
+      ObjectId(),
+      ObjectId.fromHexString(widget.parentId),
+      ObjectId.fromHexString(widget.orderId),
+      'voucher',
+      DateTime.now().toUtc(),
+      _voucher,
+      amount: _amount,
+    );
+
+    final paymentRepository = ref.read(paymentRepositoryProvider.notifier);
+    paymentRepository.create(payment);
+    ref.read(totalDueProvider.notifier).decrement(_amount);
+
     context.pop();
   }
 
@@ -91,14 +120,15 @@ class _PaymentVoucherDialogState extends ConsumerState<PaymentVoucherDialog> {
                       const Gap(10),
 
                       FutureBuilder(
-                        future: _message,
+                        future: _redeem,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.waiting) {
                             return const Center(child: CircularProgressIndicator());
                           } else if (snapshot.hasError) {
+                            _message = 'Error: ${snapshot.error}';
                             return Center(child: Text('Error: ${snapshot.error}'));
                           }
-
+                          _message = snapshot.data ?? 'No message';
                           return Text(snapshot.data ?? 'No message');
                         }
                       ),

@@ -63,6 +63,7 @@ class _PaymentQrisDialogState extends ConsumerState<PaymentQrisDialog> {
   void onClickOk() {
     if(_message != 'SUCCEEDED') {
        context.pop();
+       return;
     }
 
     final payment = Payment(
