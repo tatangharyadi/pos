@@ -20,12 +20,13 @@ Map<String, dynamic> _$VoucherDiscountToJson(VoucherDiscount instance) =>
 
 Voucher _$VoucherFromJson(Map<String, dynamic> json) => Voucher(
       code: json['code'] as String,
-      category: json['category'] as String,
-      type: json['type'] as String,
-      active: json['active'] as bool,
-    )..discount = json['discount'] == null
-        ? null
-        : VoucherDiscount.fromJson(json['discount'] as Map<String, dynamic>);
+    )
+      ..category = json['category'] as String?
+      ..type = json['type'] as String?
+      ..discount = json['discount'] == null
+          ? null
+          : VoucherDiscount.fromJson(json['discount'] as Map<String, dynamic>)
+      ..active = json['active'] as bool?;
 
 Map<String, dynamic> _$VoucherToJson(Voucher instance) => <String, dynamic>{
       'code': instance.code,

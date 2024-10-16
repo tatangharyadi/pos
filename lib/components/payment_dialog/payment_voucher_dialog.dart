@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:gap/gap.dart';
 import 'package:pos/components/dialog/dialog_header.dart';
 import 'package:pos/components/dialog/dialog_buttons.dart';
 import 'package:pos/components/dialog/dialog_footer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos/models/redemption/redemption_repository.dart';
 import 'package:pos/states/total_due/total_due_provider.dart';
 
 class PaymentVoucherDialog extends ConsumerStatefulWidget {
@@ -23,7 +25,28 @@ class PaymentVoucherDialog extends ConsumerStatefulWidget {
 class _PaymentVoucherDialogState extends ConsumerState<PaymentVoucherDialog> {
   final _formKey = GlobalKey<FormBuilderState>();
   late double _amount;
+  late String _voucher;
+  Future<String> _message = Future.value('Waiting...');
   
+  Future<String> redeemVoucher() async {
+    final redemption  = ref.read(redemptionRepositoryProvider.notifier);
+    return await redemption.redeem(
+      _voucher,
+      widget.orderId,
+      'GPAS-123',
+      _amount
+      );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _amount = ref.read(totalDueProvider) >= 0 ? ref.read(totalDueProvider) : 0;
+    _voucher = widget.paymentName == 'Voucher' ? '' : widget.paymentName;
+    _message = redeemVoucher();
+  }
+
   void onClickCancel() {
     context.pop();
   }
@@ -34,9 +57,6 @@ class _PaymentVoucherDialogState extends ConsumerState<PaymentVoucherDialog> {
 
   @override
   Widget build(BuildContext context) {
-    _amount = ref.watch(totalDueProvider) >= 0 ? ref.watch(totalDueProvider) : 0;
-    final voucher = widget.paymentName == 'Voucher' ? '' : widget.paymentName;
-    
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -63,11 +83,26 @@ class _PaymentVoucherDialogState extends ConsumerState<PaymentVoucherDialog> {
                           labelText: 'Voucher Code',
                           hintText: 'Enter voucher code',
                         ),
-                        initialValue: voucher,
+                        initialValue: _voucher,
                         onChanged: (value) {
                           if (value == null) return;
                         },
                       ),
+                      const Gap(10),
+
+                      FutureBuilder(
+                        future: _message,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(child: Text('Error: ${snapshot.error}'));
+                          }
+
+                          return Text(snapshot.data ?? 'No message');
+                        }
+                      ),
+
                     ],
                   ),
                 ),

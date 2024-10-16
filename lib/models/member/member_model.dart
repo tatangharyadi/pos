@@ -20,16 +20,13 @@ class VoucherDiscount{
 @JsonSerializable()
 class Voucher {
   String code;
-  String category;
-  String type;
+  String? category;
+  String? type;
   VoucherDiscount? discount;
-  bool active;
+  bool? active;
 
   Voucher({
     required this.code,
-    required this.category,
-    required this.type,
-    required this.active,
   });
 
   factory Voucher.fromJson(Map<String, dynamic> json) => _$VoucherFromJson(json);

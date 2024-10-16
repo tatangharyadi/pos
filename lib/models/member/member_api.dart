@@ -16,14 +16,5 @@ abstract class MemberApi {
     @Path('id') String id,
     @Query('key') String key,
   );
-
-  // @POST('/voucherify/redeem')
-  // @Headers(<String, dynamic>{
-  //   'Content-Type': 'application/json',
-  // })
-  // Future<RedeemResult> redeem(
-  //   @Body() RedeemVoucher body,
-  // );
-
 }
 
