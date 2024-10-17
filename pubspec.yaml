@@ -54,6 +54,7 @@ dependencies:
   envied: ^0.5.4+1
   smooth_page_indicator: ^1.2.0+3
   qr_flutter: ^4.1.0
+  fl_chart: ^0.69.0
 
 dev_dependencies:
   flutter_test:
@@ -64,7 +65,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   build_runner: ^2.4.11
   riverpod_generator: ^2.4.0 
   json_serializable: ^6.8.0

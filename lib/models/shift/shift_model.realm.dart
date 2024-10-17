@@ -20,10 +20,12 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
     String secretPin, {
     DateTime? openTime,
     DateTime? closeTime,
+    double orderSequence = 0.0,
     double totalSales = 0.0,
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObjectBase.setDefaults<Shift>({
+        'orderSequence': 0.0,
         'totalSales': 0.0,
       });
     }
@@ -36,6 +38,7 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'closeTime', closeTime);
     RealmObjectBase.set(this, 'status', status);
     RealmObjectBase.set(this, 'secretPin', secretPin);
+    RealmObjectBase.set(this, 'orderSequence', orderSequence);
     RealmObjectBase.set(this, 'totalSales', totalSales);
   }
 
@@ -95,6 +98,13 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
   set secretPin(String value) => RealmObjectBase.set(this, 'secretPin', value);
 
   @override
+  double get orderSequence =>
+      RealmObjectBase.get<double>(this, 'orderSequence') as double;
+  @override
+  set orderSequence(double value) =>
+      RealmObjectBase.set(this, 'orderSequence', value);
+
+  @override
   double get totalSales =>
       RealmObjectBase.get<double>(this, 'totalSales') as double;
   @override
@@ -123,6 +133,7 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
       'closeTime': closeTime.toEJson(),
       'status': status.toEJson(),
       'secretPin': secretPin.toEJson(),
+      'orderSequence': orderSequence.toEJson(),
       'totalSales': totalSales.toEJson(),
     };
   }
@@ -150,6 +161,7 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
           fromEJson(secretPin),
           openTime: fromEJson(ejson['openTime']),
           closeTime: fromEJson(ejson['closeTime']),
+          orderSequence: fromEJson(ejson['orderSequence'], defaultValue: 0.0),
           totalSales: fromEJson(ejson['totalSales'], defaultValue: 0.0),
         ),
       _ => raiseInvalidEJson(ejson),
@@ -171,6 +183,7 @@ class Shift extends _Shift with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('closeTime', RealmPropertyType.timestamp, optional: true),
       SchemaProperty('status', RealmPropertyType.string),
       SchemaProperty('secretPin', RealmPropertyType.string),
+      SchemaProperty('orderSequence', RealmPropertyType.double),
       SchemaProperty('totalSales', RealmPropertyType.double),
     ]);
   }();

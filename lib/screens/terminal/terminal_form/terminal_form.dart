@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pos/models/member/member_repository.dart';
+import 'package:pos/models/shift/shift_repository.dart';
 import 'package:pos/screens/terminal/terminal_form/member/member_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/product/product_panel.dart';
 import 'package:pos/screens/terminal/terminal_form/payment/payment_panel.dart';
@@ -40,6 +41,8 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
 
   void _submit() {
     final shiftAuth = ref.read(shiftAuthProvider);
+    final shift = ref.read(shiftRepositoryProvider.notifier);
+    final orderNumber = '${shiftAuth.name}-${shift.getOrderSequence(shiftAuth.id).toString().padLeft(4, '0')}';
     final cartItemList = ref.read(cartItemRepositoryProvider);
     final order = ref.read(orderRepositoryProvider.notifier);
     final totalDue = ref.read(totalDueProvider);
@@ -48,6 +51,7 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
     if (widget.orderType == "COUNTER" && totalDue == 0) {
       status = "DONE";
     }
+
 
     final parentOrder = ParentOrder(
       _parentId,
@@ -95,7 +99,7 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
       _parentId,
       widget.orderType,
       status,
-      "1",
+      orderNumber,
       now,
       "",
       total: orderTotal,

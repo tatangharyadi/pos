@@ -4,7 +4,6 @@ import 'package:pos/components/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos/models/order/order_repository.dart';
 import 'package:realm/realm.dart';
-import 'package:pos/models/product/product_model.dart';
 import 'package:pos/models/order/order_model.dart';
 
 @override
