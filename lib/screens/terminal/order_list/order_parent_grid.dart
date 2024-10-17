@@ -14,9 +14,11 @@ class OrderParentGrid extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Realm realm = ref.watch(orderRepositoryProvider);
+    const query = 'status != "DONE" && TRUEPREDICATE SORT(_id ASC)';
 
     return StreamBuilder<RealmResultsChanges<ParentOrder>>(
-      stream: realm.query<ParentOrder>('TRUEPREDICATE SORT(_id ASC)')
+
+      stream: realm.query<ParentOrder>(query)
           .changes,
       builder: (context, snapshot) {
         if (snapshot.data == null) {return progressIndicator();}

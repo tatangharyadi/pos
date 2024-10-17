@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_item_tab.dart';
 import 'package:pos/screens/terminal/terminal_form/cart/cart_payment_tab.dart';
+import 'package:pos/screens/terminal/terminal_form/cart/card_member_tab.dart';
 
 class CartPanel extends StatelessWidget {
   final String orderId;
@@ -17,7 +18,7 @@ class CartPanel extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.only(left: 8, right: 8),
             child: DefaultTabController(
-              length: 2,
+              length: 3,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,6 +27,7 @@ class CartPanel extends StatelessWidget {
                       tabs: [
                         Tab(icon: Icon(Icons.edit_note)),
                         Tab(icon: Icon(Icons.monetization_on)),
+                        Tab(icon: Icon(Icons.card_membership),)
                       ]),
                     const Gap(5),
                     Expanded(
@@ -33,7 +35,8 @@ class CartPanel extends StatelessWidget {
                       child: TabBarView(
                         children: [
                           const CartItemTab(),
-                          CartPaymentTab(orderId: orderId,),    
+                          CartPaymentTab(orderId: orderId,),
+                          const CartMemberTab(),    
                         ]),
                     ),
                     const Divider(),
