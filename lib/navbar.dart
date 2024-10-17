@@ -56,6 +56,15 @@ class NavBar extends ConsumerWidget {
           },
         ),
         ListTile(
+          leading: const Icon(Icons.task),
+          title: const Text('Sales'),
+          onTap: () {
+            return context.go(
+              context.namedLocation('sales'),
+            );
+          },
+        ),
+        ListTile(
           leading: const Icon(Icons.edit_calendar),
           title: const Text('Shift'),
           onTap: () {

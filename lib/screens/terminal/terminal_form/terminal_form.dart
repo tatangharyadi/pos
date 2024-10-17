@@ -42,10 +42,17 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
     final shiftAuth = ref.read(shiftAuthProvider);
     final cartItemList = ref.read(cartItemRepositoryProvider);
     final order = ref.read(orderRepositoryProvider.notifier);
+    final totalDue = ref.read(totalDueProvider);
+
+    String status = "NEW";
+    if (widget.orderType == "COUNTER" && totalDue == 0) {
+      status = "DONE";
+    }
 
     final parentOrder = ParentOrder(
       _parentId,
-      widget.orderType
+      widget.orderType,
+      status,
     );
     order.createParentOrder(parentOrder);
 
@@ -79,12 +86,15 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
       orderTotal += lineTotal;
     }
 
+    if (orderTotal == 0) {
+      status = "VOID";
+    }
     final now = DateTime.now();
     final object = Order(
       _objectId,
       _parentId,
       widget.orderType,
-      "NEW",
+      status,
       "1",
       now,
       "",

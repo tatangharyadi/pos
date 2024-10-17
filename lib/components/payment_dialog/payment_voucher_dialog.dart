@@ -71,7 +71,7 @@ class _PaymentVoucherDialogState extends ConsumerState<PaymentVoucherDialog> {
       ObjectId(),
       ObjectId.fromHexString(widget.parentId),
       ObjectId.fromHexString(widget.orderId),
-      'voucher',
+      'VOUCHER',
       DateTime.now().toUtc(),
       _voucher,
       amount: _amount,
@@ -126,7 +126,7 @@ class _PaymentVoucherDialogState extends ConsumerState<PaymentVoucherDialog> {
                             return const Center(child: CircularProgressIndicator());
                           } else if (snapshot.hasError) {
                             _message = 'Error: ${snapshot.error}';
-                            return Center(child: Text('Error: ${snapshot.error}'));
+                            return Text("FAILED: ${snapshot.error}");
                           }
                           _message = snapshot.data ?? 'No message';
                           return Text(snapshot.data ?? 'No message');

@@ -75,6 +75,8 @@ class _ParentOrder {
 
   @Indexed()
   late String type;
+  @Indexed()
+  late String status;
   late double? totalOrders = 0;
   late double? totalPayments = 0;
 }

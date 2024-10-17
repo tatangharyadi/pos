@@ -474,7 +474,8 @@ class ParentOrder extends _ParentOrder
 
   ParentOrder(
     ObjectId id,
-    String type, {
+    String type,
+    String status, {
     double? totalOrders = 0,
     double? totalPayments = 0,
   }) {
@@ -486,6 +487,7 @@ class ParentOrder extends _ParentOrder
     }
     RealmObjectBase.set(this, '_id', id);
     RealmObjectBase.set(this, 'type', type);
+    RealmObjectBase.set(this, 'status', status);
     RealmObjectBase.set(this, 'totalOrders', totalOrders);
     RealmObjectBase.set(this, 'totalPayments', totalPayments);
   }
@@ -501,6 +503,11 @@ class ParentOrder extends _ParentOrder
   String get type => RealmObjectBase.get<String>(this, 'type') as String;
   @override
   set type(String value) => RealmObjectBase.set(this, 'type', value);
+
+  @override
+  String get status => RealmObjectBase.get<String>(this, 'status') as String;
+  @override
+  set status(String value) => RealmObjectBase.set(this, 'status', value);
 
   @override
   double? get totalOrders =>
@@ -532,6 +539,7 @@ class ParentOrder extends _ParentOrder
     return <String, dynamic>{
       '_id': id.toEJson(),
       'type': type.toEJson(),
+      'status': status.toEJson(),
       'totalOrders': totalOrders.toEJson(),
       'totalPayments': totalPayments.toEJson(),
     };
@@ -544,10 +552,12 @@ class ParentOrder extends _ParentOrder
       {
         '_id': EJsonValue id,
         'type': EJsonValue type,
+        'status': EJsonValue status,
       } =>
         ParentOrder(
           fromEJson(id),
           fromEJson(type),
+          fromEJson(status),
           totalOrders: fromEJson(ejson['totalOrders'], defaultValue: 0),
           totalPayments: fromEJson(ejson['totalPayments'], defaultValue: 0),
         ),
@@ -563,6 +573,8 @@ class ParentOrder extends _ParentOrder
       SchemaProperty('id', RealmPropertyType.objectid,
           mapTo: '_id', primaryKey: true),
       SchemaProperty('type', RealmPropertyType.string,
+          indexType: RealmIndexType.regular),
+      SchemaProperty('status', RealmPropertyType.string,
           indexType: RealmIndexType.regular),
       SchemaProperty('totalOrders', RealmPropertyType.double, optional: true),
       SchemaProperty('totalPayments', RealmPropertyType.double, optional: true),

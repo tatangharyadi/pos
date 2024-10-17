@@ -9,6 +9,7 @@ import 'package:pos/screens/home/home_screen.dart';
 import 'package:pos/screens/setting/setting_screen.dart';
 import 'package:pos/screens/product/product_screen.dart';
 import 'package:pos/screens/product/product_detail/product_detail_screen.dart';
+import 'package:pos/screens/sales/sales_screen.dart';
 import 'package:pos/screens/shift/shift_screen.dart';
 import 'package:pos/screens/shift/shift_form/shift_form.dart';
 import 'package:pos/screens/terminal/terminal_screen.dart';
@@ -88,6 +89,20 @@ part 'app_router.g.dart';
             ),
           )
         ], 
+      ),
+            GoRoute(
+        path: '/sales',
+        name: 'sales',
+        builder: (context, state) => const SalesScreen(),
+        // routes: [
+        //   GoRoute(
+        //     path: 'sales/:id',
+        //     name: 'sales_detail',
+        //     builder: (context, state) => SalesDetail(
+        //       id: state.pathParameters['id']!,
+        //     ),
+        //   )
+        // ], 
       ),
       GoRoute(
         path: '/shift',
