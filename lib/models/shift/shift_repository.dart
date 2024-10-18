@@ -155,18 +155,16 @@ class ShiftRepository extends _$ShiftRepository {
     }
   }
 
-  double getOrderSequence(String id) {
+  int getOrderSequence(ObjectId id) {
     final shift = state.find<Shift>(id);
     if (shift == null) {
       return 0;
     }
 
-    final orderSequence = shift.orderSequence++;
-
     state.write(() {
-      shift.orderSequence = orderSequence;
+      shift.orderSequence = shift.orderSequence + 1;
     });
 
-    return orderSequence;
+    return shift.orderSequence;
   }
 }

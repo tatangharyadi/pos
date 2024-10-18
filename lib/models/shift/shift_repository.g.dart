@@ -6,7 +6,7 @@ part of 'shift_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$shiftRepositoryHash() => r'12e17113e65883421840221cbc816ed0c75b3c32';
+String _$shiftRepositoryHash() => r'd61fb4e0e4fd01d2fc9de44b530d1f5a30842b4e';
 
 /// See also [ShiftRepository].
 @ProviderFor(ShiftRepository)

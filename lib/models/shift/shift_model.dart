@@ -19,7 +19,7 @@ class _Shift {
   late String status;
   late String secretPin;
 
-  late double orderSequence = 0.0;
+  late int orderSequence = 0;
   late double totalSales = 0.0;
 }
 

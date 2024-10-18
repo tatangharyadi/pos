@@ -42,7 +42,8 @@ class _TerminalFormState extends ConsumerState<TerminalForm> {
   void _submit() {
     final shiftAuth = ref.read(shiftAuthProvider);
     final shift = ref.read(shiftRepositoryProvider.notifier);
-    final orderNumber = '${shiftAuth.name}-${shift.getOrderSequence(shiftAuth.id).toString().padLeft(4, '0')}';
+    final shiftId = ObjectId.fromHexString(shiftAuth.id);
+    final orderNumber = '${shiftAuth.name.toUpperCase()}-${shift.getOrderSequence(shiftId).toString().padLeft(4, '0')}';
     final cartItemList = ref.read(cartItemRepositoryProvider);
     final order = ref.read(orderRepositoryProvider.notifier);
     final totalDue = ref.read(totalDueProvider);

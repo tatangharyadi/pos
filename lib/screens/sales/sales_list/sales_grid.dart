@@ -17,12 +17,18 @@ class SalesDataTableSource extends DataTableSource {
   @override
   DataRow getRow(int index) {
     final order = orders[index];
+    final localDate = order.orderDate.toLocal();
+    final orderDate = 
+      '${localDate.year}-${localDate.month.toString().padLeft(2, '0')}-${localDate.day.toString().padLeft(2, '0')}';
 
     return DataRow(
       key: ValueKey(order.id),
       cells: [
         DataCell(Text(order.orderNumber)),
-        DataCell(Text(order.status)),      ],
+        DataCell(Text(orderDate)),
+        DataCell(Text(order.total.toString())),
+        DataCell(Text(order.status)),      
+      ],
     );
   }
 
@@ -43,6 +49,8 @@ class SalesGrid extends ConsumerWidget {
     RealmResults<Order> orders) {
     final List<Map<String, dynamic>> header = [
       {"title": "Order", "numeric": false},
+      {"title": "Date", "numeric": false},
+      {"title": "Total", "numeric": true},
       {"title": "Status", "numeric": false},
     ];
 
