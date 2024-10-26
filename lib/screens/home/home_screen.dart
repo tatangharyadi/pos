@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pos/navbar.dart';
+import 'package:pos/screens/home/home_dashboard/home_panel.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,10 +13,7 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Home'),
       ),
       body: const Center(
-        child: Text(
-          'Home Screen',
-          style: TextStyle(fontSize: 24),
-        ),
+        child: HomePanel(),
       ),
     );
   }
